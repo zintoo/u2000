@@ -1,0 +1,77 @@
+#ifndef session_idl
+#define session_idl
+
+// *************************************
+// *                                   *
+// * session.idl                       *
+// *                                   *
+// *************************************
+
+
+//Include list
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the common interface
+   * of the NML-EML interface.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module session
+{
+
+  /**
+   * <p> The Session_I interface provides capabilities to manage the
+   * client-server connection.
+   * Its main purpose is to enable either a client or server to detect the 
+   * loss of communication with the associated party.</p>
+   *
+   * <p>For a single communication session between an NMS and an EMS, there are
+   * two Session_I objects.  One is maintained on the NMS; the other one is maintained
+   * on the EMS.  The Session_I object maintained on the EMS is actually an EmsSession_I, while
+   * the Session_I object maintained on the NMS is actually an NmsSession_I
+   * (both inherit from Session_I).</p>
+   *
+   * <p>Each Session_I object is responsible to "ping" the other Session_I object
+   * periodically to detect communication failures.  Exactly when this is done is up to
+   * the implementation.</p>
+   *
+   * <p>When a Session_I object detects a communication failure, or when the endSession
+   * operation is called on it, all resources allocated with that communication session
+   * must be freed and the Session_I object must be deleted.</p>
+   **/
+
+   interface Session_I
+   {
+  /**
+   * <p>This attribute contains a reference to the Session_I on the other side (NMS/EMS)
+   * to which the object is associated.
+   * This attribute can be checked to make sure the NmsSession_I/EmsSession_I association is
+   * still valid (in particular in case of communication failures).</p>
+   **/
+   readonly attribute Session_I associatedSession;
+
+  /**
+   * <p> Allows for the detection of loss of communication.
+   * It is implementation specific to differenciate intermittent 
+   * problems from loss of connection.</p>
+   **/
+   void ping();
+
+  /**
+   * <p> Allows for a controlled disconnect between parties.
+   * All resources allocated for the session are deleted by operation.</p>
+   **/
+   oneway void endSession();
+
+   };
+
+};       // end of module
+
+#endif
+

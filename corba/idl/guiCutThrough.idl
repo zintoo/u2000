@@ -1,0 +1,243 @@
+#ifndef         guiCutThrough_idl
+#define         guiCutThrough_idl
+
+// *************************************
+// *                                   *
+// * guiCutThrough.idl                 *
+// *                                   *
+// *************************************
+
+//Include list
+#include "globaldefs.idl"
+#include "common.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the GUI Cut-Through manager
+   * of the NML-EML interface, with related types.
+   *
+   * <p>GUI Cut-Through (GCT) is provided by the NMS launching a 
+   * GCT. This interface provides the means for the NMS to do this
+   * GCT launch.
+   *
+   * The interface provides two launch modes: client launch and server launch. 
+   * EMS support of the client launch is mandatory and the support for server 
+   * launch is optional. The EMS indicates what launch modes are supported.</p>
+   *
+   * <p> The client launch requires a set of all GCT windows supported 
+   * by the EMS (each supported window type, or scope and context, has 
+   * an associated window data).  The window data contains a command
+   * in a template form.  The NMS fills in the command placeholders
+   * to launch the client.  If both the NMS and the EMS support the server
+   * launch, the NMS can initiate a server launch.</p>
+   *
+   * <p> The client launch mechanism itself and the security issues are not
+   * addressed by this interface.</p>
+   *
+   * <p> For details on the GUI Cut-Through strategy, see
+   * <a href=supportingDocumentation/guiCutThrough.pdf>GUI Cut-Through strategy</a>.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+module guiCutThrough
+{	  
+
+  /**
+   * <p>Describes the capability for server launch; either the EMS supports
+   * only a client launch, or the EMS supports both a client launch and a
+   * server launch.</p>
+   **/
+   enum ServerLaunchCapability_T
+   {
+      CLIENT_LAUNCH_ONLY,
+      SERVER_LAUNCH_CAPABLE 
+   };
+
+  /**
+   * <p>The guiCutThroughData_T provides all the information necessary by 
+   * NMS to launch a specific GUI Cut-Through window outside the EMS-NMS    
+   * interface. The information is GuiCutThroughDataList represents all the    
+   * windows supported by the EMS.
+   * It is a readonly attribute. </p>
+   * 
+   * <p>This struct is used to represent the GCT window data for one window.</p> 
+   *
+   * string <b>gctScope</b>:
+   * <br> Scope of the window: "EMS", "ME".<br>
+   * Only support of the "EMS" scope is mandatory.<br>
+   *
+   * string <b>gctContext</b>:
+   * <br> Context of the window.<br>
+   * <br> Valid values are:<br>
+   * "TOP_LEVEL"<br>
+   * "FAULT"<br>
+   * "CONFIGURATION_SOFTWARE"<br>
+   * "CONFIGURATION_CONNECTION"<br>
+   * "ACCOUNTING"<br>
+   * "PERFORMANCE"<br>
+   * "SECURITY"<br>
+   * "SYSTEMS_MANAGEMENT"<br>
+   * Only support of the "TOP_LEVEL" context is mandatory.<br>
+   *
+   * string <b>gctCommand</b>:
+   * <br>The gctCommand contains the exact command needed by the EMS 
+   * to launch its GUI so that the window for that EMS is launched. This 
+   * string shall not be empty. Placeholders are used to indicate where 
+   * values should be replaced by the NMS when performing the client launch.
+   * For details of how this list is filled see
+   * <a href=supportingDocumentation/guiCutThrough.pdf>GUI Cut Through Data</a>.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>: 
+   * <br> This a vendor specific attribute which contains additional specific 
+   * information required for the GCT.<br>
+   * <br>
+   **/ 
+   struct GuiCutThroughData_T
+   {
+      string gctScope;
+      string gctContext;
+      string gctCommand;
+      globaldefs::NVSList_T additionalInfo;
+   };
+
+  /**
+   * <p>Set of GuiCutThroughData_T.</p>
+   **/ 
+   typedef sequence<GuiCutThroughData_T> GuiCutThroughDataList_T;
+
+  /**
+   * <p>This struct is used to represent the GCT profile data for the EMS.</p> 
+   *
+   * <b>serverLaunchCapability</b>:
+   * <br> Indicates whether the EMS supports the 
+   * server launchGCT operation. 
+   * The default is to support client launch only.<br>
+   *
+   * <b>gctHostname</b>:
+   * <br> IP address (or host name which is mapped to the appropriate 
+   * IP address) that allows the NMS to identify where to launch the 
+   * EMS GUI client.  This string can  be empty only for emsGctPlatform
+   * "local" or "web-based".  
+   * For Citrix commands, it is the TSE (Terminal Server Environment) IP address.<br>
+   *
+   * <b>emsGctPlatform</b>:
+   * <br> Indicates the platform supported for the GUI Cut-Through.<br>
+   * <br> Valid values are:<br>
+   * "unix"<br>
+   * "windowsNT"<br>
+   * "local"<br>
+   * "web-based"<br><br>
+   *
+   * <b>guiCutThroughDataList</b>:
+   * <br> Indicates the supported window types and how to lauch them.<br>
+   **/ 
+   struct GCTProfileInfo_T
+   {
+      ServerLaunchCapability_T serverLaunchCapability;
+      string gctHostname;
+      string emsGctPlatform;
+      GuiCutThroughDataList_T guiCutThroughDataList; 
+   }; 
+
+  /**
+   * <p>The GuiCutThroughMgr_I is used to access the GUI Cut-Through data
+   * available at the EMS</p>
+   *
+   * <p>A handle to this interface is gained via the
+   * <a href=_emsSession.EmsSession_I.html#emsSession::EmsSession_I::getManager>
+   * getManager</a> operation in Manager.</p>
+   **/
+
+   interface GuiCutThroughMgr_I: common::Common_I
+   {
+
+  /**
+   * <p>This allows an NMS to request the GUI Cut-Through
+   * information from the EMS.</p>
+   *
+   * <p>The interface will include two different operation modes, client 
+   * launch and server launch.</p> 
+   *
+   * <p>EMS support of the client launch is mandatory and the client launch 
+   * itself is handled outside this interface.
+   * The EMS should, to the best of its abilities, provide sufficient 
+   * information in the response to enable the NMS to launch a 
+   * GUI Cut-Through.</p>
+   *
+   * <p>EMS support for server launch is optional and the server launch is 
+   * invoked through the interface.</p>
+   *
+   * <p>Note that it is not required for the NMS to reobtain the GCT profile
+   * before every launchGCT request and therefore the EMS cannot change the
+   * GCTProfileInfo_T unless the session is closed.</p>
+   *
+   * <br>  gctProfileInfo: The EMS will fill this list to contain data on all
+   * supported GCT window types.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * <br>
+   **/
+   void getGCTProfileInfo(
+	 out GCTProfileInfo_T gctProfileInfo) 
+	    raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service invokes the EMS server launch of the GCT.</p>
+   *
+   * <br> objectName: object which should be displayed, if possible, upon creation
+   * of the GCT window.  If not possible, the EMS will select the closest superior
+   *  object available.<br>
+   * <br> gctContext: the window context (see GuiCutThroughData_T).<br>
+   * <br> userInfo: identifies the GCT user.  The contents
+   * of this parameter is subject to bilateral agreements.<br>
+   * <br> displayAddress: IP address or hostname of the display for the window.<br>
+   * <br> additionalInputInfo: additional info provided to the EMS.  The contents
+   * of this parameter is subject to bilateral agreements.<br>
+   * <br> closingEnabled: indicates to the NMS whether or not destroyGCT 
+   * will be supported for this window.<br> 
+   * <br> additionalOutputInfo: additional info provided to the NMS.  The contents
+   * of this parameter is subject to bilateral agreements.<br> 
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised in case when EMS does not support this operation<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised in case the EMS is unable to complete the launch<br>
+   * EXCPT_CAPACITY_EXCEEDED - Raised in case the maximum number of active GCTs
+   *  has been reached<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * <br> 
+   **/
+   void launchGCT(
+      in globaldefs::NamingAttributes_T objectName,
+      in string gctContext,
+      in globaldefs::NVSList_T userInfo,
+      in string displayAddress,
+      in globaldefs::NVSList_T additionalInputInfo, 
+      out boolean closingEnabled, 
+      out globaldefs::NVSList_T additionalOutputInfo) 
+        raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This service closes all the GCT windows opened by launchGCT() 
+   * at the given displayAddress; it also removes all 
+   * related records from the EMS/GCT window manager.</p>
+   *
+   * <br> string displayAddress: the IP address or hostname of the display
+   * from which all GCT windows are to be closed.<br>
+   * <br> globaldefs::ProcessingFailureException:<br> 
+   * EXCPT_NOT_IMPLEMENTED - Raised in case when EMS does not support this operation<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised in case input data is invalid<br>
+   * <br> 
+   **/
+   void destroyGCT(
+      in string displayAddress) 
+        raises(globaldefs::ProcessingFailureException);
+};
+ 
+}; // END OF MODULE
+
+#endif

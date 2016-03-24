@@ -1,0 +1,372 @@
+#ifndef	circuitCutMgr_idl
+#define	circuitCutMgr_idl
+
+// ********************************
+// *				  *
+// * circuitCutMgr.idl		  *
+// *				  *
+// ********************************
+
+#include "common.idl"
+
+#pragma	prefix "mtnm.tmforum.org"
+
+module circuitCutMgr
+{
+
+	/** 对象ID数据类型 **/
+	typedef	unsigned long		ObjectID;
+	
+	/** 对象ID列表类型 **/   
+	typedef	sequence<ObjectID>  	ObjectIDList;
+	
+	/** 时隙类型 **/   
+	typedef unsigned long 		TimeSlot;
+	typedef	ObjectIDList	 	TimeSlotList; 
+   	
+   	/** 名值对类型 **/ 
+   	struct NameAndStringValue_T
+   	{
+    	   string      name;
+    	   string      value;
+   	};
+   	typedef sequence<NameAndStringValue_T> NVSList_T;   	
+   	typedef NVSList_T NamingAttributes_T;   	
+   	typedef sequence<NamingAttributes_T> NamingAttributesList_T;
+   	
+   	/** 路径方向枚举类型 **/
+   	enum ConnectionDirection_T
+  	{
+    	   CD_UNI,
+    	   CD_BI   
+  	};
+  	
+  	/** CORBA接口返回异常枚举类型 **/
+   	enum ExceptionType_T
+  	{
+    	   EXCPT_NOT_IMPLEMENTED,
+    	   EXCPT_INTERNAL_ERROR,
+    	   EXCPT_INVALID_INPUT,
+    	   EXCPT_OBJECT_IN_USE,
+    	   EXCPT_TP_INVALID_ENDPOINT,
+    	   EXCPT_ENTITY_NOT_FOUND,
+    	   EXCPT_TIMESLOT_IN_USE,
+    	   EXCPT_PROTECTION_EFFORT_NOT_MET,
+    	   EXCPT_NOT_IN_VALID_STATE,
+    	   EXCPT_UNABLE_TO_COMPLY,
+    	   EXCPT_NE_COMM_LOSS,
+    	   EXCPT_CAPACITY_EXCEEDED,
+    	   EXCPT_ACCESS_DENIED,
+    	   EXCPT_TOO_MANY_OPEN_ITERATORS,
+    	   EXCPT_UNSUPPORTED_ROUTING_CONSTRAINTS,
+    	   EXCPT_USERLABEL_IN_USE
+	};
+	
+	exception  ProcessingFailureException
+  	{
+      	   ExceptionType_T exceptionType; 
+      	   string errorReason;
+  	};
+  	
+  	/** 路径层速率枚举数据类型 **/
+	enum SNCRate_T
+	{
+	   RATE_VC4_4C,
+	   RATE_VC4_8C,
+	   RATE_VC4_16C,
+	   RATE_VC4_64C,
+	   RATE_SERVERVC4,
+	   RATE_MS,
+	   RATE_VC12,
+	   RATE_VC3,
+	   RATE_VC4	
+	};	
+	
+	/** 
+	*路径源宿端方向枚举数据类型 
+	*创建单向路径时，表示网元是源或宿
+	*创建双向路径时，BI表示即为源也为宿
+	**/
+	enum TtpDirection
+	{
+	   AEND,  
+	   ZEND,	
+	   BI	
+	};
+	
+	/** 网元端口数据结构 **/
+	struct PortInfo_T
+	{
+	   ObjectID    portID;	     
+	   ObjectID    slotID;	    
+	};
+	
+	/** 端口可用时隙数据结构 **/
+	struct TimeSlotInfo_T
+	{
+	   unsigned long  vc4No;	   
+	   TimeSlotList  timeslots;   
+	};
+	typedef  sequence<TimeSlotInfo_T>  TimeSlotInfoList_T;
+	
+	/** 路径终结点数据结构 **/
+	struct  TPInfo_T
+	{
+	   ObjectID	 	NEID;
+	   PortInfo_T		portInfo;
+	   TimeSlotInfo_T	tsInfo;
+	};
+	typedef  sequence<TPInfo_T> TPInfoList_T; //2007-3-12:批量源宿对创建批量电路
+	
+	/** 路径类型 **/
+	enum SNCTypeQualifier_T
+	{
+	   SNC,		 
+	   PREFAB_SNC 
+	};
+  
+	/** 服务层路径数据类型 **/
+	struct	ServiceTrail_T
+	{
+	   ObjectID			serviceTrailID;			 
+	   string			serviceTrailName;				
+	   TimeSlotList		usedTSList;	
+	   TPInfo_T			aTP;       
+	   TPInfo_T			zTP;	
+	   ConnectionDirection_T	direction;
+	   ObjectID			psnInId;	
+           ObjectID			psnOutId;	
+	};   
+	typedef sequence<ServiceTrail_T>  	    ServiceTrailList_T;
+	
+	struct ProtectServiceTrail_T
+	{
+	  TPInfo_T			 aEndTP;       
+	  TPInfo_T		 	 zEndTP;
+	  ServiceTrailList_T route;
+	};
+	typedef sequence<ProtectServiceTrail_T>   ServiceTrailSequence_T;
+   	
+   	/** 路径服务层路由数据类型 **/
+	struct	SNCServiceRoute_T
+	{
+	   ServiceTrailList_T 		positiveRouteWork; 
+	   ServiceTrailList_T 		oppositeRouteWork;
+	   ServiceTrailSequence_T 	positiveRouteProtection;
+	   ServiceTrailSequence_T 	oppositeRouteProtection;
+	};	
+	typedef sequence<SNCServiceRoute_T> SNCServiceRouteList_T;  //2007-3-5 修改：新增加批量路由数据结构  
+   	
+   	/** 路径基本属性数据类型 **/
+	struct SNCBasicInfo_T
+	{
+	   string		nativeEMSName;	    
+	   SNCRate_T		rate;		
+	   TPInfo_T		aEnd;		
+	   TPInfo_T		zEnd;
+	   SNCTypeQualifier_T	SNCType;
+	   ConnectionDirection_T direction;
+	   NVSList_T		 additionalInfo;		
+	};
+	typedef	sequence<SNCBasicInfo_T>  SNCBasicInfoList_T;
+   	
+   	/** 错误信息数据类型 **/
+	struct	ErrorReason_T
+	{
+	   string	   	strObjName;
+	   unsigned long	errorReason;
+	   string		strOperDesc;
+	};
+	typedef	sequence<ErrorReason_T>  ErrorReasonList_T;
+	
+   	/** 约束条件数据类型 **/
+	struct ServiceLimit_T
+	{
+	   ObjectID		speciSeriveTrailID;
+	   TimeSlotList 	speciTS;     //2007-3-5 修改前：TimeSlot 	speciTS;
+	   ObjectID		aNe;
+	};
+	typedef	sequence<ServiceLimit_T>  ServiceLimitList_T;
+	
+	/** 预制电路创建数据结构 **/
+	struct PrefabSNCCreateData_T
+	{
+	   ConnectionDirection_T	direction;
+	   SNCRate_T				rate;
+	   ServiceLimitList_T		serviceTrailInclusions;
+	   ObjectIDList				neInclusions;		
+	   ObjectIDList				neExclusions;		
+	   TPInfoList_T					aEndList;	
+	   TPInfoList_T					zEndList;
+	};
+	
+	/**创建修改电路数据结构**/
+	struct CutAndPrefabSNCPair_T
+	{
+		SNCBasicInfo_T  cutSNC;
+		SNCBasicInfo_T  prefabSNC;
+	};	
+       typedef sequence<CutAndPrefabSNCPair_T>  CutAndPrefabSNCPairList_T;
+	
+	/** 网元节点对数据结构，用于描述服务层路径连通性视图 **/
+	struct ConnectivityNodePair_T
+	{
+	   ObjectID  aEnd;
+	   ObjectID  zEnd;
+	};
+	typedef	sequence<ConnectivityNodePair_T>  ConnectivityNodePairList_T;
+	
+	/** 该结构用于创建预制路径时，查询源宿网元可用端口和时隙 **/
+	struct  SNCTtpInfo_T
+	{
+	   ObjectID	 	NEID;
+	   TtpDirection	   	tpDirection;
+	   SNCRate_T		rate;
+	};
+	
+	/** 空闲端口和时隙数据类型 **/
+	struct  IdlePortAndTS_T
+	{
+	   ObjectID	slotID;
+	   ObjectID	portID;
+	   ObjectID	slotNo;  //总的TS数
+	   TimeSlotInfoList_T  	SlotInfoList;
+	};
+	typedef  sequence<IdlePortAndTS_T> IdlePortAndTSList_T;
+	
+	/** 服务层路径连通性视图节点对列表的迭代子数据结构 **/
+	interface ConnectivityNodePairIterator_I
+	{
+	   boolean next_n(in unsigned long how_many,out ConnectivityNodePairList_T meList)
+		 raises	(ProcessingFailureException);
+	   unsigned long getLength()
+		 raises	(ProcessingFailureException);
+	   void destroy()
+		 raises	(ProcessingFailureException);
+	};
+	
+	/** TOPO视图相关数据类型 **/	
+	/** TOPO节点类型数据结构 **/
+	enum NodeType_T
+	{
+	   NODETYPE_ME,		//网元
+	   NODETYPE_TOPO_SN	//拓扑子网
+	};
+	
+	/** TOPO节点坐标数据结构 **/
+	struct Position_T
+	{
+	   long xPos;	//X轴方向坐标
+	   long yPos;	//Y轴方向坐标
+	};
+	
+	/** TOPO节点数据结构 **/
+	struct Node_T
+	{
+	   ObjectID 	nodeID;		//节点对象ID
+	   string 	nativeEMSName;	//节点对象在下层网管的名称
+	   NodeType_T 	nodeType;  	//节点类型：拓扑子网/网元
+	   Position_T 	position;	//节点坐标
+	   ObjectID 	parent; 	//父节点对象ID
+	   NVSList_T additionalInfo; 	//用来扩展
+	};
+	typedef  sequence<Node_T> NodeList_T;
+	
+	interface NodeIterator_I
+	{
+	   boolean next_n(in unsigned long how_many,out NodeList_T nodeList)
+		 raises	(ProcessingFailureException);
+	   unsigned long getLength()
+		 raises	(ProcessingFailureException);
+	   void destroy()
+		 raises	(ProcessingFailureException);
+	};
+	
+	
+	/** 电路割接工具使用的CORBA私有接口 **/
+	interface  CircuitCutMgr_I : common::Common_I
+	{
+	   /** 下发割接任务接口 **/
+	   void createPrefabSNCsAndDelCutSNCs(
+		in  SNCBasicInfoList_T	         prefabSNCList,
+		in  SNCBasicInfoList_T	         cutSNCList,
+		in  CutAndPrefabSNCPairList_T    cutAndPrefabSNCList, 
+		out unsigned long                result, 
+		out ErrorReasonList_T 	         errorReasonList)
+		raises(ProcessingFailureException);
+	
+	   /** 割接任务校验接口 **/
+	   void checkPrefabAndCutSNCs(
+		in SNCBasicInfoList_T		checkPrefabSNCList,
+		in SNCBasicInfoList_T		checkCutSNCList,
+		in boolean			isAccordCheck,
+		out ErrorReasonList_T		errorReasons)
+		raises(ProcessingFailureException);
+	
+	   /** 计算预制电路路由接口 **/
+	   void calcuPrefabSNCRoute(
+		in PrefabSNCCreateData_T	createPrefabSNC,
+		in SNCBasicInfoList_T		deleteCutSNCList,
+		in ObjectID	 				srcSncpNEID,
+		in ObjectID	 				snkSncpNEID,
+		in boolean					isCalcSNCP,
+		inout SNCServiceRouteList_T	normalOrSncpRoute   //2007-3-5 修改前为：inout SNCServiceRoute_T	normalOrSncpRoute
+		)raises(ProcessingFailureException);
+	
+	   /** 查询可用服务层路由约束条件接口 **/
+	   void getAllIdleServiceTrailAndTS(
+		in   ConnectivityNodePairList_T	serviceTrailEndPointList,
+		in   SNCBasicInfoList_T		deleteCutSNCList,
+		in   SNCRate_T			rate,
+		out  ServiceTrailList_T		idleSNCServiceTrailList
+		)raises(ProcessingFailureException);
+	
+	   /** 在T2100创建预制电路接口 **/
+	   void setPrefabSNC(
+		in  SNCBasicInfo_T	prefabSNCInfo,
+		in  SNCServiceRoute_T	prefabSNCServiceRoute
+		)raises(ProcessingFailureException);
+	
+	   /** 查询预制电路或普通电路服务层路由接口 **/
+	   void getSNCServiceRoute(
+		in  SNCBasicInfo_T	sncBasicInfo,
+		out SNCServiceRoute_T	sncServiceRoute
+		)raises(ProcessingFailureException);
+	
+	   /** 
+	   *在T2100侧删除预制电路接口
+	   *delPrefabSNCIDList为空表示全部删除
+	   **/
+	   void deletePrefabSNCs(
+		in  SNCBasicInfoList_T	delPrefabSNCInfoList,
+		out ErrorReasonList_T	errorReasonList
+		)raises(ProcessingFailureException);
+	
+	   /** 查询网元可用端口和时隙接口 **/
+	   void getAllIdlePortAndTS(
+		in  SNCTtpInfo_T	sncTtPInfo,
+		in  SNCBasicInfoList_T	cutSNCList,
+		out IdlePortAndTSList_T	idleportAndTSList
+		)raises(ProcessingFailureException);
+	
+	   /** 上载服务层路径连通性视图接口 **/
+	   void getServiceTrailViewBySNCRate(
+		in  unsigned long			how_many,
+		in  SNCRate_T				rate,
+		out ConnectivityNodePairList_T		connectivityNodePairList,
+		out ConnectivityNodePairIterator_I	ConnectivityNodePairListIt
+		)raises(ProcessingFailureException);	
+	   
+	
+	   /** 上载物理TOPO数据接口 **/
+	   void getTopoSubnetworkViewInfo(in unsigned long how_many,
+		out NodeList_T nodeList,
+		out NodeIterator_I NodeIt)
+ 		raises(ProcessingFailureException);
+	};
+ 
+};
+
+#endif
+
+

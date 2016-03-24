@@ -1,0 +1,974 @@
+#ifndef subnetworkConnection_idl
+#define subnetworkConnection_idl
+
+// ********************************
+// *                              *
+// * subnetworkConnection.idl     *
+// *                              *
+// ********************************
+
+//Include list
+#include "globaldefs.idl"
+#include "transmissionParameters.idl"
+#include "terminationPoint.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the subnetworkConnection structure
+   * of the NML-EML interface.</p>
+   * <p>For a detailed description of the use of this struct see 
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.</p)
+   * <br>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module subnetworkConnection
+{
+  /**
+   * <p>The static protection level is a statement of the internal resiliency of the SNC
+   * (internal to
+   * the subnetwork). The more resilient an SNC is, the more bandwidth 
+   * it will consume.<br>
+   * The protection level does not have any bearing on the externally visible
+   * shape and traffic flows of the SNC (in non-failure cases).<br>
+   * For a detailed description of the use of this attribute, see 
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.</p>
+   **/
+   enum StaticProtectionLevel_T
+   {
+      PREEMPTIBLE,
+      UNPROTECTED,
+      PARTIALLY_PROTECTED,
+      FULLY_PROTECTED,
+      HIGHLY_PROTECTED
+   };
+
+
+/**
+   * <p>The protection effort is a statement of the requirement
+   * of the static protection level.  
+   * For example if EFFORT_SAME_OR_WORSE is specified for a 3-ended
+   * FULLY_PROTECTED connection, a 3-ended PARTIALLY_PROTECTED connection is acceptable, 
+   * but a 2-ended connection (ST_SIMPLE) is not acceptable i.e. ProtectionEffort_T 
+   * does not have any bearing on the externaly visible shape of the SNC.</p>
+   *
+   * <p>EFFORT_WHATEVER indicates that the specified static protection level is preferred,
+   * but that any other level is acceptable.</p>
+   *
+   * <p>For a detailed description of the use of this attribute see 
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.</p>
+   **/
+   enum ProtectionEffort_T
+   {
+     EFFORT_WHATEVER,
+     EFFORT_SAME_OR_BETTER,
+     EFFORT_SAME_OR_WORSE,
+     EFFORT_SAME
+   };
+
+
+  /**
+   * <p>The SNCState enum is used to represent the various states that
+   * an SNC may take.</p>
+   *
+   * <p>The following states may be supported by the EMS, depending on the SNC
+   * management mode of operation used by the EMS.
+   * See <a href=supportingDocumentation/modesOfOperation.html>SNC Management 
+   * Modes Of Operation</a> for details.<br>
+   * <ul>
+   * <li> SNCS_PENDING: the SNC has been created by an NMS and has not been
+   *   activated by any NMS; or the SNC has been successfully deactivated by an NMS.
+   *   That state has no relationship with the network state of the cross-connects of
+   *   the SNC.
+   *   It is allowable for an EMS to not support the SNCS_PENDING state and to 
+   *   reject any operation that attempts to put an SNC into SNCS_PENDING state.</li>
+   * <li> SNCS_ACTIVE: the SNC is not in pending state, a route has been assigned to
+   *   the SNC and all cross-connects for the SNC are active in the network.</li>
+   * <li> SNCS_PARTIAL: the SNC is not in pending state, and either a route has not been
+   *   assigned to the SNC, or not all of the
+   *   cross-connects of the SNC are active in the network.  This may or may not
+   *   include activated SNCs for which there are currently no active cross-connects
+   *   in the network, depending on the SNC management mode of operation.
+   *   It is possible that, in some EMSes, this state be unreachable.</li>
+   * <li> SNCS_NONEXISTENT: this is not an SNC state per se, as it applies to 
+   *   "non-existent SNCs".  It is used in the interface to report SNCs that have 
+   *   been deleted.
+   * </li></ul></p>
+   *
+   * <p>See 
+   * <a href=supportingDocumentation/SNCStateDiagram.pdf>SNCState state diagram</a>
+   * for details on valid transitions.</p>
+   **/
+   enum SNCState_T
+   {
+     SNCS_NONEXISTENT,
+     SNCS_PENDING,
+     SNCS_ACTIVE,
+     SNCS_PARTIAL
+   };
+
+
+  /**
+   * <p>Grades of maximum tolerable disruption to traffic as a result of the
+   * operation that this parameter is describing. The following relates 
+   * to design intent:<br>GOI_HITLESS,<br>
+   * GOI_MINOR_IMPACT <= 50ms,<br>
+   * GOI_MAJOR_IMPACT > 50ms.<br></p>
+   **/
+   enum GradesOfImpact_T
+   {
+    GOI_HITLESS,
+    GOI_MINOR_IMPACT,
+    GOI_MAJOR_IMPACT
+   };
+
+
+  /** 
+   * <p>The TPData struct contains termination point data that is settable by the NMS.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>tpName</b>:
+   * <br>The name of the termination point to which this data applies.<br>
+   *
+   * TerminationMode_T <b>tpMappingMode</b>:
+   * <br>The mapping mode to put the TP in.<br>
+   *
+   * transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+   * <br>When used as output to the NMS, this is the transmission parameters of the TP.
+   * When used as input to the EMS, this
+   * is a "delta" list that needs to be applied to the specified TP.  Only
+   * a subset of the parameters may be specified in the list, and
+   * only those should be applied in the NE. 
+   * If the list is empty then this means do nothing. To remove a parameter from the
+   * list, "-" should be specified in the value part of the structure.
+   * When a BLSR connection is created, the SPRING_NodeId parameter should be provided
+   * for the aEnd and zEnd CTPs.<br>
+   *
+   * globaldefs::NamingAttributes_T <b>ingressTrafficDescriptorName</b>:
+   * <br>The ingressTrafficDescriptorName of the TP (to be set).<br>
+   *
+   * globaldefs::NamingAttributes_T <b>egressTrafficDescriptorName</b>:
+   * <br>The egressTrafficDescriptorName of the TP (to be set).<br>
+   **/
+   struct TPData_T
+   {
+    globaldefs::NamingAttributes_T tpName;
+    terminationPoint::TerminationMode_T tpMappingMode;
+    transmissionParameters::LayeredParameterList_T transmissionParams;
+    globaldefs::NamingAttributes_T ingressTrafficDescriptorName;
+    globaldefs::NamingAttributes_T egressTrafficDescriptorName;
+   };
+
+  /**
+   * <p>Sequence of TPData_T.</p>
+   **/
+  typedef sequence<TPData_T> TPDataList_T;
+
+  /**
+   * <p>The SNC Type describes the connection based on the signal 
+   * flows.</p>
+   *
+   * <p>For a detailed description of the use of this attribute see 
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.</p>
+   *
+   * <p>In case of an ATM SNC (VP or VC), ST_SIMPLE is used to specify a 'plain'
+   * (hard or regular) PVC.</p>
+   **/
+   enum SNCType_T
+   {
+     ST_SIMPLE,
+     ST_ADD_DROP_A,
+     ST_ADD_DROP_Z,
+     ST_INTERCONNECT,
+     ST_DOUBLE_INTERCONNECT,
+     ST_DOUBLE_ADD_DROP,
+     ST_OPEN_ADD_DROP,
+     ST_EXPLICIT
+   };
+
+
+  /**
+   * <p>The Reroute_T type indicates if the EMS/MEs are allowed and/or required
+   * to reroute this SNC if there 
+   * is a failure on this SNC, periodically to optimize the routes, of for any other reason.
+   * It is an EMS/ME implementation whether this is done using network routing protocols
+   * or if the EMS/MEs detect the failure and take appropriate action to attempt to fix 
+   * the SNC.</p>
+   *
+   * <p>The RR_NO value means that the EMS/MEs are not allowed to reroute the SNC.
+   * The RR_YES value means that the EMS/MEs are allowed to reroute the SNC and required 
+   * to attempt to reroute it upon failure.
+   * The RR_NA value is used when the NMS does not want to specify the exact EMS behaviour.
+   * In this case it is left up to the EMS to decide whether rerouting will be provided.
+   * It is also used if the EMS/MEs are allowed to reroute the SNC but not required 
+   * to attempt to reroute it upon failure.</p>
+   **/
+   enum Reroute_T
+   {
+      RR_NA,
+      RR_NO,
+      RR_YES
+   };
+
+
+  /**
+   * Network routed, indicates if the route must be or is computed and
+   * implemented at the network level. 
+   * NR_YES indicates that the
+   * route must be / is computed at the network.
+   * NR_NO indicates that the route must not be / is not
+   * computed at the network. 
+   * NR_NA indicates that the route can be computed
+   * anywhere.
+   **/
+
+   enum NetworkRouted_T
+   {
+      NR_NA,
+      NR_NO,
+      NR_YES
+   };
+
+
+  /** 
+   * The route change goes through different stages during a
+   * reroute of a SubnetworkConnection. These stages are a part
+   * of the ROUTE_CHANGE notification.
+   * These are:
+   * <ol>
+   * <li> "RerouteStarted" </li>
+   * <li> "RerouteCompleted" </li>
+   * <li> "RerouteFailed" </li>
+   * </ol>
+   **/
+
+   typedef string RerouteChangeEvent_T;
+ 
+
+  /**
+   * <p>A subnetwork connection represents a connection between CTPs.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>The name represents the name of the
+   * SubnetworkConnection which is assigned by the EMS upon creation.
+   * The EMS is responsible for guaranteeing the uniqueness of the name
+   * within the context of the MultiLayerSubnetworkMgr_I.
+   * It is a readonly attribute.<br>
+   *
+   * string <b>userLabel</b>:
+   * <br>The user label of the subnetwork connection is NMS data
+   * (typically end-to-end trail data). This could be used by the EMS 
+   * to display to the user (to associate SNCs/cross-connects to the NMS data),
+   * but this is not a requirement on the EMS to display on its GUI.
+   * This attribute can be set
+   * by the NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setUserLabel>setUserLabel</a>
+   * or through the createSNC and createAndActivateSNC operations. 
+   * It is a read/write attribute.<br>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br>The name represents how the SNC is referred to on EMS displays. Its
+   * aim is to provide a "nomenclature bridge" to aid relating information
+   * presented on NMS displays to EMS displays (via GUI cut through).
+   * The native name is defaulted to a NULL string. However, this could
+   * be used by the EMS for its implementation dependent purpose.<br>
+   *
+   * string <b>owner</b>:
+   * <br>
+   * The owner is provisionable by the NMS. This attribute can be set
+   * by NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setOwner>setOwner</a>
+   * or through the createSNC and createAndActivateSNC operations. 
+   * It is a read/write attribute.<br>
+   *
+   * SNCState_T <b>sncState</b>:
+   * <br>The EMS may operate in one of four modes, summarized below.  See
+   * <a href=supportingDocumentation/SNCModes.html>SNC Management 
+   * Modes Of Operation</a>.<br>
+   * <ol> 
+   * <li>  No pending no sharing </li>
+   *   <ul> 
+   *   <li> The pending state is not supported.  Conflicting SNCs are rejected
+   *    on creation.  Sharing of CCs amongst SNCs is not allowed, except for
+   *    broadcast SNCs.
+   *   </li>
+   * </ul>
+   * <li>  No pending with sharing </li>
+   *   <ul> 
+   *   <li> The pending state is not supported.  Conflicting SNCs are rejected
+   *    on creation.  However, sharing of CCs amongst SNCs is allowed.
+   *   </li>
+   * </ul>
+   * <li>  Pending no sharing </li>
+   *   <ul> 
+   *   <li> The pending state is supported.  Conflicting SNCs and SNCs that share CCs
+   *    are accepted on creation, however their activation is rejected.
+   *    Sharing of CCs amongst SNCs is not allowed for partial and active SNCs, 
+   *    except for broadcast SNCs.
+   *   </li>
+   * </ul>
+   * <li>  Pending with sharing </li>
+   *   <ul> 
+   *   <li> The pending state is supported.  Conflicting SNCs are accepted
+   *    on creation, however their activation is rejected.  
+   *    Sharing of CCs amongst SNCs is allowed.
+   *   </li>
+   * </ul>
+   * </ol>
+   * See <a href=supportingDocumentation/modesOfOperation.html>SNC Management 
+   * Modes Of Operation</a> for details.<br>
+   * The sncState is an attribute managed by the EMS.<br>
+   * The EMS manages the state transition of this attribute.<br>
+   * The EMS will assess the cross-connections in the network that
+   * support the SNC and will appropriately adjust the value of SNCState to 
+   * reflect the actual state of the SNC in the network.
+   * <br>
+   *
+   * globaldefs ::ConnectionDirection_T <b>direction</b>:
+   * <br>Specifies the direction of the
+   * subnetwork connection.
+   * It is a readonly attribute.<br>
+   *
+   * transmissionParameters::LayerRate_T <b>rate</b>:
+   * <br>The rate of the SubnetworkConnection is obtained by reading
+   * this attribute. The EMS sets this attribute at creation of the SNC.
+   * The EMS is allowed to choose a Layer Rate equivalent to that of 
+   * one of the TPs. The EMS is
+   * expected to reflect any equivalent layer rate in any connection 
+   * retrievals (i.e. the connection rate of the SNC retrieved from the 
+   * EMS does not have to be the same as that requested by the NMS so long
+   * as it is an equivalent rate).<br>
+   *
+   * <br>For a detailed description of the use of this attribute see 
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.
+   * This is a readonly attribute.<br>
+   *
+   * StaticProtectionLevel_T <b>staticProtectionLevel</b>:
+   * <br>The static protection level of the SNC.  
+   * For a detailed description of the use of this attribute, see 
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.
+   * This is a readonly attribute.<br>
+   *
+   * SNCType_T <b>sncType</b>:
+   * <br>The type of the SNC.  For a detailed description of the use of this attribute, see 
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.
+   * This is a readonly attribute.<br>
+   *
+   * TPDataList_T <b>aEnd</b>:
+   * <br>The list of Aend termination points where this SNC terminates.
+   * For a detailed description of the use of this attribute, see 
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.
+   * This is a readonly attribute.<br>
+   *
+   * TPDataList_T <b>zEnd</b>:
+   * <br>The list of Zend termination points where this SNC terminates.
+   * For a detailed description of the use of this attribute, see 
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.
+   * This is a readonly attribute.<br>
+   *
+   * Reroute_T <b>rerouteAllowed</b>:
+   * <br>This attribute specifies if the EMS is allowed/required to reroute this SNC.<br>
+   *
+   * NetworkRouted_T <b>networkRouted</b>:
+   * <br>This attribute specifies if the route for this SNC is computed by the network.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>This attribute allows the communication from the EMS to the NMS of additional 
+   * information which is not explicitly modelled.
+   * It is a readonly attribute.<br>
+   * <br>
+   **/
+   struct SubnetworkConnection_T
+   {
+   globaldefs::NamingAttributes_T name;
+   string userLabel;
+   string nativeEMSName;
+   string owner;
+   SNCState_T sncState;    
+   globaldefs::ConnectionDirection_T direction;
+   transmissionParameters::LayerRate_T rate;
+   StaticProtectionLevel_T staticProtectionLevel;
+   SNCType_T sncType;
+   TPDataList_T aEnd;    
+   TPDataList_T zEnd;    
+   Reroute_T rerouteAllowed;
+   NetworkRouted_T networkRouted;
+   globaldefs::NVSList_T additionalInfo;
+  };
+
+
+  /**
+   * <p>Sequence of SubnetworkConnection_T.</p>
+   **/
+   typedef sequence<SubnetworkConnection_T> SubnetworkConnectionList_T;
+
+
+  /**
+   * <p>A crossConnect represents a connection within a single managed element.
+   * This structure is primarily used in the specification of routes.</p>
+   *
+   * boolean <b>active</b>:
+   * <br>Indicates if the cross-connect is active in the ME.  Refer to
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a> for details.<br>
+   *
+   * globaldefs::ConnectionDirection_T <b>direction</b>:
+   * <br>Directionality of the cross connection.<br>
+   *
+   * SNCType_T <b>ccType</b>:
+   * <br>Type of connection as specified in
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>aEndNameList</b>:
+   * <br>Names of CTPs at the aEnd of the cross connection.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>zEndNameList</b>:
+   * <br>Names of CTPs at the zEnd of the cross connection.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>This attribute allows the communication from the EMS to the NMS of additional 
+   * information which is not explicitly modelled.
+   * It is a readonly attribute.<br>
+   **/
+  struct CrossConnect_T
+  {
+   boolean active;
+   globaldefs::ConnectionDirection_T direction; 
+   SNCType_T ccType;
+   globaldefs::NamingAttributesList_T aEndNameList;
+   globaldefs::NamingAttributesList_T zEndNameList;
+   globaldefs::NVSList_T additionalInfo;
+  };
+
+
+  /**
+   * <p>A route for an SNC is defined as a partially ordered list of cross-connects.</p>
+   *
+   * <p>This structure can deal with any arbitrarily complex protection paths
+   * made up from connection types described in
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.</p>
+   * 
+   * <p>The cross-connects are listed from the NE 
+   * on which the SNC starts (first entry) to the NE on which the SNC ends
+   * (last entry) and the aEndNameList and zEndNameList will name CTPs of the
+   * same or equivalent layerRate only. There is no mandatory order in
+   * the cross-connects listed in between the first one and the last one.</p>
+   **/
+   typedef sequence<CrossConnect_T> Route_T;
+
+
+  /**
+   * <p>This structure specifys the route of a single SNC.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>sncName</b>:
+   * <br>the name of the SNC<br>
+   *
+   * Route_T <b>route</b>:
+   * <br>route of the SNC.<br>
+   *
+   **/
+   struct RouteInfo_T
+   {
+    globaldefs::NamingAttributes_T sncName;
+	Route_T route;
+   };
+
+
+  /**
+   * <p>Sequence of RouteInfo_T.</p>
+   **/
+   typedef sequence<RouteInfo_T> RouteInfoList_T;
+
+
+  /**
+   * <p>Arbitrary sequence of cross-connects.</p>
+   **/
+   typedef sequence<CrossConnect_T> CrossConnectList_T;
+
+
+  /**
+   * <p>An inclusion/exclusion constraint for an SNC is defined as a list of resources.
+   * A resource is defined as an ME, TL, CTP, PTP, or SNC.</p>
+   */
+   typedef globaldefs::NamingAttributes_T Resource_T;
+
+
+  /**
+   * <p>Set of Resources_T, used as an inclusion/exclusion constraint for SNC creation.</p>
+   *
+   * <p>There is no mandatory order for the resources listed.</p>
+   */
+   typedef sequence<Resource_T> ResourceList_T;
+
+
+  /**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   **/
+
+   interface CCIterator_I 
+    {
+	boolean  next_n(in  unsigned long    how_many,
+			out CrossConnectList_T ccList)
+		 raises (globaldefs::ProcessingFailureException);
+
+	unsigned long getLength()
+		 raises (globaldefs::ProcessingFailureException);
+
+	void     destroy()
+		 raises (globaldefs::ProcessingFailureException);
+    };
+
+
+  /**
+   * <p>The read-create attributes required for the creation of a
+   * subnetworkConnection on the EMS are packaged together in an SNCCreateData
+   * structure which the NMS will pass to the EMS at SNC creation time.  These 
+   * are the read-create attributes of the SNC.</p>
+   *
+   * string <b>userLabel</b>:
+   * <br>userLabel may be specified by the NMS. May be empty.<br>
+   *
+   * boolean <b>forceUniqueness</b>:
+   * <br>Specifies whether uniqueness of the userLabel is required amongst SNCs of 
+   *  the EMS.  The operation will fail if userLabel is already in use.<br>
+   *
+   * string <b>owner</b>:
+   * <br>owner may be specified by the NMS. May be empty.<br>
+   *
+   * Globaldefs::ConnectionDirection_T <b>direction</b>:
+   * <br>The connection directionality must be specified by the NMS.<br>
+   *
+   * StaticProtectionLevel_T <b>staticProtectionLevel</b>:
+   * <br>The NMS must specify the requested staticProtectionLevel as specified in
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.<br>
+   *
+   * ProtectionEffort_T <b>protectionEffort</b>:
+   * <br>The NMS must specify the protectionEffort as specified in
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.<br>
+   *
+   * Reroute_T <b>rerouteAllowed</b>:
+   * <br>This attribute specifies if the EMS is allowed/required to reroute this SNC.
+   * There is no requirement for the reroutes
+   * to respect the constraints specified in the creation request
+   * (ccInclusions, neTpInclusions, fullRoute, neTpSncExclusions).<br>
+   *
+   * NetworkRouted_T <b>networkRouted</b>:
+   * <br>This attribute specifies if the network is allowed/required to route this SNC.<br>
+   *
+   * SNCType_T <b>sncType</b>:
+   * <br>The NMS must specify the sncType as specified in
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.<br>
+   *
+   * transmissionParameters::LayerRate_T <b>layerRate</b>:
+   * <br>Identifies the layer at which the SNC is to be made.<br>
+   *
+   * CrossConnectList_T <b>ccInclusions</b>:
+   * <br>Specifies a list of cross-connects that must be used by the SNC.
+   * The list must be empty if no cross-connect constraints are required.  If the EMS
+   * cannot fully satisfy the constraints, then the request will be rejected.<br>
+   *
+   * ResourceList_T <b>neTpInclusions</b>
+   * <br>Specifies a list of MEs, TLs, PTPs, and/or CTPs that must be used by 
+   * the SNC. The list must be empty if no ME/PTP/CTP constraints are required.  
+   * If the EMScannot fully satisfy the constraints, then the request will be rejected.<br>
+   *
+   * boolean <b>fullRoute</b>
+   * <br>Specifies if the ccInclusions and neTpInclusions constraints describe
+   * the full route of the SNC (as opposed to only a partial constraint).
+   * When no inclusions constraints are specified, false must be used.<br>
+   *
+   * ResourceList_T <b>neTpSncExclusions</b>
+   * <br>Specifies a list of MEs, TLs, PTPs, CTPs, and/or SNCs to be excluded.
+   * The SNC to be created must not use any of the NEs, TLs, PTPs, and CTPs 
+   * specified, nor any resource used by the SNCs specified.
+   * Specifying both inclusion and exclusion constraints is not supported,
+   * therefore this list must be empty if ccInclusions or neTpInclusions is non empty.
+   * <br>
+   *
+   * NamingAttributesList_T <b>aEnd</b>:
+   * <br>The NMS must specify the aEnd as specified in
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.
+   * Is also used to indicate the Source TP when adding a leg to an existing
+   * broadcast system.<br>
+   *
+   * NamingAttributesList_T <b>zEnd</b>:
+   * <br>The NMS must specify the zEnd as specified in
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.
+   * Is also used to indicate the Sink TP when adding a leg to an existing
+   * broadcast system.
+   * If the NMS supplies an invalid 
+   * combination of TPs in aEnd and zEnd, then the EMS will throw an 
+   * INVALID_INPUT exception.
+   * Aend and Zend TPs have to be on the same subnetwork.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalCreationInfo</b>:
+   * <br>Some additional creation information may be specified by the NMS.
+   * For example, for a system which cannot use the routing constraints 
+   * for a BLSR case it may supply the pairs:
+   * <ul><li>"BLSRDirection" taking values "EAST", "WEST" and "NA"</li>
+   * <li>"Timeslot" taking values "1".."nnnnn".</li></ul>
+   * This could also be used to carry the "PotentialFutureSetupIndicator" of the aEnd
+   * in the case where it has an impact on the creation of the SNC.
+   * The list may be empty.<br>
+   * <br>
+   **/  
+   struct SNCCreateData_T
+   {
+    string userLabel;
+    boolean forceUniqueness;
+    string owner;
+    globaldefs::ConnectionDirection_T direction;
+    StaticProtectionLevel_T staticProtectionLevel;
+    ProtectionEffort_T protectionEffort;
+    Reroute_T rerouteAllowed;
+    NetworkRouted_T networkRouted;
+    SNCType_T sncType;
+    transmissionParameters::LayerRate_T layerRate;
+    CrossConnectList_T ccInclusions;
+    ResourceList_T neTpInclusions;
+    boolean fullRoute;
+    ResourceList_T neTpSncExclusions;
+    globaldefs::NamingAttributesList_T aEnd;
+    globaldefs::NamingAttributesList_T zEnd;
+    globaldefs::NVSList_T additionalCreationInfo;
+   };
+   
+   /**
+   * <p>A sequence of data for the creation of a set of SNCs</p>
+   **/
+   typedef sequence<SNCCreateData_T> SNCCreateDataList_T;
+   
+   /**
+   * <p>A route is a partially ordered list of cross connections. A SNC always  
+   * has one route and may have more than one: <ul>
+   * <li>always 1 intended route, i.e. the preferred, or default route</li>
+   * <li>0..n backup / alternative route(s)</li>
+   * </ul>
+   * <p>A route belongs to only one SNC. However XCs/CTPs can be shared by 
+   * routes of different SNCs.</p>
+   *
+   * string <b>id</b>:
+   * <br>Unique identifier within the SNC name, with format up to EMS.<br>
+   *
+   * string <b>intended</b>:
+   * <br>Can assume only the following values: "y", "n". The intended route 
+   * (value "y") could be defined as the preferred, or default route for a given 
+   * service. Practically, the intended route could be simply the first time 
+   * provisioned route, or the preferred route for a number of factors, from 
+   * network engineering to intrinsic media reliability. The backup route (value 
+   * "n") is partly or totally different from intended route (but with same end 
+   * points), and it is useful mainly for restoration and maintenance 
+   * purposes.<br>
+   *
+   * string <b>actualState</b>:
+   * <br> it is the summary state of the actual state of XCs in the network, 
+   * regardless the SNC such XCs are currently serving; it can assume only the 
+   * following values:<ul>
+   * <li><b>inactive</b>: None of its XCs is active in the network</li>
+   * <li><b>active</b>: all its XCs are active in the network. So it is the 
+   * route where SNC traffic is currently carried. There can be at most one 
+   * active route per SNC. inUseBy shall be always "n".</li>
+   * <li><b>partial</b>: one or more, but not all the XCs are active in the 
+   * network. If the route was unsuccessfully activated, then inUseBy shall be 
+   * always "n". If the route was unsuccessfully deactivated, then inUseBy could 
+   * be "y". <i>Note: a capability to activate segments of a backup route for 
+   * more rapid switch over would be of value. It was agreed that this would not 
+   * be included in the current release but that it could be considered for a 
+   * later release.</i></li></ul><br>
+   *
+   * string<b>administrativeState</b>:
+   * <br>This state refers to the belonging SNC, and has not any relationship 
+   * with the actual state. It can assume only the following values:<ul>
+   * <li><b>locked</b>: the route is not allowed to be active. This state is 
+   * changeable by:<ul>
+   * <li>multiLayerSubnetwork::MultiLayerSubnetworkMgr_I::setRoutesAdminState()
+   * if all the routes of a given SNC are set to locked, 
+   * the SNC transits in PENDING state.</li>
+   * <li>multiLayerSubnetwork::MultiLayerSubnetworkMgr_I::createSNC()
+   * creates one locked intended route</li>
+   * <li>multiLayerSubnetwork::MultiLayerSubnetworkMgr_I::deactivateSNC()
+   * locks all routes</li>
+   * <li>multiLayerSubnetwork::MultiLayerSubnetworkMgr_I::addRoute()
+   * creates one locked backup route</li>
+   * <li>multiLayerSubnetwork::MultiLayerSubnetworkMgr_I::createModifiedSNC()
+   * modifies the addressed route, which transits to 
+   * locked.
+   * Note for createModifySNC(): the SNC will transit to PARTIAL  state, because 
+   * the just modified route was never unlocked/activated before, and the old 
+   * route is still ACTIVE in the network. So the SNC PARTIAL state means that 
+   * an activateSNC() or unlockRoute() operation is needed. Moreover, it is not 
+   * possible to determine the actual route of the SNC in the network once the 
+   * old route was modified.</li></ul></li>
+   * <li><b>unlocked</b>: the route is allowed to be active. This state is 
+   * changeable by:<ul>
+   * <li>multiLayerSubnetwork::MultiLayerSubnetworkMgr_I::setRoutesAdminState()
+   * If a route was modified by createModifySNC(), then 
+   * setting it to unlocked implies the activation of the new route. If the 
+   * activation is successful, (route actual state is ACTIVE) then also the SNC 
+   * will transit to ACTIVE. If a locked route of a PENDING SNC is set to 
+   * UNLOCKED, the SNC will transit to either ACTIVE or PARTIAL.</li>
+   * <li>multiLayerSubnetwork::MultiLayerSubnetworkMgr_I::createAndActivateSNC()
+   * creates and unlocks the intended route</li>
+   * <li>multiLayerSubnetwork::MultiLayerSubnetworkMgr_I::activateNC()
+   * unlocks all routes</li>
+   * <li>multiLayerSubnetwork::MultiLayerSubnetworkMgr_I::switchRoute()
+   * is a "manual" switch, so no route is locked or 
+   * unlocked.</li>
+   * <li>multiLayerSubnetwork::MultiLayerSubnetworkMgr_I::modifySNC()
+   * modifies and unlocks the addressed route</li>
+   * <li>multiLayerSubnetwork::MultiLayerSubnetworkMgr_I::deleteSNC()
+   * fails if at least one route is unlocked</li></ul></li><br>
+   *
+   * string <b>inUseBy</b>:
+   * <br>With value "y" if at least one of its XCs or CTPs is carrying traffic 
+   * of another SNC, "n" otherwise.<br>
+   *
+   * string <b>exclusive</b>: 
+   * <br>The value "y"  means not any routes of other SNCs can share any of its 
+   * XCs or CTPs, even in locked state, "n" otherwise.<br>
+   *
+   * Route_T <b>routeXCs</b>:
+   * <br>The partially ordered list of cross-connects that forms the 
+   * route.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>: 
+   * <br>This attribute allows the communication from the EMS to the NMS of 
+   * additional information which is not explicitly modelled. For full 
+   * information see <a href=supportingDocumentation/additionalInfoUsage.pdf>
+   * Additional Information Usage</a>.<br>
+   **/
+   struct RouteDescriptor_T 
+   {
+    string id;
+    string intended;
+    string actualState;
+    string administrativeState;
+    string inUseBy;
+    string exclusive;
+    Route_T routeXCs; 
+    globaldefs::NVSList_T additionalInfo;
+   };
+
+  /**
+   * <p>Arbitrary sequence of routes.</p>
+   **/
+   typedef sequence<RouteDescriptor_T> RouteList_T;
+   
+   
+   /**
+   * <p>The read-create attributes required for the modification of a
+   * subnetworkConnection on the EMS are packaged together in an SNCModifyData
+   * structure which the NMS will pass to the EMS in a request to modify an 
+   * existing SNC.</p>
+   *
+   * string <b>userLabel</b>:
+   * <br>userLabel may be specified by the NMS. May be empty.<br>
+   *
+   * boolean <b>forceUniqueness</b>:
+   * <br>Specifies whether uniqueness of the userLabel is required amongst SNCs 
+   *  of the EMS.  The operation will fail if userLabel is already in use.<br>
+   *
+   * string <b>owner</b>:
+   * <br>owner may be specified by the NMS. May be empty.<br>
+   *
+   * globaldefs::ConnectionDirection_T <b>direction</b>:
+   * <br>The connection directionality must be specified by the NMS.<br>
+   *
+   * string <b>modifyType</b>:
+   * <br>Class of modification: "rerouting", "add_protection" or 
+   * "remove_protection".<br>
+   *
+   * boolean <a>retainOldSNC</b>:
+   * <br>Request for the EMS to keep the old SNC in pending state.<br>
+   * 
+   * boolean <a>modifyServers_allowed</a>:
+   * <br>Allow to modify the server layers to fulfil the protection 
+   * constraint.<br>
+   *
+   * StaticProtectionLevel_T <b>staticProtectionLevel</b>:
+   * <br>The NMS must specify the requested staticProtectionLevel as specified 
+   * in <a href=supportingDocumentation/SNCTypes.pdf>SNC Types</a>.<br>
+   *
+   * ProtectionEffort_T <b>protectionEffort</b>:
+   * <br>The NMS must specify the protectionEffort as specified in
+   * <a href=supportingDocumentation/SNCTypes.pdf>SNC Types</a>.<br>
+   *
+   * Reroute_T <b>rerouteAllowed</b>:
+   * <br>This attribute indicates if the EMS/MEs are allowed and/or required
+   * to reroute this SNC if there 
+   * is a failure on this SNC, periodically to optimize the routes, of for any 
+   * other reason. It is an EMS/ME implementation whether this is done using 
+   * network routing protocols or if the EMS/MEs detect the failure and take 
+   * appropriate action to attempt to fix the SNC. There is no requirement for 
+   * the reroutes to respect the constraints specified in the creation request
+   * (ccInclusions, neTpInclusions, fullRoute, neTpSncExclusions).<br>
+   *
+   * NetworkRouted_T <b>networkRouted</b>:
+   * <br>This attribute specifies if the network is allowed/required to route 
+   * this SNC.<br>
+   *
+   * SNCType_T <b>sncType</b>:
+   * <br>The NMS must specify the sncType as specified in
+   * <a href=supportingDocumentation/SNCTypes.pdf>SNC Types</a>.<br>
+   *
+   * transmissionParameters::LayerRate_T <b>layerRate</b>:
+   * <br>Identifies the layer at which the SNC is to be made.<br>
+   *
+   * RouteList_T <b>addedOrNewRoute</b>:
+   * <br>Depending on the modifyType, AddedOrNewRoute describes the route of a 
+   * new protection leg or the whole SNC. When it describes a segment to be 
+   * added, either the SNCP cross-connects or the switch TPs that will be 
+   * changed in the segment may be specified by the NMS. The EMS then chooses 
+   * the missing segments. Alternatively, the NMS may specify the full 
+   * route.<br>
+   *
+   * RouteList_T <b>removedRoute</b>:
+   * <br>RemovedRoute describes dropping of a protection leg from the original 
+   * SNC. Either the last cross-connects (that contain the SNCP) are specified 
+   * by the NMS or the full route may be specified. This parameter can be used 
+   * in conjunction with addedOrNewRoute only to reroute a segment.<br>
+   *
+   * ResourceList_T <b>neTpInclusions</b>
+   * <br>Specifies a list of MEs, TLs, PTPs, FTPs and/or CTPs that must be used 
+   * by the SNC when carrying out a full reroute or adding a routing leg. The 
+   * list must be empty if no ME/TL/PTP/CTP/FTP constraints are required.If the 
+   * EMScannot fully satisfy the constraints, then the request will be 
+   * rejected.<br>
+   *
+   * boolean <b>fullRoute</b>
+   * <br>Specifies if the neTpInclusions constraints describe the full route of 
+   * the SNC or routing leg (as opposed to only a partial constraint).
+   * When no inclusions constraints are specified, false must be used.<br>
+   *
+   * ResourceList_T <b>neTpSncExclusions</b>
+   * <br>Specifies a list of MEs, TLs, PTPs, FTPs, CTPs, and/or SNCs to be 
+   * excluded. This is applicable for adding the leg or doing a full reroute and 
+   * the route must not use any of the NEs, TLs, PTPs, 
+   * FTPs and CTPs specified, nor any resource used by the SNCs specified.
+   * Specifying both inclusion and exclusion constraints is not supported,
+   * therefore this list must be empty if neTpInclusions is not empty.
+   * <br>
+   *
+   * NamingAttributesList_T <b>aEnd</b>:
+   * <br>The NMS must specify the aEnd (CTP/FTP) as specified in
+   * <a href=supportingDocumentation/SNCTypes.pdf>SNC Types</a>.
+   * Is also used to indicate the Source TP when adding a leg to an existing
+   * broadcast system. If the TP is an FTP the NMS is allowed to specify a 
+   * generic end point within a  ME, the EMS will choose the appropriate TP 
+   * instance. See 
+   * <a href=supportingDocumentation/objectNaming.pdf>
+   * Object Naming</a> for further detail.<br>
+   *
+   * NamingAttributesList_T <b>zEnd</b>:
+   * <br>The NMS must specify the zEnd (CTP/FTP) as specified in
+   * <a href=supportingDocumentation/SNCTypes.pdf>SNC Types</a>.
+   * Is also used to indicate the Sink TP when adding a leg to an existing
+   * broadcast system.
+   * If the NMS supplies an invalid 
+   * combination of TPs in aEnd and zEnd, then the EMS will throw an 
+   * INVALID_INPUT exception.
+   * Aend and Zend TPs have to be on the same subnetwork If the TP is an FTP 
+   * the NMS is allowed to specify a generic end point within a ME, the EMS will 
+   * choose the appropriate TP instance. See 
+   * <a href=supportingDocumentation/objectNaming.pdf>
+   * Object Naming</a> for further detail.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalCreationInfo</b>:
+   * <br>Some additional creation information may be specified by the NMS.
+   * For example:
+   * <ul><li> for a system which cannot use the routing constraints 
+   * for a BLSR case it may supply the pairs:
+   * <ul><li>"BLSRDirection" taking values "EAST", "WEST" and "NA"</li>
+   * <li>"Timeslot" taking values "1".."nnnnn".</li></ul></li>
+   * <li>this could be used to carry the "PotentialFutureSetupIndicator" of the 
+   * aEnd in the case where it has an impact on the creation of the SNC.</li>
+   * <li>this could be used to indicate the intended role of one or more aEnd 
+   * or zEnd TPs by using the name conventions name = "A<n>Role" or "Z<n>Role", 
+   * and value = "CMEndPoint" or "LCEndPoint", where <n> refers to the index 
+   * of the TP within the aEnd or zEnd list.</li>
+   * <li>this could be used to convey the pointer to the alarm severity 
+   * assignment profile</li></ul>
+   * The list may be empty. For full information see <a 
+   * href=supportingDocumentation/additionalInfoUsage.pdf>
+   * Additional Information Usage</a>.<br>
+   * <br>
+   **/  
+
+   struct SNCModifyData_T
+   {
+    string userLabel;
+    boolean forceUniqueness;
+    string owner;
+    globaldefs::ConnectionDirection_T direction;
+    string modifyType;
+    boolean retainOldSNC;
+    boolean modifyServers_allowed;
+    StaticProtectionLevel_T staticProtectionLevel;
+    ProtectionEffort_T protectionEffort;
+    Reroute_T rerouteAllowed;
+    NetworkRouted_T networkRouted;
+    SNCType_T sncType;
+    transmissionParameters::LayerRate_T layerRate;
+    RouteList_T addedOrNewRoute;
+    RouteList_T removedRoute;
+    ResourceList_T neTpInclusions;
+    boolean fullRoute;
+    ResourceList_T neTpSncExclusions;
+    globaldefs::NamingAttributesList_T aEnd;
+    globaldefs::NamingAttributesList_T zEnd;
+    globaldefs::NVSList_T additionalCreationInfo;
+   };
+   
+  /**
+   * <p>The attributes of WDM WaveLengthStatus .</p>
+   * string <b>frequency</b>:
+   * <br>The Wave frequency of which the using status is received .<br>
+   * short <b>used</b>:
+   * <br>The amount of OCH Trails that are created for this frequency.<br>
+   * short <b>unused</b>:
+   * <br>The amount of usable Trails for this frequency.<br>
+   * globaldefs::NamingAttributes_T <b>addtionalInfo</b>:
+   * <br>The additional information of this frequency.<br>
+   **/ 
+   struct WaveLengthStatus_T
+   {
+   string frequency;
+   short used;
+   short unused;
+   globaldefs::NamingAttributes_T addtionalInfo;
+   };
+   
+  /**
+   * <p>Arbitrary sequence of WaveLengthStatus_T.</p>
+   **/
+   typedef sequence<WaveLengthStatus_T> WaveLengthStatusList_T;
+
+  /**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   **/
+
+  interface SNCIterator_I 
+    {
+        boolean  next_n(in unsigned long               how_many,
+                        out SubnetworkConnectionList_T sncList)
+          raises (globaldefs::ProcessingFailureException);
+
+        unsigned long getLength()
+          raises (globaldefs::ProcessingFailureException);
+
+        void destroy()
+          raises (globaldefs::ProcessingFailureException);
+    };
+  // End of Iterator interface
+}; 
+#endif
+

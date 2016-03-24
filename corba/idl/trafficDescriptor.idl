@@ -1,0 +1,501 @@
+#ifndef         trafficDescriptor_idl
+#define         trafficDescriptor_idl
+
+// *************************************
+// *                                   *
+// * trafficDescriptor.idl             *
+// *                                   *
+// *************************************
+
+//Include list
+#include "terminationPoint.idl"
+#include "globaldefs.idl"
+#include "common.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the traffic Descriptor structure
+   * of the NML-EML interface.
+   * It also contains the definition of the traffic descriptor manager.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module trafficDescriptor
+{
+
+  /**
+   * <p>Represents Service Categories used by Traffic 
+   * Descriptors. The current Service Categories are defined
+   * as follows (note that Guaranteed Bit Rate (GBR) is not 
+   * defined because it is generally not used):<p>
+   * <ol>
+   * <li> SC_CBR = Constant Bit Rate. For connections that require
+   * a sstatic amount of bandwidth that is continuously available during
+   * the lifetime of the connection.</li>
+   * <li> SC_VBRRT = Variable Bit Rate - Real-Time. For connections that
+   * require tightly constrained delay and delay variation.</li>
+   * <li> SC_VBRNRT = Variable Bit Rate - NonReal-Time. For connections
+   * that have bursty traffic.</li>
+   * <li> SC_ABR = Available Bit Rate. For connections that do not require
+   * bounding the delay or delay variation. Not intended for real-time
+   * applications.</li> 
+   * <li> SC_UBR = Unspecified Bit Rate. For connections that do not require
+   * tightly constrained delay and delay variation.</li> 
+   * <li> SC_GFR = Guaranteed Frame Rate. For non-real-time applications that may require 
+   * a minimum rate guarantee and can benefit from accessing additional bandwidth 
+   * dynamically available in the network.</li> 
+   * <li> SC_NA = Not Applicable</li> 
+   * </ol><br>
+   **/
+   enum ServiceCategory_T {
+      SC_CBR,
+      SC_VBRRT,
+      SC_VBRNRT,
+      SC_ABR,
+      SC_UBR,
+      SC_GFR,
+      SC_NA
+   };
+
+
+
+  /**
+   * <p>TrafficParametersList_T is used to specify the parameters 
+   * used in Traffic Descriptors. The list is a sequence of 
+   * name/value pairs (NVSList_T).  See
+   * <a href=supportingDocumentation/trafficParameters.html>Traffic Parameters</a>
+   * for a list of 
+   * possible traffic parameters.</p>
+   **/
+   typedef globaldefs::NVSList_T TrafficParameterList_T;
+
+
+  /**
+   * <p>A Traffic Descriptor is a collection of attributes which 
+   * are used to define bandwidth and Quality of Service 
+   * characteristics on a TP.  Traffic Descriptors can be 
+   * created by the NMS or the EMS.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>The name represents the name of the
+   * Traffic Descriptor which is assigned by the EMS upon creation.
+   * The EMS is responsible for guaranteeing the uniqueness of the name
+   * within the context of EMS.
+   * It is a read-only attribute.<br>
+   *
+   * string <b>userLabel</b>:
+   * <br>The userLabel is provisionable by the NMS. This attribute can be set
+   * by NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setUserLabel>setUserLabel</a>. 
+   * It is a read/write attribute.<br>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br>The name represents how the Traffic Descriptor is referred to on EMS displays. Its
+   * aim is to provide a "nomenclature bridge" to aid relating information
+   * presented on NMS displays to EMS displays (via GUI cut through).<br>
+   *
+   * string <b>owner</b>
+   * <br>The owner is provisionable by the NMS. This attribute can be set
+   * by NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setOwner>setOwner</a>. 
+   * It is a read/write attribute.<br>
+   *
+   * ServiceCategory_T <b>serviceCategory</b>
+   * <br>The Service Category contains quality of Service 
+   * characteristics of the Traffic Descriptor.<br>
+   *
+   * TrafficParameterList_T <b>trafficParameters</b>
+   * <br>The <a href=supportingDocumentation/trafficParameters.html>Traffic Parameter</a>
+   * name/values associated with the Traffic Descriptor.<br>
+   *
+   * string <b>conformanceDefinition</b>
+   * <br>The conformance definition for the Traffic Descriptor
+   * from UNI 4.1, UNI 4.0 and UNI 3.1 standards.  For ATM, 
+   * see <a href=supportingDocumentation/conformanceDefinitions.html>Conformance
+   * Definitions</a>
+   * for the valid values of this attribute.
+   * This field is nullable if the conformance definition
+   * does not apply.<br>
+   *
+   * boolean <b>activeState</b>
+   * <br>traffic descriptor active state.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>This attribute allows the communication from the EMS to the NMS of additional 
+   * information which is not explicitly modelled.<br>
+   **/
+   struct TrafficDescriptor_T {
+    globaldefs::NamingAttributes_T name;
+    string userLabel;
+    string nativeEMSName;
+    string owner;
+    ServiceCategory_T serviceCategory;
+    TrafficParameterList_T trafficParameters;
+    string conformanceDefinition;
+    boolean activeState;
+    globaldefs::NVSList_T additionalInfo;
+   };
+
+
+  /**
+   * <p>TDCreateData_T is used when traffic descriptors are 
+   * created by the NMS.</p>
+   *
+   * string <b>userLabel</b>:
+   * <br>The userLabel is provisionable by the NMS. This attribute can be set
+   * by NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setUserLabel>setUserLabel</a>. 
+   * It is a read/write attribute.<br>
+   *
+   * boolean <b>forceUniqueness</b>:
+   * <br>Specifies whether uniqueness of the userLabel is required amongst TDs of 
+   *  the EMS.  The operation will fail if userLabel is already in use.<br>
+   *
+   * string <b>owner</b>
+   * <br>The owner is provisionable by the NMS. This attribute can be set
+   * by NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setOwner>setOwner</a>. 
+   * It is a read/write attribute.<br>
+   *
+   * ServiceCategory_T <b>serviceCategory</b>
+   * <br>The Service Category contains quality of Service 
+   * characteristics of the Traffic Descriptor.<br>
+   *
+   * TrafficParameterList_T <b>trafficParameters</b>
+   * <br>The <a href=supportingDocumentation/trafficParameters.html>Traffic Parameter</a>
+   * name/values associated with the Traffic Descriptor.<br>
+   *
+   * string <b>conformanceDefinition</b>
+   * <br>The conformance definition for the Traffic Descriptor
+   * from standards. See TrafficDescriptor_T.<br>
+   *
+   * boolean <b>activeState</b>
+   * <br>traffic descriptor active state.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>This attribute allows the communication from the EMS to the NMS of additional 
+   * information which is not explicitly modelled.
+   * It is a readonly attribute.<br>
+   **/
+   struct TDCreateData_T {
+    string userLabel;
+    boolean forceUniqueness;
+    string owner;
+    ServiceCategory_T serviceCategory;
+    TrafficParameterList_T trafficParameters;
+    string conformanceDefinition;
+    boolean activeState;
+    globaldefs::NVSList_T additionalInfo;
+   };
+
+
+  /**
+   * <p>A list of Traffic Descriptors.</p>
+   **/
+   typedef sequence<TrafficDescriptor_T> TrafficDescriptorList_T;
+
+
+  /**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   **/
+
+  interface TrafficDescriptorIterator_I 
+    {
+        boolean  next_n(in unsigned long                how_many,
+                        out TrafficDescriptorList_T         trafficDescList)
+                 raises (globaldefs::ProcessingFailureException);
+
+        unsigned long getLength()
+                 raises (globaldefs::ProcessingFailureException);
+
+        void     destroy()
+                 raises (globaldefs::ProcessingFailureException);
+    };
+
+
+
+  /**
+   * <p>The trafficDescriptorManager is used to gain access to operations
+   * that deal with traffic descriptors </p>
+   *
+   * <p>A handle to an instance of this interface is gained via the
+   * <a href=_emsSession.EmsSession_I.html#emsSession::EmsSession_I::getManager>
+   * getManager</a> operation in Manager.</p>
+   **/
+
+  interface TrafficDescriptorMgr_I : common::Common_I
+    {
+
+  /**
+   * <p>This allows an NMS to request all of the trafficDescriptors that
+   * are under the control of the trafficDescriptorMgr_I.</p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br>  unsigned long how_many: number of iterators to return in trafficDescList.
+   * <br>  trafficDescriptor::TrafficDescriptorList trafficDescList: the first
+   * batch of iterators.
+   * <br>  trafficDescriptor::TrafficDescriptorIterator_I trafficDescIt: the iterator
+   * used to access the remaining traffic descriptors.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators
+   *  that the EMS can support has been reached<br>
+   * <br>
+   **/
+   void getAllTrafficDescriptors(
+           in unsigned long how_many,
+           out TrafficDescriptorList_T trafficDescList,
+           out TrafficDescriptorIterator_I trafficDescIt)
+        raises (globaldefs::ProcessingFailureException);
+
+   /**
+   * <p>This allows an NMS to request all of the trafficDescriptors that
+   * are under the control of the trafficDescriptorMgr_I.</p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> globaldefs::NamingAttributesList_T meName: the managedelement name.
+   * <br>  unsigned long how_many: number of iterators to return in trafficDescList.
+   * <br>  trafficDescriptor::TrafficDescriptorList trafficDescList: the first
+   * batch of iterators.
+   * <br>  trafficDescriptor::TrafficDescriptorIterator_I trafficDescIt: the iterator
+   * used to access the remaining traffic descriptors.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators
+   *  that the EMS can support has been reached<br>
+   * <br>
+   **/
+   void HW_getAllTrafficDescriptors( in globaldefs::NamingAttributes_T meName,
+		   in unsigned long how_many,
+		   out TrafficDescriptorList_T trafficDescList,
+           out TrafficDescriptorIterator_I trafficDescIt)
+		raises (globaldefs::ProcessingFailureException);
+  /**
+   * <p>This operation has exactly the same behaviour as getAllTrafficDescriptors, but
+   * instead of returning the entire object structures, this operation returns their names.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   *
+   * <br> unsigned long how_many: the number of iterators to return in nameList.
+   * <br> globaldefs::NamingAttributesList_T nameList: the first batch of iterator names.
+   * <br> globaldefs::NamingAttributesIterator_I nameIt: the iterator used to retrieve
+   * the remaining iterator names.
+   * <br> globaldefs::ProcessingFailureException:
+   * As for getAllTrafficDescriptors.
+   **/
+   void getAllTrafficDescriptorNames(
+         in unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+         raises(globaldefs::ProcessingFailureException);
+
+
+	/**
+   * <p>This operation has exactly the same behaviour as HW_getAllTrafficDescriptors, but
+   * instead of returning the entire object structures, this operation returns their names.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T meName: the managedelement name.
+   * <br> unsigned long how_many: the number of iterators to return in nameList.
+   * <br> globaldefs::NamingAttributesList_T nameList: the first batch of iterator names.
+   * <br> globaldefs::NamingAttributesIterator_I nameIt: the iterator used to retrieve
+   * the remaining iterator names.
+   * <br> globaldefs::ProcessingFailureException:
+   * As for getAllTrafficDescriptors.
+   **/
+   void HW_getAllTrafficDescriptorNames( in globaldefs::NamingAttributes_T meName,
+         in unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+         raises(globaldefs::ProcessingFailureException);
+
+  /** 
+   * <p>This service returns the Traffic Descriptor struct for the given tdName. 
+   * The Traffic Descriptor structure contains an NVSList of traffic 
+   * parameters.  The traffic parameters returned will be the parameters
+   * in place on the actual Traffic Descriptor.  If there are no
+   * traffic parameters,
+   * then the NVSList will be empty.</p><p>
+   * <br> globaldefs::NamingAttributes tdName: name of the traffic descriptor.
+   * <br> TrafficDescriptor_T td : the returned traffic descriptor.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tdName does not reference traficDescriptor object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tdName references object which does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void getTrafficDescriptor(
+         in globaldefs::NamingAttributes_T tdName,
+         out TrafficDescriptor_T td) 
+         raises (globaldefs::ProcessingFailureException);
+
+/** 
+   * <p>This service activate the Traffic Descriptor struct for the given tdName. 
+   * The Traffic Descriptor structure contains an NVSList of traffic 
+   * parameters.  The traffic parameters returned will be the parameters
+   * in place on the actual Traffic Descriptor.  If there are no
+   * traffic parameters,
+   * then the NVSList will be empty.</p><p>
+   * <br> globaldefs::NamingAttributes tdName: name of the traffic descriptor.
+   * <br> TrafficDescriptor_T td : the returned traffic descriptor.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tdName does not reference traficDescriptor object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tdName references object which does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void activateTrafficDescriptor(
+         in globaldefs::NamingAttributes_T tdName,
+         out TrafficDescriptor_T td) 
+         raises (globaldefs::ProcessingFailureException);
+
+/** 
+   * <p>This service deactivate the Traffic Descriptor struct for the given tdName. 
+   * The Traffic Descriptor structure contains an NVSList of traffic 
+   * parameters.  The traffic parameters returned will be the parameters
+   * in place on the actual Traffic Descriptor.  If there are no
+   * traffic parameters,
+   * then the NVSList will be empty.</p><p>
+   * <br> globaldefs::NamingAttributes tdName: name of the traffic descriptor.
+   * <br> TrafficDescriptor_T td : the returned traffic descriptor.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tdName does not reference traficDescriptor object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tdName references object which does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void deactivateTrafficDescriptor(
+         in globaldefs::NamingAttributes_T tdName,
+         out TrafficDescriptor_T td) 
+         raises (globaldefs::ProcessingFailureException);
+
+/**
+   * <p>This allows an NMS to request all of the CTPs associated with the specified  
+   * Traffic Descriptor. If there are no CTPs which are associated with the specified
+   * Traffic Descriptor, then an empty list is returned. </p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> globaldefs::NamingAttributes trafficDescriptorName: the name of the Traffic 
+   * Descriptor.
+   * <br>  unsigned long how_many: maximum number of CTPs to return in the first batch.
+   * <br>  terminationPoint::TerminationPointList tpList: first batch of CTPs.
+   * <br>  terminationPoint::TerminationPointIterator_I tpIt: iterator to access the remaining
+   *  CTPs.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when trafficDescriptrName does not reference a
+   *  Traffic Descriptor object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when trafficDescriptorName references
+   *  an object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators
+   *  that the EMS can support has been reached<br>
+   * <br>
+   **/
+   void getAssociatedCTPs(
+         in globaldefs::NamingAttributes_T trafficDescriptorName,
+         in unsigned long how_many,
+         out terminationPoint::TerminationPointList_T tpList,
+         out terminationPoint::TerminationPointIterator_I tpIt) 
+         raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>The createTrafficDescriptor operation is used to create
+   * a new Traffic Descriptor on the server. A Traffic 
+   * Descriptor create data representing the new Traffic Descriptor is 
+   * passed as input. The resulting Traffic Descriptor is 
+   * returned as a result.</p>
+   *
+   * <br> TDCreateData_T newTDCreateData: information about the traffic
+   * descriptor to be created.
+   * <br> TrafficDescriptor_T newTrafficDescriptor: result of the creation.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support creation of TDs via this interface<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised if newTDCreateData contains invalid data<br>
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is not met<br>
+   * <br>
+   **/
+   void createTrafficDescriptor(
+         in  TDCreateData_T      newTDCreateData,
+         out TrafficDescriptor_T newTrafficDescriptor)
+         raises (globaldefs::ProcessingFailureException);
+
+
+    /**
+   * <p>The HW_createTrafficDescriptor operation is used to create
+   * a new Traffic Descriptor on the server. A managedElement Name 
+   * representing the me that the TD will be created on. A Traffic 
+   * Descriptor create data representing the new Traffic Descriptor is 
+   * passed as input. The resulting Traffic Descriptor List is 
+   * returned as a result.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T meName: me about the traffic
+   * descriptor to be created on.
+   * <br> TDCreateData_T newTDCreateData: information about the traffic
+   * descriptor to be created.
+   * <br> TrafficDescriptor_T newTrafficDescriptor: result of the creation.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support creation of TDs via this interface<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised if newTDCreateData contains invalid data<br>
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is not met<br>
+   * <br>
+   **/	
+   void HW_createTrafficDescriptor( in globaldefs::NamingAttributes_T meName,
+         in  TDCreateData_T      newTDCreateData,
+         out TrafficDescriptor_T newTrafficDescriptor )
+         raises (globaldefs::ProcessingFailureException);
+  /**
+   * <p>The delete Traffic Descriptor operation is used to 
+   * delete a Traffic Descriptor on the server. This operation is
+   * idempotent. If the service is called with the
+   * name of a non-existent Traffic Descriptor, it will succeed.</p>
+   *
+   * <br> globaldefs::NamingAttributes descriptorName
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support deletion of TDs via this interface<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_OBJECT_IN_USE - Raised if there are TPs that are using
+   *  the Traffic Descriptor<br>
+   * <br>
+  **/
+   void deleteTrafficDescriptor(
+         in globaldefs::NamingAttributes_T descriptorName)
+         raises (globaldefs::ProcessingFailureException);
+};
+
+}; // END OF MODULE
+
+#endif
+

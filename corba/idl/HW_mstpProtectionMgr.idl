@@ -1,0 +1,745 @@
+#ifndef __HUAWEI_MSTP_PROTECTION_MGR_IDL__
+#define __HUAWEI_MSTP_PROTECTION_MGR_IDL__
+
+// ********************************
+// *                              *
+// * HW_mstpProtectionMgr.idl     *
+// *                              *
+// ********************************
+
+#include "globaldefs.idl"
+#include "terminationPoint.idl"
+#include "protection.idl"
+
+#pragma prefix "mtnm.huawei.com"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the MSTP protection description structure
+   * of the NML-EML interface.
+   * It also contains the definition of the MSTP protection manager.</p>
+   * 
+   * This module is defined by Huawei Technologies Co., LTD. All rights reserved!
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module HW_mstpProtection
+{
+
+	/**
+	* <p>Switching status definition. The switching status can be not applicable (NA), normal, pass through and switching. NA means the switching status is indefinite.
+	*You can use NA to indicate the state that cannot be defined for the moment when status query failed.</p>
+	**/
+	enum HW_SwitchState_T
+	{
+		HW_SS_NA,
+		HW_SS_IDLE,				
+		HW_SS_SWITCH,
+		HW_SS_PASS_THROUGH
+	};
+
+	/**
+	* <p>RPR node switching direction definition. There are inloop and outloop in the RPR ring network, and the corresponding switching direction is east (the transmitting end at outloop) 
+	*and west (the transmitting end at inloop)</p>	
+	**/
+	enum HW_SwitchPosition_T
+	{
+		HW_SP_NA,
+		HW_SP_EAST,		
+		HW_SP_WEST		
+	};
+
+
+	/**
+	* <p>A RPR Node is modeled as a data structure to avoid a great number of
+	* CORBA objects across the EMS/NMS interface. Internally in the EMS,
+	* these data structures can map to any desired architecture.   </p>
+    	*
+	* <p>HW_RPRNode_T refers to a node on the Ethernet RPR ring network. This kind of structure defines the name, node number, protocol enabling flag, switching reversion mode, and ring network node parameter of the RPR ring network.
+	*</p>
+	*
+	* <p>For relevant knowledge about Ethernet RPR, please refer to ITU-T recommendations.</p>
+	*
+	* <p>The naming rules of Ethernet ring network nodes are as follows:
+	* <br> 1. name="EMS";value="CompanyName/EMSname" <br>
+    	* <br> 2. name="ManagedElement";value="ManagedElementName" <br>
+    	* <br> 3. name="RPRNode";value="RPRNodeName" <br>
+	* The RPRNodeName format is (there might be multiple RPR nodes listed under a board):
+	* <br> "/rack=xxx/shelf=xxx/slot=xxx/node=xxx" <br></p>
+	*
+	* globaldefs::NamingAttributes_T <b>name</b>:
+	* <br>name identifies a RPR ring network node entiry. This identifier is assigned a value when the EMS is creating the RPR ring network node, and its uniqueness in an NE is ensured by the EMS
+	*This attribute is read-only.<br>
+	*
+	* string <b>nativeEMSName</b>:
+	* <br>nativeEMSName identifies the local name of the ring network node, that is, the name displayed on the EMS interface<br>
+	*
+	* unsigned short <b>nodeNo</b>:
+	* <br>nodeNo identifies the node number of the RPR ring network node.<br>
+	*
+	* boolean <b>protocolEnabled</b>:
+	* <br>protocolEnabled identifies whether RPR protocol is enabled at this node<br>
+	*
+	* globaldefs::NVSList_T <b>nodeParameters</b>:
+	* <br>nodeParameters describes parameter information of the RPR ring network node. These parameters are:<br>
+	* Protection parameters are:<br>
+	* Reversion Mode (reversionMode: revertive and non-revertive) <br>
+	* Hold Off Time ( holdOffTime: (100ms) )<br>
+	* WTR Time ( wtrTime: (s) )<br>
+	* RPR Forwarding Aging Time ( forwardAgeTime: (h) )<br>
+	* Priority Partition ( priorityPartition:0-7 )<br>
+	* RPR Mapping Mode( mappingMode: TOS Mapping/VLAN Mapping )<br>
+	* RPR Mapping Relation (mappingRelation:(list) )	
+	* <br>  When mappingMode == TOS Mapping, the mapping relation list is as follows:
+	*		 <li>Min.Delay = 0-7
+	*		 <li>Max.Throughput = 0-7
+	*		 <li>Max.Reliability = 0-7
+	*		 <li>Min.Cost = 0-7
+	*		 <li>No Service Level = 0-7
+	* <br>  When mappingMode == VLAN Mapping, the mapping relation list is as follows:
+	*		 <li>VLAN[0] = 0-7
+	*		 <li>...
+	*        <li>VLAN[7] = 0-7 
+	* <br>
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br>
+	**/
+	struct HW_RPRNode_T
+	{
+		globaldefs::NamingAttributes_T name;
+		string  userLabel;
+		string	nativeEMSName;					
+		string  owner;		
+		unsigned short nodeNo;							
+		boolean protocolEnabled;					
+		globaldefs::NVSList_T nodeParameters;
+		globaldefs::NVSList_T additionalInfo;  
+	};
+
+	/**
+	* <p>Sequence of HW_RPRNode_T.</p>
+	**/
+	typedef sequence<HW_RPRNode_T> HW_RPRNodeList_T;
+
+	/**
+	* <p>A RPR Node is modeled as a data structure to avoid a great number of
+	* CORBA objects across the EMS/NMS interface. Internally in the EMS,
+	* these data structures can map to any desired architecture.   </p>
+    	*
+	* <p>HW_RPRSwitchData_T indicates the switching status of Ethernet RPR ring network node.</p>
+	*
+	* globaldefs::NamingAttributes_T <b>nodeName</b>:
+	* <br>nameidentifies a RPR ring network node entiry. This identifier is assigned a value when the EMS is creating the RPR ring network node, and its uniqueness in an NE is ensured by the EMS
+	*This attribute is read-only.<br>
+	*
+	* protection::SwitchReason_T <b>switchReason</b>:
+	* <br>switchReason identifies the reason to switch RRP node. The reasons are signal failure, signal degradation, auto switching (manual and forced), and clear switching<br>
+	*
+	* HW_SwitchState_T <b>switchState</b>:
+	* <br>switchState identifies the switching status of ring network node. It can be normal, pass-through, or switching state.<br>
+	*
+	* HW_SwitchPosition_T <b>switchPosition</b>:
+	* <br>switchPosition identifies the switching position of ring network node, including east and west<br>
+	*
+	* globaldefs::NVSList_T <b>switchParameters</b>:
+	* <br>topoParameters describes switching parameters of the RPR ring network node<br>
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br>
+	**/
+	struct HW_RPRSwitchData_T
+	{
+		globaldefs::NamingAttributes_T nodeName;
+		protection::SwitchReason_T switchReason;
+		HW_SwitchState_T switchState;		
+		HW_SwitchPosition_T switchPosition;	
+		globaldefs::NVSList_T switchParameters;	
+		globaldefs::NVSList_T additionalInfo;  
+	};
+
+	/**
+	* <p>A RPR Node is modeled as a data structure to avoid a great number of
+	* CORBA objects across the EMS/NMS interface. Internally in the EMS,
+	* these data structures can map to any desired architecture.   </p>
+    	*
+	* <p>HW_RPRSwitchData_T indicates the switching status of Ethernet RPR ring network node.</p>
+	*
+	* globaldefs::NamingAttributes_T <b>nodeName</b>:
+	* <br>name identifies a RPR ring network node entiry. This identifier is assigned a value when the EMS is creating the RPR ring network node, and its uniqueness in an NE is ensured by the EMS
+	*This attribute is read-only.<br>
+	*
+	* globaldefs::NVSList_T <b>topoParameters</b>:
+	* <br>topoParameters describes topology parameters of the RPR ring network node<br>
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br>
+	**/
+	struct HW_RPRTopoInfo_T
+	{
+		globaldefs::NamingAttributes_T nodeName;
+		globaldefs::NVSList_T topoParameters;	
+		globaldefs::NVSList_T additionalInfo;  	
+	};
+
+	/**
+	* <p>Define types of ATM VP protection group, including non-protection/1+1/1:1 protection</p>
+	**/	
+	enum HW_AtmProtectType_T
+	{
+		HW_APT_NA,
+		HW_APT_NONE,		
+		HW_APT_1PLUS1,
+		HW_APT_1V1
+	};
+
+	
+	/**
+	* <p>Define switching direction of ATM protection group, including source, sink, and bidirectional</p>
+	**/	
+	enum HW_AtmPGSwitchDirect_T
+	{
+		HW_ASD_NA,
+		HW_ASD_SRC,
+		HW_ASD_SNK,
+		HW_ASD_BI		
+	};
+
+	/**
+	* <p>Define usage of ATM protection group, including used and unused</p>
+	**/	
+	enum HW_AtmPGUseState_T
+	{
+		HW_AUS_NA,
+		HW_AUS_USED,
+		HW_AUS_UNUSED		
+	};
+
+	/**
+	* <p>Define types of ATM protection group, including unidirectional and bidirectional</p>
+	**/	
+	enum HW_AtmPGSwitchType_T
+	{
+		HW_AST_NA,
+		HW_AST_SINGLE_END,  
+		HW_AST_BI_END		
+	};
+
+	/**
+	* <p>Define switching actions of ATM protection group, including switching (from working to protection) and restoration (from protection to working)</p>
+	**/	
+	enum HW_AtmPGSwitchAction_T
+	{
+		HW_ASAT_NA,
+		HW_ASAT_SWITCH,  
+		HW_ASAT_RESTORE		
+	};
+	
+	/**
+	* <p>Define monitoring status of ATM service protection pair, including monitoring connection and monitoring service protection pair</p>
+	**/	
+	enum HW_AtmMonitorFlag_T
+	{
+		HW_AMF_NA,
+		HW_AMF_CONNECTION,			
+		HW_AMF_PROTECT_PAIR			
+	};
+
+	/**
+	* <p>Define types of ATM service protection pair. Used to describe a pair of ATM services. One is the working service, the other is the protection service</p>
+	* 
+	* globaldefs::NamingAttributes_T <b>workServiceName</b>:
+	* <br>workServiceName describes the name of the working ATM service<br>
+	*
+	* globaldefs::NamingAttributes_T <b>protectServiceName</b>:
+	* <br>protectServiceName describes the name of the protection ATM service<br>
+	*
+	* HW_AtmMonitorFlag_T <b>monitorFlag</b>:
+	* <br>monitorFlag describes the monitoring flag of the service protection pair, that is, to identify whether is monitoring connection or the entire protection pair<br>
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br>
+	**/	
+	struct HW_AtmServiceProtectPair_T
+	{
+		globaldefs::NamingAttributes_T workServiceName;	
+		globaldefs::NamingAttributes_T protectServiceName;
+		HW_AtmMonitorFlag_T	monitorFlag;
+		globaldefs::NVSList_T additionalInfo;	
+	};
+
+	/**
+	* <p>Sequence of HW_AtmServiceProtectPair_T.</p>
+	**/
+	typedef sequence<HW_AtmServiceProtectPair_T> HW_AtmServiceProtectPairList_T;
+
+	/**
+	* <p>Data structure definition of one end of ATM protection group, used to describes parameters of source or sink end of the ATM protection group</p>
+	*
+	* HW_AtmPGSwitchType_T <b>switchType</b>:
+	* <br>switchType describes switching type of one end of the ATM protection group<br>
+	*
+	* protection::ReversionMode_T <b>reversionMode</b>:
+	* <br>reversionMode describes switching reversion mode of one end of the ATM protection group<br>
+	*
+	* unsigned long <b>holdOffTime</b>:
+	* <br>holdOffTime describes switching hold off time (100ms) of one end of the ATM protection group<br>
+	*
+	* unsigned long <b>wtrTime</b>:
+	* <br>wtrTime describes WTR time (min) of one end of the ATM protection group<br>
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br> 
+	**/	
+	struct HW_AtmPGSingEndPara_T
+	{
+		HW_AtmPGSwitchType_T switchType;
+		protection::ReversionMode_T reversionMode;
+		unsigned long holdOffTime;
+		unsigned long wtrTime;	
+		globaldefs::NVSList_T additionalInfo;
+	};
+
+	/**
+	* <p>Data structure definition of one end of ATM protection group, used to describes switching parameters of source or sink end of the ATM protection group</p>
+	*
+	* protection::SwitchReason_T <b>switchReason</b>:	
+	* <br>switchReason describes the switching reason of one end of the ATM protection group<br>
+	*
+	* HW_SwitchState_T <b>switchState</b>
+	* <br>switchState describes the currect switching status of one of the ATM protecton group<br>
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br> 
+	**/	
+	struct HW_AtmPGSingleEndSwitchPara_T
+	{
+		protection::SwitchReason_T switchReason;
+		HW_SwitchState_T switchState;			
+		globaldefs::NVSList_T additionalInfo;
+	};
+
+	/**
+	* <p>Data structure definition of switching information of ATM protection group, used to describes switching parameters of the entire ATM protection group</p>
+	*
+	* globaldefs::NamingAttributes_T <b>pgName</b>:
+	* <br>pgName identifies the name of the ATM protection group<br>
+	*
+	* HW_AtmProtectType_T <b>protectType</b>:
+	* <br>protectType identifies the protection type of the ATM protection group<br>
+	*
+	* HW_AtmPGSingleEndSwitchPara_T <b>srcEndSwitchPara</b>
+	* <br>srcEndSwitchPara identifies the switching information of source end of the ATM protection group<br>
+	*
+	* HW_AtmPGSingleEndSwitchPara_T <b>snkEndSwitchPara</b>
+	* <br>snkEndSwitchPara identifies the switching information of sink end of the ATM protection group<br>
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br> 
+	**/
+	struct HW_AtmPGSwitchData_T
+	{
+		globaldefs::NamingAttributes_T pgName;
+		HW_AtmProtectType_T protectType;
+		HW_AtmPGSingleEndSwitchPara_T srcEndSwitchPara; 
+		HW_AtmPGSingleEndSwitchPara_T snkEndSwitchPara; 
+		globaldefs::NVSList_T additionalInfo;
+	};
+
+	/**
+	* <p>Data structure definition of ATM protection group, used to describes data information of the ATM protection group object entity</p>
+	*
+	* globaldefs::NamingAttributes_T <b>pgName</b>:
+	* <br>pgName identifies the name of the ATM protection group<br>
+	*
+	* HW_AtmProtectType_T <b>protectType</b>:
+	* <br>protectType identifies the protection type of the ATM protection group<br>
+	*
+	* HW_AtmSwitchDirect_T <b>switchDirect</b>:
+	* <br>switchDirect identifies the protection direction of the ATM protection group<br>
+	*
+	* HW_AtmPGUseState_T <b>useState</b>:
+	* <br>useState identifies the usage of the ATM protection group<br>
+	*
+	* HW_AtmPGSingEndPara_T <b>srcEndPara</b>
+	* <br>srcEndPara identifies the switching information of source end of the ATM protection group<br>
+	*
+	* HW_AtmPGSingEndPara_T <b>snkEndPara</b>
+	* <br>snkEndPara identifies the switching information of sink end of the ATM protection group<br>
+	*
+	* HW_AtmServiceProtectPairList_T <b>ppList</b>
+	* <br>ppList identifies data information of service protection pair of the ATM protection group<br>
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br> 
+	**/	
+	struct HW_AtmProtectGroup_T
+	{
+		globaldefs::NamingAttributes_T name;
+		string  userLabel;
+		string	nativeEMSName;					
+		string  owner;
+		HW_AtmProtectType_T protectType;
+		HW_AtmPGSwitchDirect_T switchDirect;		
+		HW_AtmPGUseState_T   useState;			
+		HW_AtmPGSingEndPara_T srcEndPara;	
+		HW_AtmPGSingEndPara_T snkEndPara;	
+		HW_AtmServiceProtectPairList_T ppList;
+		globaldefs::NVSList_T additionalInfo;
+	};
+
+	/**
+	* <p>Sequence of HW_AtmProtectGroup_T.</p>
+	**/
+	typedef sequence<HW_AtmProtectGroup_T> HW_AtmProtectGroupList_T;
+
+	/**
+	* <p>Data structure definition of RPR Link, used to describes data information of the RPR Link object entity</p>
+	*
+	* globaldefs::NamingAttributes_T <b>name</b>:
+	* <br>identifies the name of the RPR Link<br>
+	*
+	* unsigned short <b>nodeNo</b>:
+	* <br>nodeNo identifies the RPR node no<br>
+	*
+	* globaldefs::NVSList_T <b>rprLinkParameters</b>:
+	* <br>identifies the parameters of the RPR Link<br>
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br> 
+	**/
+	struct HW_RPRLinkInfo_T
+	{
+		globaldefs::NamingAttributes_T name;	
+		unsigned short                 nodeNo;
+		globaldefs::NVSList_T          rprLinkParameters;
+		globaldefs::NVSList_T          additionalInfo;	
+	};
+
+	/**
+	* <p>Sequence of HW_RPRLinkInfo_T.</p>
+	**/
+	typedef sequence<HW_RPRLinkInfo_T> HW_RPRLinkInfoList_T;
+
+	/**
+   	* <p>In order to allow the NMS to deal with a large number of objects,
+   	* iterators are used.</p>
+   	* <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   	* for information on how iterators are used in this interface.</p>
+   	**/
+	interface HW_RPRLinkIterator_I
+	{
+		boolean next_n( in unsigned long how_many,
+						out HW_RPRLinkInfoList_T rprLinkList)
+						raises (globaldefs::ProcessingFailureException );
+
+		unsigned long getLength() raises( globaldefs::ProcessingFailureException );
+
+		void destroy() raises( globaldefs::ProcessingFailureException );
+	};
+
+	/**
+   	* <p>In order to allow the NMS to deal with a large number of objects,
+   	* iterators are used.</p>
+   	* <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   	* for information on how iterators are used in this interface.</p>
+   	**/
+	interface HW_RPRNodeIterator_I
+	{
+		boolean next_n( in unsigned long how_many,
+						out HW_RPRNodeList_T rprNodeList)
+						raises (globaldefs::ProcessingFailureException );
+
+		unsigned long getLength() raises( globaldefs::ProcessingFailureException );
+
+		void destroy() raises( globaldefs::ProcessingFailureException );
+	};
+
+	 /**
+   	* <p>In order to allow the NMS to deal with a large number of objects,
+   	* iterators are used.</p>
+   	* <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   	* for information on how iterators are used in this interface.</p>
+   	**/
+	interface HW_AtmProtectGroupIterator_I
+	{
+		boolean next_n( in unsigned long how_many,
+						out HW_AtmProtectGroupList_T atmPGList)
+						raises (globaldefs::ProcessingFailureException );
+
+		unsigned long getLength() raises( globaldefs::ProcessingFailureException );
+
+		void destroy() raises( globaldefs::ProcessingFailureException );
+	};
+
+  	/**
+   	* <p>The HW_mstpProtectionMgr_I is used as a handle to gain access to the
+   	* mstp protection management functionalities of the NML-EML interface, including
+   	* ethernet RPR management and atm vp protection management functionalities. </p>
+   	*
+   	* <p>A handle to an instance of this interface is gained via the
+   	* <a href=_emsSession.EmsSession_I.html#emsSession::EmsSession_I::getManager>
+   	* getManager</a> operation in Manager.</p>
+   	**/
+
+	interface HW_MSTPProtectionMgr_I : common::Common_I
+	{
+	   /**
+	   * <p>Query all RPR nodes in an NE</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>meName</b>: the name of the managed element for which the request is made.
+	   * <br>unsigned long how_many: Maximum number of protection groups to report in the first batch.
+	   * <br>HW_RPRNodeList_T nodeList: First batch of rpr nodes.
+	   * <br>HW_RPRNodeIterator_I nodeIt: Iterator used to access the remaining nodes, if any.
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when meName is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    *  that the EMS can support has been reached<br>	   
+	   * <br>
+	   **/	       
+		
+	   void getAllRPRNode( in globaldefs::NamingAttributes_T meName, 
+				in unsigned long how_many,
+				out HW_RPRNodeList_T nodeList, 
+				out HW_RPRNodeIterator_I nodeIt )
+				raises( globaldefs::ProcessingFailureException );		
+		
+	   /**
+	   * <p>Query the specified RPR node</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>nodeName</b>: RPR node name	   
+	   * <br>HW_RPRNode_T <b>node</b>: the RPR object returned
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when nodeName is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/	    	    
+	   void getRPRNode( in globaldefs::NamingAttributes_T nodeName,
+				out HW_RPRNode_T node )		
+				raises( globaldefs::ProcessingFailureException );
+
+	   /**
+	   * <p>Query topology parameters of the RPR node</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>nodeName</b>: RPR node name
+	   * <br>HW_RPRTopoInfo_T <b>topoInfo</b>: topology information of the RPR node
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when nodeName is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+	   void getRPRTopoPara( in globaldefs::NamingAttributes_T nodeName,
+					out HW_RPRTopoInfo_T topoInfo )		
+					raises( globaldefs::ProcessingFailureException );
+		
+
+	   /**
+	   * <p>Query the switching status of the RPR node</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>nodeName</b>: RPR node name	   
+	   * <br>HW_RPRSwitchData_T <b>switchData</b>: switching status of the RPR node
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when nodeName is invalide<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+	   void retrieveRPRSwitchData( in globaldefs::NamingAttributes_T nodeName,						
+						out HW_RPRSwitchData_T switchData )
+						raises( globaldefs::ProcessingFailureException );
+
+	   /**
+	   * <p>Execute external switching command of the RPR node</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>nodeName</b>: RPR node name
+	   * <br>protection::ProtectionCommand_T <b>protectionCommand</b>: external switching command	   
+	   * <br>HW_SwitchPosition_T <b>switchPosition</b>: RPR node switching position
+	   * <br>HW_RPRSwitchData_T <b>switchData</b>: the switching status of the RPR node after it is successfully switched
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+	   void performRPRProtectionCommand( in globaldefs::NamingAttributes_T nodeName,
+						in protection::ProtectionCommand_T protectionCommand,						
+						in HW_SwitchPosition_T switchPosition,	
+						out HW_RPRSwitchData_T switchData )
+						raises( globaldefs::ProcessingFailureException );
+
+		
+	   /**
+	   * <p>Query all ATM protection groups in an NE</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>meName</b>: NE name
+	   * <br>unsigned long <b>how_many</b>: the maximum record entries returned in the first batch
+	   * <br>HW_AtmProtectGroupList_T <b>atmPGList</b>: the ATM protection group list returned
+	   * <br>HW_AtmProtectGroupIterator_I <b>pgIt</b>: ATM protection group iterator
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when meName is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+       	   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	   *  that the EMS can support has been reached<br>
+	   * <br>
+	   **/
+	   void getAllAtmProtectGroup( in globaldefs::NamingAttributes_T meName, 
+						in unsigned long how_many,
+						out HW_AtmProtectGroupList_T atmPGList,
+						out HW_AtmProtectGroupIterator_I pgIt )
+						raises( globaldefs::ProcessingFailureException );
+
+	   /**
+	   * <p>Query the specified ATM protection group</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>atmpgName</b>: ATM protection group name	   
+	   * <br>HW_AtmProtectGroup_T <b>atmPG</b>: the ATM protection group returned
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when atmpgName is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+	   void getAtmProtectGroup( in globaldefs::NamingAttributes_T atmpgName,
+					out HW_AtmProtectGroup_T atmPG )
+					raises( globaldefs::ProcessingFailureException );
+
+	   /**
+	   * <p>Modify the specified ATM protection group</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>atmpgName</b>: ATM protection group name	   
+	   * <br>globaldefs::NVSList_T <b>atmPGParameters</b>: ATM protection group parameters to be modified.
+	   * <br>HW_AtmProtectGroup_T <b>atmPG</b>: the ATM protection group returned
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when atmpgName is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+		void modifyAtmProtectGroup( in globaldefs::NamingAttributes_T atmPgName,
+			in globaldefs::NVSList_T atmPGParameters,
+			out HW_AtmProtectGroup_T atmPG )
+			raises( globaldefs::ProcessingFailureException );
+
+	   /**
+	   * <p>Query the switching status of the ATM protection group</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>atmpgName</b>: ATM protection group name	   
+	   * <br>HW_AtmPGSwitchData_T <b>switchData</b>: switching status of the ATM protection group
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when atmpgName is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+	   void retrieveAtmPGSwitchData( in globaldefs::NamingAttributes_T atmpgName,
+						out HW_AtmPGSwitchData_T switchData )
+						raises( globaldefs::ProcessingFailureException );
+
+	   /**
+	   * <p>Execute the external switching command of the ATM protection group</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>atmpgName</b>: ATM protection group name
+	   * <br>protection::ProtectionCommand_T <b>protectionCommand</b>: external switching command
+	   * <br>HW_AtmPGSwitchAction_T <b>switchAction</b>: switching action
+	   * <br>HW_AtmPGSwitchDirect_T <b>switchDirect</b>: switching direction
+	   * <br>HW_AtmPGSwitchData_T <b>switchData</b>: switching status of the ATM protection group that is successfully switched
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+	   void performAtmPGProtectionCommand( in globaldefs::NamingAttributes_T atmpgName,
+						in protection::ProtectionCommand_T protectionCommand,
+						in HW_AtmPGSwitchAction_T switchAction,
+						in HW_AtmPGSwitchDirect_T switchDirect,
+						out HW_AtmPGSwitchData_T switchData )
+						raises( globaldefs::ProcessingFailureException );
+
+	   /**
+	   * <p>Query all RPR Links in an NE</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>meName</b>: NE name
+	   * <br>unsigned long <b>how_many</b>: the maximum record entries returned in the first batch
+	   * <br>HW_RPRLinkInfoList_T <b>linkList</b>: the RPR Link list returned
+	   * <br>HW_RPRLinkIterator_I <b>rprLinkIt</b>: RPR Link iterator
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when meName is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+       	   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	   *  that the EMS can support has been reached<br>
+	   * <br>
+	   **/
+		void getAllRPRLinkInfo(in globaldefs::NamingAttributes_T meName, 
+			in unsigned long how_many,
+			out HW_RPRLinkInfoList_T linkList,
+			out HW_RPRLinkIterator_I rprLinkIt)
+			raises( globaldefs::ProcessingFailureException );
+
+	   /**
+	   * <p>Modify the specified RPR Link para</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>nodeName</b>: RPR Link name	   
+	   * <br>globaldefs::NVSList_T <b>rprLinkParameters</b>: RPR Link parameters to be modified.
+	   * <br>HW_RPRLinkInfo_T <b>linkInfo</b>: the RPR Link returned
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when nodeName is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+		void modifyRPRLinkPara(in globaldefs::NamingAttributes_T nodeName,
+			in globaldefs::NVSList_T rprLinkParameters,
+			out HW_RPRLinkInfo_T linkInfo)
+			raises( globaldefs::ProcessingFailureException );
+	};
+};
+
+#endif /*__HUAWEI_MSTP_PROTECTION_MGR_IDL__*/
+

@@ -1,0 +1,69 @@
+#ifndef emsSessionFactory_idl
+#define emsSessionFactory_idl
+
+// ********************************
+// *                              *
+// * emsSessionFactory.idl        *
+// *                              *
+// ********************************
+
+//Include list
+#include "globaldefs.idl"
+#include "mtnmVersion.idl"
+#include "session.idl"
+#include "emsSession.idl"
+#include "nmsSession.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the EmsSessionFactory_I interface
+   * of the NML-EML interface.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module emsSessionFactory 
+{
+  /**
+   * <p>There is a single instance of the EmsSessionFactory_I.  It is the 
+   * entry point to the Server.
+   * This is the object reference that the client uses to connect to the 
+   * server.</p>
+   *
+   * <p>This interface implements the version interface and will return 
+   * the server idl version.</p>
+   **/
+
+  interface EmsSessionFactory_I : mtnmVersion::Version_I
+  {
+  /**
+   * This operation allows the NMS to obtain the EmsSession_I object from
+   * which all managers of the EMS can be obtained.
+   *
+   * <br> user: The user or application that is trying to access the server.
+   * <br> password: The password of the user.  Can be empty string.
+   * <br> client: A handle to the NMS NmsSession_I object, to which the returned
+   *  EmsSession_I object has to be associated.
+   * <br> emsSessionInterface: It is a CORBA IOR for the EmsSession_I interface.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when client is invalid<br>
+   * EXCPT_ACCESS_DENIED - Raised in case of security violation<br>
+   **/
+   void getEmsSession(
+         in string user,
+         in string password,
+         in nmsSession::NmsSession_I client,
+         out emsSession::EmsSession_I emsSessionInterface)
+        raises(globaldefs::ProcessingFailureException);
+    };
+
+};
+
+#endif
+

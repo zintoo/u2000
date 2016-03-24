@@ -1,0 +1,199 @@
+#ifndef transmissionParameters_idl
+#define transmissionParameters_idl
+
+// ********************************
+// *                              *
+// * transmissionParameters.idl   *
+// *                              *
+// ********************************
+
+//Include list
+#include "globaldefs.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains various definitions common to PTPs, CTPs,
+   * SNCs and MLSNs of the NML-EML interface.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module transmissionParameters
+{
+
+
+  /**
+   * <p>The LayerRate_T value is used to identify:</p>
+   * - the Layer of a TTP/CTP,<br>
+   * - the characteristic information of a PTP,<br>
+   * - the Layer/Rate of a connection.<br>
+   * <p>Each LayerRate_T may be used in conjunction with a CTP or TTP of that layer.
+   * In the SDH definitions, the CTP and TTP layer names differ, for
+   * example TU12 is used for the CTP and VC12 for the corresponding TTP.
+   * In this interface definition the TU and VC definitions have
+   * been combined into a single composite layer and this has been named
+   * to include the equivalent SONET layer, e.g. LR_VT2_and_TU12_VC12.</p>
+   * 
+   * <p>For details on how layer rate is used, see
+   * <a href=supportingDocumentation/layers.pdf>layering</a>.</p>
+   *
+   * <p>Certain specific LayerRates have been included to allow for description
+   * of Ports (Physical Termination Points - PTPs) in SONET equipment.</p>
+   *
+   * <p>The currently defined LayerRates are as follows:</p>
+   *
+   * 0 Not used, <br>
+   * 1 = LR_Not_Applicable, the layer is not relevant, <br>
+   * 2 = LR_T1_and_DS1_1_5M, 1.5Mbit/s async/PDH signal,<br>
+   * 3 = LR_T2_and_DS2_6M, 6Mbit/s async/PDH signal,<br>
+   * 4 = LR_T3_and_DS3_45M, 45Mbit/s async/PDH signal,<br>
+   * 5 = LR_E1_2M, 2Mbit/s PDH signal,<br>
+   * 6 = LR_E2_8M, 8Mbit/s PDH signal,<br>
+   * 7 = LR_E3_34M, 34Mbit/s PDH signal,<br>
+   * 8 = LR_E4_140M, <br>
+   * 9 = LR_E5_565M, <br>
+   * 10 = LR_VT1_5_and_TU11_VC11, <br>
+   * 11 = LR_VT2_and_TU12_VC12, <br>
+   * 12 = LR_VT6_and_TU2_VC2, <br>
+   * 13 = LR_Low_Order_TU3_VC3, <br>
+   * 14 = LR_STS1_and_AU3_High_Order_VC3, <br>
+   * 15 = LR_STS3c_and_AU4_VC4, <br>
+   * 16 = LR_STS12c_and_VC4_4c, <br>
+   * 17 = LR_STS48c_and_VC4_16c, <br>
+   * 18 = LR_STS192c_and_VC4_64c, <br>
+   * 19 = LR_Section_OC1_STS1_and_RS_STM0, <br>
+   * 20 = LR_Section_OC3_STS3_and_RS_STM1, <br>
+   * 21 = LR_Section_OC12_STS12_and_RS_STM4, <br>
+   * 22 = LR_Section_OC48_STS48_and_RS_STM16, <br>
+   * 23 = LR_Section_OC192_STS192_and_RS_STM64, <br>
+   * 24 = LR_Line_OC1_STS1_and_MS_STM0, <br>
+   * 25 = LR_Line_OC3_STS3_and_MS_STM1, <br>
+   * 26 = LR_Line_OC12_STS12_and_MS_STM4, <br>
+   * 27 = LR_Line_OC48_STS48_and_MS_STM16, <br>
+   * 28 = LR_Line_OC192_STS192_and_MS_STM64, <br>
+   * 29-39 Not used, <br>
+   * 40 = LR_Optical_Channel, for WDM wavelength, <br>
+   * 41 = LR_Optical_Multiplex_Section, for WDM wavelength bands, <br>
+   * 42 = LR_Optical_Transmission_Section for WDM entire optical signal,<br>
+   * 43 = LR_ATM_NI for ATM Network Interfaces (UNI and NNI), <br>
+   * 44 = LR_ATM_VP for ATM Virtual Paths, <br>
+   * 45 = LR_ATM_VC for ATM Virtual Channels, <br>
+   * 46 = LR_PHYSICAL_ELECTRICAL, <br>
+   * 47 = LR_PHYSICAL_OPTICAL, <br>
+   * 48 = LR_PHYSICAL_MEDIALESS, Specifies physical media for technologies such as radio,<br>
+   * 49 = LR_OPTICAL_SECTION, Represents the wavelength termination for a non DWDM system,<br>
+   * 50 = LR_DIGITAL_SIGNAL_RATE, Raw binary electrical signal of unspecified rate,<br>
+   * 51 = LR_Async_FOTS_150M, Legacy async optical signal,<br>
+   * 52 = LR_Async_FOTS_417M, Legacy async optical signal,<br>
+   * 53 = LR_Async_FOTS_560M, Legacy async optical signal,<br>
+   * 54 = LR_Async_FOTS_565M, Legacy async optical signal,<br>
+   * 55 = LR_Async_FOTS_1130M, Legacy async optical signal,<br>
+   * 56 = LR_Async_FOTS_1G7, Legacy async optical signal,<br>
+   * 57 = LR_Async_FOTS_1G8, Legacy async optical signal,<br>
+   * 58 = LR_D1_Video, Video capable port,<br>
+   * 59 = LR_ESCON, IBM protocol for mainframes,<br>
+   * 60 = LR_ETR, IBM protocol for mainframes,<br>
+   * 61 = LR_Fast_Ethernet, Fast Ethernet (legacy),<br>
+   * 62 = LR_FC_12_133M, Fibre Channel protocol,<br>
+   * 63 = LR_FC_25_266M, Fibre Channel protocol,<br>
+   * 64 = LR_FC_50_531M, Fibre Channel protocol,<br>
+   * 65 = LR_FC_100_1063M, Fibre Channel protocol,<br>
+   * 66 = LR_FDDI, <br>
+   * 67 = LR_FICON, IBM Protocol for mainframes,<br>
+   * 68 = LR_Gigabit_Ethernet, Gigabit ethernet,<br>
+   * 69 = LR_DS0_64K, DS0 CTP layer rate,<br>
+   * 70 = LR_ISDN_BRI, ISDN Basic Rate Interface PTP layer rate,<br>
+   * 71 = LR_POTS, POTS PTP layer rate,<br>
+   * 72 = LR_DSR_OC1_STM0, <br>
+   * 73 = LR_DSR_OC3_STM1, <br>
+   * 74 = LR_DSR_OC12_STM4, <br>
+   * 75 = LR_DSR_OC24_STM8, <br>
+   * 76 = LR_DSR_OC48_and_STM16, <br> 
+   * 77 = LR_DSR_OC192_and_STM64, <br>
+   * 78 = LR_DSR_OC768_and_STM256, <br>
+   * 79 = LR_DSR_1_5M, <br>
+   * 80 = LR_DSR_2M, <br>
+   * 81 = LR_DSR_6M, <br>
+   * 82 = LR_DSR_8M, <br>
+   * 83 = LR_DSR_34M, <br>
+   * 84 = LR_DSR_45M, <br>
+   * 85 = LR_DSR_140M, <br>
+   * 86 = LR_DSR_565M, <br>
+   * 87 = LR_DSR_Gigabit_Ethernet, <br>
+   * 88 = LR_Section_OC24_STS24_and_RS_STM8,<br>
+   * 89 = LR_Line_OC24_STS24_and_MS_STM8,<br>
+   * 90 = LR_Section_OC768_STS768_and_RS_STM256,<br>
+   * 91 = LR_Line_OC768_STS768_and_MS_STM256.
+   * <p>
+   * Any extension to the list of integers (0..91) defined here will be
+   * agreed upon through a formal
+   * process. They will be added at the end of the range i.e. 92 and above.  
+   * The type of the LayerRate has been made a 'short' rather than an enum to 
+   * allow new rates to be added without changing the IDL interface.  The value 
+   * for any new rates would have to be agreed by client and server and will be 
+   * included in the next IDL release for documentation.  
+   * Other layerRates may be added with the approval of the Specification
+   * Authority. </p>
+   *
+   * <p>The interface definition allows for failed specification of layer in the
+   * connection creation service. This is to allow the EMS to
+   * make the choice of specific layer of the connection to support the 
+   * requested
+   * signal flow. The layer specified must be supported by the physical 
+   * termination 
+   * identified. The layer chosen by the subnetwork will have the same rate as 
+   * that requested or will have a greater capacity.</p>
+   *
+   * <p>For example, LR_T1_and_DS1_1_5M may be used in place of 
+   * LR_VT1_5_and_TU11_VC11 
+   * where the NMS client does not want to dictate to the EMS the actual 
+   * solution to a connection request. In this case the EMS may choose a VT1.5
+   * connection to join the two CTPs identified in the request. </p>
+   *
+   * <p>The EMS may reject a request for a connection at a layer that it can not
+   * specifically support. </p>
+   *
+   **/
+   typedef short LayerRate_T;
+
+
+  /**
+   * <p>Set of LayerRate_T.<p>
+   **/
+   typedef sequence<LayerRate_T> LayerRateList_T;
+
+
+  /** 
+   * <p> The LayeredParameters_T struct will include
+   *  the layer rate with the applicable list of transmissions parameters.</p>
+   *
+   * LayerRate_T <b>layer</b>:
+   * <br>Represents the layer to which the parameters apply.<br>
+   *
+   * globaldefs::NVSList_T <b>transmissionParams</b>:
+   * <br>Name value pair list as specified in
+   * <a href=supportingDocumentation/layeredParameters.html>Layered Parameters</a><br>
+   * <br>
+   **/
+   struct LayeredParameters_T
+   {
+     LayerRate_T layer;
+     globaldefs::NVSList_T transmissionParams;
+   };
+
+  /**
+   * <p>Set of LayeredParameters_T.</p>
+   *
+   * <p>LayeredParameterList_T is used in the TP definition and as a 
+   * consequence is available for use in a connection specification
+   * where a TP is specified.</p>
+   **/
+   typedef sequence<LayeredParameters_T> LayeredParameterList_T;
+};
+
+#endif
+

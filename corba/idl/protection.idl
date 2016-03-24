@@ -1,0 +1,1246 @@
+#ifndef         protection_idl
+#define         protection_idl
+
+// *************************************
+// *                                   *
+// * protection.idl                    *
+// *                                   *
+// *************************************
+
+//Include list
+#include "globaldefs.idl"
+#include "transmissionParameters.idl"
+#include "common.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the protection structure
+   * of the NML-EML interface.
+   * It also contains the definition of the protection manager.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+module protection
+{
+  /**
+   * <p>The protection scheme state identifies the state in which the
+   * protection scheme is in.  PSS_FORCED_OR_LOCKED_OUT indicates that the entire
+   * group is locked; partial locking is indicated by PSS_AUTOMATIC.  Individual
+   * locks can be reported through transmission parameters on the appropriate TPs.</p>
+   **/
+  enum ProtectionSchemeState_T
+  {
+   PSS_UNKNOWN,
+   PSS_AUTOMATIC,
+   PSS_FORCED_OR_LOCKED_OUT
+  };
+
+
+  /**
+   * <p>The protection type identifies whether a protection switch
+   * is an MS protection switch or an SNCP protection switch.</p>
+   **/
+  enum ProtectionType_T
+  {
+   PT_MSP_APS,
+   PT_SNCP
+  };
+
+
+  /**
+   * <p>The switch reason reflects the reason why a
+   * switch occurred.<br>
+   * SR_NA is used upon retrieval of switch data for non-revertive groups, if a more precise
+   * value is not available.<br>
+   * SR_RESTORED is used for revertive groups to indicate a return to the normal state.<br>
+   * SR_SIGNAL_MISMATCH is used in the case the signal is ok, but is identified as coming
+   * from an incorrect source: TRAIL_TRACE_IDENTIFIER_MISMATCH, Signal Label Mismatch, etc.<br>
+   * SR_AUTOMATIC_SWITCH is used when the exact switch reason is unknown,
+   *  in retrievals of switch data if a protection switch is currently active
+   *  or in protection switch notifications.<br>
+   * SR_MANUAL indicates a switch that was requested by the operator
+   * and includes forced switches.
+   * </p>
+   **/
+  enum SwitchReason_T
+  {
+   SR_NA,
+   SR_RESTORED,
+   SR_SIGNAL_FAIL,
+   SR_SIGNAL_MISMATCH,
+   SR_SIGNAL_DEGRADE,
+   SR_AUTOMATIC_SWITCH,
+   SR_MANUAL
+  };
+
+
+  /**
+   * <p>The equipment switch reason reflects the reason why a
+   * switch occurred. EswitchReason is a string that can take 
+   * the following values.<br>
+   * "SR_NA" is used, 
+   * if a more precise value is not available.<br>
+   * "SR_E_FAILURE" is used when an instance of equipment has failed.<br>
+   * "SR_MANUAL" indicates a switch that was requested by the operator
+   * and includes forced switches.
+   * </p>
+   **/
+   typedef string ESwitchReason_T;
+
+  /**
+   * <p> This type identifies the possible protection switch commands.
+   * See ITU-T Recommendation G.841 for definitions.</p>
+   **/
+  enum ProtectionCommand_T 
+  {
+    PC_CLEAR,
+    PC_LOCKOUT,
+    PC_FORCED_SWITCH,
+    PC_MANUAL_SWITCH,
+    PC_EXERCISER
+  };
+
+
+  /**
+   * <p>The protection group type identifies the type of the
+   * protection Group.</p>
+   **/
+  enum ProtectionGroupType_T
+   {
+    PGT_MSP_1_PLUS_1,
+    PGT_MSP_1_FOR_N,
+    PGT_2_FIBER_BLSR,
+    PGT_4_FIBER_BLSR
+   };
+
+
+  /**
+   * <p>Reversion mode is used to indicate whether, after repair of a
+   * failed resource, an additional switch should be
+   * made to revert to the preferred resource.
+   * Revertive modes may require a wait to restore (WTR) time
+   * setting.</p>
+   **/
+  enum ReversionMode_T
+  {
+   RM_UNKNOWN,
+   RM_NON_REVERTIVE,    
+   RM_REVERTIVE                 
+  };
+
+
+  /**
+   * <p>The struct ProtectionGroup_T represents a protection group,
+   * which is used to model MS layer protection.</p>
+   *
+   * <p>See <a href=supportingDocumentation/protectionSwitch.pdf>Protection Switch</a>
+   * for more information.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>The name represents the name of the
+   * Protection Group which is assigned by the EMS upon creation.
+   * The EMS is responsible for guaranteeing the uniqueness of the name
+   * within the context of the ManagedElement.
+   * It is a readonly attribute.<br>
+   *
+   * string <b>userLabel</b>:
+   * <br>The userLabel is provisionable by the NMS and would typically represent
+   * the ring-id of a ring. This attribute can be set
+   * by NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setUserLabel>setUserLabel</a>. 
+   * It is a read/write attribute.<br>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br>The native name of the protection group is the AID of the
+   * protection group itself. In case of the 4-Fiber BLSR (MSSPRING) group, the managed 
+   * element usually has only one group, whereas it is represented as three groups in this
+   * interface. Therefore the native name of the 4-Fiber group will be
+   * the AID of the 4-Fiber group. The native name of the component APS (MSP)
+   * groups is set to some useful name chosen by the EMS. Its
+   * aim is to provide a "nomenclature bridge" to aid relating information
+   * presented on NMS displays to EMS displays (via GUI cut through).
+   * This is never set to a null string.<br>
+   *
+   * string <b>owner</b>:
+   * <br>The owner is provisionable by the NMS. This attribute can be set
+   * by NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setOwner>setOwner</a>. 
+   * It is a read/write attribute.<br>
+   *
+   * ProtectionGroupType_T <b>protectionGroupType</b>:
+   * <br>Defines the type of scheme this group represents (e.g. 2f,4f blsr etc).
+   * It is a readonly attribute.<br>
+   *
+   * ProtectionSchemeState_T <b>protectionSchemeState</b>:
+   * <br>Identifies the current protection scheme state.
+   * It is a readonly attribute.<br>
+   *
+   * ReversionMode_T <b>reversionMode</b>:
+   * <br>Defines whether the protection scheme is revertive or not.
+   * It is a readonly attribute.<br>
+   *
+   * transmissionParameters::LayerRate_T <b>rate</b>:
+   * <br>Line rate of the PTPs of the protection group.
+   * It is a readonly attribute.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>pgpTPList</b>:
+   * <br>This is the list of TPs that belong in the protection group.
+   * The list of TPs is partially ordered. The protecting TP always
+   * trails its worker TPs. The East TPs are always contiguous in the list, as well
+   * as West TPs.
+   * <br>
+   *
+   * globaldefs::NVSList_T <b>pgpParameters</b>:
+   * <br>The pgpParameters contains a name value list for the known parameters
+   * of the protection group.  Non-applicable parameters and parameters for which
+   * the value is unknown to the EMS may be left out.<br>   
+   * It is a readonly attribute.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>
+   * <br>This attribute allows the communication from the EMS to the NMS of additional 
+   * information which is not explicitly modelled.
+   * This may be an empty list.<br>
+   **/
+  struct ProtectionGroup_T
+  {
+   globaldefs::NamingAttributes_T name;
+   string userLabel;
+   string nativeEMSName;
+   string owner;
+   ProtectionGroupType_T protectionGroupType;
+   ProtectionSchemeState_T protectionSchemeState;
+   ReversionMode_T reversionMode;
+   transmissionParameters::LayerRate_T rate;
+   globaldefs::NamingAttributesList_T pgpTPList;
+   globaldefs::NVSList_T pgpParameters;
+   globaldefs::NVSList_T additionalInfo;
+  };
+
+
+  /**
+   * <p>Sequence of ProtectionGroup_T.</p>
+   **/
+  typedef sequence <ProtectionGroup_T> ProtectionGroupList_T;
+
+
+  /**
+   * <p>This structure is used
+   * to respond to queries regarding the current protection switch status of a
+   * protection group or an SNC.</p>
+   *
+   * <p>See <a href=supportingDocumentation/protectionSwitch.pdf>Protection Switch</a>
+   * for more information.</p>
+   *
+   * ProtectionType_T <b>protectionType</b>:
+   * <br>The type of protection.<br>
+   *
+   * SwitchReason_T <b>switchReason</b>:
+   * <br>The reason the last switch occurred.<br>
+   *
+   * transmissionParameters::LayerRate_T <b>layerRate</b>:
+   * <br>The layer which this switch is relevant to.<br>
+   *
+   * globaldefs::NamingAttributes_T <b>groupName</b>:
+   * <br>Identifies the protectionGroup for which protection switch status is being reported.
+   * NULL if protectionType is SNCP.<br>
+   * 
+   * globaldefs::NamingAttributes_T <b>protectedTP</b>:
+   * <br>
+   * This is the TP that is protected. The protected (worker) and protecting TPs are fixed 
+   * in a revertive protection group, the worker can be active or not at any point in time. 
+   * In a non-revertive protection group, there is no fixed worker/protecting distinction. 
+   * The worker TP is indeed always the active TP; after a switch, the worker and 
+   * protecting TPs exchange their roles.<br>
+   * For an SNCP, this is always the reliable TP.<br>
+   * For a retrieval of a 2F BLSR, each TP is protected,
+   * and two SwitchData_T are returned.<br>
+   * For a retrieval of a 4FMSSPR, each worker TP is protected,
+   * and two SwitchData_T are returned.<br>
+   * For a retrieval of a 1:N MSP, each worker TP is protected,
+   * and N SwitchData_T are returned.<br>
+   * For a revertive 1+1 MSP, this is always the worker TP.<br>
+   * For a retrieval of a non-revertive 1+1 MSP switch, this is the active TP.
+   * <br>
+   * 
+   * globaldefs::NamingAttributes_T <b>switchToTP</b>:
+   * <br>Identifies the TP which is being switched to.<br>
+   * This identifies the 
+   * TP that is the active source after the switch, or currently active if
+   * no protection switch is currently active.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>
+   * <br>This attribute allows the communication from the EMS to the NMS of additional 
+   * information which is not explicitly modelled.
+   * This may be an empty list.<br>
+   **/
+  struct SwitchData_T
+  { 
+	   ProtectionType_T protectionType; 
+	   SwitchReason_T switchReason; 
+	   transmissionParameters::LayerRate_T layerRate; 
+	   globaldefs::NamingAttributes_T groupName;
+	   globaldefs::NamingAttributes_T protectedTP; 
+	   globaldefs::NamingAttributes_T switchToTP; 
+	   globaldefs::NVSList_T additionalInfo;
+  };
+
+
+  /**
+   * <p>Sequence of SwitchData_T.</p>
+   **/
+  typedef sequence<SwitchData_T> SwitchDataList_T;
+
+    /**
+	* <p>Protection Subnet Type Definition</p>
+	* <br>PSNT_MSP_1_PLUS_1: 1+1 Protection Subnet
+	* <br>PSNT_MSP_M_FOR_N: M:N Protection Subnet
+	* <br>PSNT_2_FIBER_ULSR: Two-Fiber Unidirectional Protection Ring
+	* <br>PSNT_2_FIBER_BLSR: Two-Fiber Bidirectional Protection Ring
+	* <br>PSNT_4_FIBER_BLSR: Four-Fiber Bidirectional Protection Ring
+	* <br>PSNT_USNCP: Unidirectional SNCP Protection Subnet
+	* <br>PSNT_BSNCP: Bidirectional SNCP Protection Subnet
+	* <br>PSNT_UPP: Unidirectional Path Protection Ring
+	* <br>PSNT_BPP: Bidirectional Path Protection Ring
+	* <br>PSNT_NP: Non-Protection Ring
+	* <br>PSNT_SNC_NODE: SNC Node
+	**/
+    enum ProtectionSubnetworkType_T
+    {
+		PSNT_MSP_1_PLUS_1,	
+		PSNT_MSP_M_FOR_N,	
+		PSNT_2_FIBER_ULSR,	
+		PSNT_2_FIBER_BLSR,
+		PSNT_4_FIBER_BLSR,
+		PSNT_USNCP,	
+		PSNT_BSNCP,
+		PSNT_UPP,
+		PSNT_BPP,
+		PSNT_NP,
+		PSNT_SNC_NODE
+    };
+    
+    /**
+	* <p>Sequence of unsigned short.</p>
+	**/
+    typedef sequence<unsigned short> TSSeq_T;
+
+   /**
+   *<p>Definition of Protection Subnet Link Structure</p>
+   *
+   * globaldefs::NamingAttributes_T <b>srcTP</b>:
+   * <br>Name of the TP at the source end of a link
+   *
+   * globaldefs::NamingAttributes_T <b>snkTP</b>:
+   * <br>Name of the TP at the sink end of a link
+   **/
+    struct ProtectionSubnetworkLink_T
+    {
+    	globaldefs::NamingAttributes_T srcTP;
+    	globaldefs::NamingAttributes_T snkTP;
+    	TSSeq_T	vc4List;
+    };
+
+	/**
+	* <p>Sequence of ProtectionSubnetworkLink_T.</p>
+	**/
+    typedef sequence<ProtectionSubnetworkLink_T> ProtectionSubnetworkSection_T;
+
+	/**
+	* <p>Sequence of ProtectionSubnetworkSection_T.</p>
+	**/
+    typedef sequence<ProtectionSubnetworkSection_T> ProtectionSubnetworkCircle_T;
+    
+	/**
+	* <p>Sequence of unsigned long.</p>
+	**/
+    typedef sequence<unsigned long> NEIDSeq_T;
+
+    /**
+    *<p>Protection Subnet Structure Definition</p>
+    *
+    * globaldefs::NamingAttributes_T <b>name</b>:
+    * <br>Protection Subnet Name
+    *
+    * string <b>userLabel</b>:
+    * <br>Protection Subnet User Label
+    *
+    * string <b>nativeEMSName</b>:
+    * <br>Protection Subnet Local Name
+    *
+    * string <b>owner</b>:
+    * <br>Protection Subnet Owner
+    *
+    * transmissionParameters::LayerRate_T <b>layerRate</b>:
+    * <br>Protection Subnet Layer Rate
+    *
+    * ProtectionSubnetworkType_T <b>psnType</b>:
+    * <br>Protection Subnet Type
+    *
+    * NEIDSeq_T <b>neIDList</b>:
+    * <br>Included NE ID List
+    *
+    * ProtectionSubnetworkCircle_T <b>psnLinks</b>:
+    * <br>Protection Subnet Link List
+    *
+    * globaldefs::NVSList_T <b>additionalInfo</b>:
+    * <br>Additional Information for Protection Subnet
+    **/
+    struct ProtectionSubnetwork_T
+    {
+		globaldefs::NamingAttributes_T name;
+		string  userLabel ;
+		string  nativeEMSName ;
+		string  owner ;
+		transmissionParameters::LayerRate_T layerRate;
+		ProtectionSubnetworkType_T psnType;
+		NEIDSeq_T neIDList;
+		ProtectionSubnetworkCircle_T psnLinks;
+		globaldefs::NVSList_T additionalInfo;
+     };
+
+	/**
+	* <p>Sequence of ProtectionSubnetwork_T.</p>
+	**/
+    typedef sequence<ProtectionSubnetwork_T> ProtectionSubnetworkList_T;     
+
+
+	/**
+    * <p> The WDM protection group type is a string that identifies the
+    * type of WDM port protection. The string can take on the following value: 
+    * "1_PLUS_1", "1_FOR_N" </p>
+    **/
+    typedef string WDMProtectionGroupType_T;	
+
+	/**
+	*<p>Definition of WDM Port Protection Group Structure</p>
+	*
+	* globaldefs::NamingAttributes_T <b>name</b>:
+	* <br>WDM Port Protection Group Name
+	*
+	* string <b>userLabel</b>:
+	* <br>User Label for WDM Port Protection Group
+	*
+	* string <b>nativeEMSName</b>:
+	* <br>Local Name for WDM Port Protection Group
+	*
+	* string <b>owner</b>:
+	* <br>WDM Port Protection Group Owner
+	*
+	* WDMProtectionGroupType_T <b>protectionGroupType</b>:
+	* <br>WDM Port Protection Group Type
+	*
+	* ProtectionSchemeState_T <b>protectionSchemeState</b>:
+	* <br>Protection Strategy Status of WDM Port Protection Group
+	*
+	* ReversionMode_T <b>reversionMode</b>:
+	* <br>Protection Reversion Mode for WDM Port Protection Group
+	*
+	* globaldefs::NamingAttributesList_T <b>pgpTPList</b>:
+	* <br>TP List of WDM Port Protection Group
+	*
+	* globaldefs::NVSList_T <b>pgpParameters</b>:
+	* <br>Parameter List of WDM Port Protection Group
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+	* <br>Additional Information
+	**/
+	struct WDMProtectionGroup_T
+	{
+	   globaldefs::NamingAttributes_T name;
+	   string userLabel;
+	   string nativeEMSName;
+	   string owner;
+	   WDMProtectionGroupType_T protectionGroupType;
+	   ProtectionSchemeState_T protectionSchemeState;
+	   ReversionMode_T reversionMode;
+	   globaldefs::NamingAttributesList_T pgpTPList;
+	   globaldefs::NVSList_T pgpParameters;
+	   globaldefs::NVSList_T additionalInfo;
+	};
+
+	/**
+	*<p>Sequence of WDMProtectionGroup_T.</p>
+	**/
+	typedef sequence <WDMProtectionGroup_T> WDMProtectionGroupList_T;  
+  
+     
+	/**
+	*<p>Definition of Protection Switching Data Structure for WDM Port Protection Group.</p>
+	*
+	* WDMProtectionGroupType_T <b>protectionGroupType</b>:
+	* <br>WDM Port Protection Group Type	
+	*
+	* SwitchReason_T <b>switchReason</b>:
+	* <br>Protection Switching Reason for WDM Port Protection Group
+	*
+	* globaldefs::NamingAttributes_T <b>wPGPName</b>:
+	* <br>WDM Port Protection Group Name
+	*
+	* globaldefs::NamingAttributes_T <b>protectedTP</b>:
+	* <br>Name of the Working TP for WDM Port Protection Group After Switching Occurred
+	*
+	* globaldefs::NamingAttributes_T <b>protectedTP</b>:
+	* <br>Name of the Protection TP for WDM Port Protection Group After Switching Occurred
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+	* <br>Additional Information
+	**/
+	struct WDMSwitchData_T
+	{ 
+	   WDMProtectionGroupType_T protectionType; 	   
+	   SwitchReason_T switchReason; 
+	   globaldefs::NamingAttributes_T wPGPName;
+	   globaldefs::NamingAttributes_T protectedTP; 
+	   globaldefs::NamingAttributes_T switchToTP; 
+	   globaldefs::NVSList_T additionalInfo;
+	};
+	 
+	/**
+	*<p>Sequence of WDMSwitchData_T.</p>
+	**/
+	typedef sequence<WDMSwitchData_T> WDMSwitchDataList_T;
+
+    /**
+    * <p> The equipment protection group type is a string that identifies the
+    * type of equipment protection. The string can take on the following value: 
+    * "M_FOR_N." 
+    * M:N equipment protection means that M pieces of equipment protect N 
+    * pieces of equipment. </p>
+    **/
+    typedef string EProtectionGroupType_T;
+    
+
+	 /**
+   * <p>The struct EProtectionGroup_T represents an equipment protection group,
+   * which is used to model equipment protection.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>The name represents the name of the Equipment
+   * Protection Group which is assigned by the EMS upon creation.
+   * The EMS is responsible for guaranteeing the uniqueness of the name
+   * within the context of the ManagedElement.
+   * It is a readonly attribute.<br>
+   *
+   * string <b>userLabel</b>:
+   * <br>The userLabel is provisionable by the NMS. This attribute can be set
+   * by NMS through the Common_I interface service
+   * common::Common_I::setUserLabel(). It is a read/write attribute.<br>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br>The native name of the equipment protection group <br>. 
+   *
+   * string <b>owner</b>:
+   * <br>The owner is provisionable by the NMS. This attribute can be set
+   * by NMS through the Common_I interface service
+   * common::Common_I::setOwner(). It is a read/write attribute.<br>
+   *
+   * EProtectionGroupType_T <b>eProtectionGroupType</b>:
+   * <br>Defines the type of scheme this group represents (so far, only  M:N 
+   * equipment protection has been identified). It is a readonly attribute.<br>
+   *
+   * ProtectionSchemeState_T <b>protectionSchemeState</b>:
+   * <br>Identifies the current protection scheme state.
+   * It is a readonly attribute.<br>
+   *
+   * ReversionMode_T <b>reversionMode</b>:
+   * <br>Defines whether the protection scheme is revertive or not.
+   * It is a readonly attribute.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>protectedList</b>:
+   * <br>This is provides a list of the protected equipment instances.
+   * For M:N equipment protection, this list would have N elements.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>protectingList</b>:
+   * <br>This is provides a list of the protecting equipment instances.
+   * For M:N equipment protection, this list would have M elements. <br>
+   *
+   * globaldefs::NVSList_T <b>ePgpParameters</b>:
+   * <br>The epgpParameters contains a name value list of the associated 
+   * parameters for the equipment protection group.  
+   * No epgpParameters have been identified. 
+   * It is a readonly attribute.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>This attribute allows the communication from the EMS to the NMS of  
+   * additional information which is not explicitly modelled. Additional info
+   * is used to convey the pointer to the alarm severity assignment profile.
+   * See <a href=supportingDocumentation/additionalInfoUsage.pdf>
+   * Additional Info Usage</a> for further information on usage. This 
+   * may be an empty list.<br>
+   **/
+    struct EProtectionGroup_T
+    {
+	     globaldefs::NamingAttributes_T name;
+	     string userLabel;
+	     string nativeEMSName;
+	     string owner;
+	     EProtectionGroupType_T eProtectionGroupType;
+	     ProtectionSchemeState_T protectionSchemeState;
+	     ReversionMode_T reversionMode;
+	     globaldefs::NamingAttributesList_T protectedList;
+	     globaldefs::NamingAttributesList_T protectingList;
+	     globaldefs::NVSList_T ePgpParameters;
+	     globaldefs::NVSList_T additionalInfo;
+    };
+    
+	/**
+	* <p>Sequence of EProtectionGroup_T.</p>
+	**/
+	typedef sequence <EProtectionGroup_T> EProtectionGroupList_T;
+    
+	/**
+   * <p>This structure is used to respond to queries
+   * regarding the current protection switch status of an
+   * equipment protection group.</p>
+   *
+   * EProtectionGroupType_T <b>eProtectionGroupType</b>:
+   * <br>The type of protection.<br>
+   *
+   * ESwitchReason_T <b>eSwitchReason</b>:
+   * <br>The reason that the last switch occurred.<br>
+   *
+   * globaldefs::NamingAttributes_T <b>ePGPName</b>:
+   * <br>Identifies the equipment protection group for which 
+   * protection switch status is being reported. <br>
+   * 
+   * globaldefs::NamingAttributes_T <b>protectedE</b>:
+   * <br>
+   * This attributes identifies the protected equipment. <br>
+   * For a retrieval of an M:N group, protectedE always 
+   * identifies a worker equipment instance. In this case, N ESwitchData_T 
+   * are returned as a result of retrieveESwitchData (one for 
+   * each worker equipment instance).<br>
+   * 
+   * globaldefs::NamingAttributes_T <b>switchToE</b>:
+   * <br>This identifies the equipment instance
+   * that is working after the switch, or currently working if
+   * no protection switch is currently active.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>
+   * <br>This attribute allows the communication from the EMS to the NMS 
+   * of additional information which is not explicitly modelled.
+   * This may be an empty list.<br>
+   **/
+   struct ESwitchData_T
+   { 
+    EProtectionGroupType_T eProtectionGroupType; 
+    ESwitchReason_T eSwitchReason; 
+    globaldefs::NamingAttributes_T ePGPName;
+    globaldefs::NamingAttributes_T protectedE; 
+    globaldefs::NamingAttributes_T switchToE; 
+    globaldefs::NVSList_T additionalInfo;
+   };
+
+  /**
+   * <p>Sequence of ESwitchData_T.</p>
+   **/
+   typedef sequence<ESwitchData_T> ESwitchDataList_T;
+
+	/**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * 
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator
+   * overview</a> for information on how iterators are used in this
+   * interface.</p>
+   **/
+    interface EProtectionGroupIterator_I
+    {
+		boolean next_n(
+          	 in unsigned long how_many,
+          	 out EProtectionGroupList_T ePGPList)
+             raises(globaldefs::ProcessingFailureException);
+                 
+		unsigned long getLength()
+             raises(globaldefs::ProcessingFailureException);
+                 
+   		void destroy()																																																							
+             raises(globaldefs::ProcessingFailureException);																																																							
+     };    
+    
+/**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * 
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator
+   * overview</a> for information on how iterators are used in this
+   * interface.</p>
+   **/
+  interface ProtectionGroupIterator_I
+  {
+	boolean next_n(in unsigned long how_many,
+                  out ProtectionGroupList_T pgpList)
+				  raises(globaldefs::ProcessingFailureException);
+		
+	unsigned long getLength()
+				 raises(globaldefs::ProcessingFailureException);
+		
+	void destroy()
+				 raises(globaldefs::ProcessingFailureException);
+   };
+
+ /**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * 
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator
+   * overview</a> for information on how iterators are used in this
+   * interface.</p>
+   **/
+    interface ProtectionSubnetworkIterator_I
+    {
+     	     boolean next_n(
+          	in unsigned long how_many,
+          	out ProtectionSubnetworkList_T PGPList)
+             raises(globaldefs::ProcessingFailureException);
+                 
+    	     unsigned long getLength()
+             raises(globaldefs::ProcessingFailureException);
+                 
+   	     void destroy()																																																							
+             raises(globaldefs::ProcessingFailureException);																																																							
+     };          
+ 
+    
+/**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * 
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator
+   * overview</a> for information on how iterators are used in this
+   * interface.</p>
+   **/
+	interface WDMProtectionGroupIterator_I
+	{
+		boolean next_n(in unsigned long how_many,
+					out WDMProtectionGroupList_T pgpList)
+					raises(globaldefs::ProcessingFailureException);
+  
+		unsigned long getLength()
+					raises(globaldefs::ProcessingFailureException);
+  
+		void destroy()
+					raises(globaldefs::ProcessingFailureException);
+	};
+
+   /**
+   * <p>The protectionManager is used as a handle to gain access to the
+   * protection functionalities of the NML-EML interface. In this
+   * release, only retrieval functionalities of the protection (of both the MS (line) level
+   * and SNC level) are supported.</p>
+   *
+   * <p>A handle to an instance of this interface is gained via the
+   * <a href=_emsSession.EmsSession_I.html#emsSession::EmsSession_I::getManager>
+   * getManager</a> operation in Manager.</p>
+   **/		
+
+  interface ProtectionMgr_I: common::Common_I
+  {
+  /**
+   * <p>This operation is used by the client to discover all the 
+   * protection groups currently in operation for the managed
+   * element.</p>
+   *
+   * <br>  globaldefs::NamingAttributes_T meName:
+   *        the name of the managed element for which the request is made.
+   * <br>  unsigned long how_many: Maximum number of protection groups 
+   *        to report in the first batch.
+   * <br>  ProtectionGroupList_T pgList: First batch of protection groups.
+   * <br>  ProtectionGroupIterator_I pgIt: Iterator used to access the remaining PGs, if any.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when meName does not reference a managedElement object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when meName references object which does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void getAllProtectionGroups(
+         in globaldefs::NamingAttributes_T meName,
+         in unsigned long how_many,
+         out ProtectionGroupList_T pgList,
+         out ProtectionGroupIterator_I pgpIt)
+         raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This operation is used to get the current status of a 
+   * protectionGroup. This service is needed so that even if a filter
+   * is established, the NMS can query the status of a protection 
+   * group.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T protectionGroupName:
+   *       the name of the protection Group that the client is
+   *       interested in.
+   * <br> protection::ProtectionGroup_T protectionGroup: the returned protection group.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when pgName does not reference a protection group<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when pgName references a PG object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void getProtectionGroup(
+         in  globaldefs::NamingAttributes_T pgName,
+         out protection::ProtectionGroup_T  protectionGroup)
+         raises (globaldefs::ProcessingFailureException);
+
+   /**
+   * <p>This operation is used to set the current status of a 
+   * protectionGroup. This service is needed so that even if a filter
+   * is established, the NMS can set the status of a protection 
+   * group.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T pgName:
+   *       the name of the protection Group that the client is
+   *       interested in.
+   * <br> globaldefs::NVSList_T paraList: the parameters of the protection group to modify, including wtrTime.
+   * <br> protection::ProtectionGroup_T protectionGroup: the returned protection group.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when pgName does not reference a protection group<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when pgName references a PG object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void setProtectionGroup(
+         in globaldefs::NamingAttributes_T pgName,
+	 in globaldefs::NVSList_T paraList,
+         out protection::ProtectionGroup_T  protectionGroup)
+         raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This operation gets the list of names of CTPs that are configured to carry
+   * Non-preemptible Unprotected extra Traffic.  The result is independent of the current
+   * switch status.</p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T groupName:
+   *          Name of the protection group.
+   * <br>  unsigned long how_many:
+   *       Maximum number of CTPs to be returned in the first batch.
+   * <br> globaldefs::NamingAttributesList_T nameList:
+   *       The first batch of CTPs that have NUT turned on.
+   * <br> globaldefs::NamingAttributesIterator_I nameIt:
+   *       The iterator used to retrieve the remaining CTPs that have NUT turned on.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when pgName does not reference a protectionGroup object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when pgName references object which does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators
+   *  that the EMS can support has been reached.
+   * <br>
+   **/
+   void getAllNUTTPNames(
+         in globaldefs::NamingAttributes_T pgName,
+         in unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+         raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This operation gets the list of names of CTPs that can carry preemptible extra
+   * traffic.  The result is independent of the current
+   * switch status.</p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T groupName:
+   *          Name of the protection group.
+   * <br>  unsigned long how_many:
+   *       Maximum number of CTPs to be returned in the first batch.
+   * <br> globaldefs::NamingAttributesList_T     tpNameList:
+   *       The first batch of CTPs that can carry preemptible extra traffic.
+   * <br> globaldefs::NamingAttributesIterator_I tpit:
+   *       The iterator used to retrieve the remaining CTPs that can carry preemptible
+   *       extra traffic.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when pgName does not reference a protectionGroup object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when pgName references object which does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators
+   *  that the EMS can support has been reached.
+   * <br>
+   **/
+   void getAllPreemptibleTPNames(
+         in globaldefs::NamingAttributes_T pgName,
+         in unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+         raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This operation gets the list of CTPs that can carry protected
+   * traffic.  The result is independent of the current
+   * switch status.</p>
+   * 
+   * <br> globaldefs::NamingAttributes_T pgName:
+   *          Name of the protection group.
+   * <br>  unsigned long how_many:
+   *       Maximum number of CTPs to be returned in the first batch.
+   * <br> globaldefs::NamingAttributesList_T nameList:
+   *       The first batch of CTPs that can carry protected traffic.
+   * <br> globaldefs::NamingAttributesIterator_I nameIt:
+   *       The iterator used to retrieve the remaining CTPs that can carry protected traffic.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when pgName does not reference a protectionGroup object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when pgName references object which does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+   void getAllProtectedTPNames(
+         in globaldefs::NamingAttributes_T pgName,
+         in unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+        raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This service is used by the NMS to get the latest switch status
+   * on a SNC or a MSP group. 
+   *
+   * <p>When used on the reliable CTP of an SNC, a single struct is returned and the
+   * group name is NULL. The switchToTP indicates the presently active
+   * source of the traffic to the protectedTP.
+   *
+   * <p> When used on a 1+1 MSP, a single struct is provided with the 
+   * relevant data.
+   *
+   * <p> When used on a 1:N MSP, a struct per worker TP is presented with
+   * protectedTP being the worker TP Name and the switchToTP identifying
+   * the present source of the traffic.
+   *
+   * <p> When used on a 2F BLSR, two structs are returned, one per TP. 
+   * In a stable state, the protectedTP and the switchToTP are the same TP. 
+   * In a switched state, the switchToTP is the same for both protectedTPs.
+   *
+   * <p> When used on a 4F BLSR, two structs are returned,
+   * each one identifying a span with the protectedTP being the worker TP 
+   * and the switchToTP identifying the present source of the ring traffic
+   * for that span.
+   *
+   * <p>See <a href=supportingDocumentation/protectionSwitch.pdf>Protection Switch</a>
+   * for more information.</p>
+   *
+   * <br>   globaldefs::NamingAttributes_T reliableSinkCtpOrGroupName:
+   *         This is the CTP that is the output of a service selector in case
+   *         of the SNC or the group name for which the switch data is being
+   *         requested.
+   * <br>   protection::SwitchDataList_T: The current protection switch status
+   * of the CTP or PG provided.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when reliableSinkCtpOrGroupName does not reference 
+   *  a reliable CTP nor a PG object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when reliableSinkCtpOrGroupName references a CTP or PG
+   *  object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void retrieveSwitchData(
+         in globaldefs::NamingAttributes_T reliableSinkCtpOrGroupName,
+         out protection::SwitchDataList_T switchData)
+        raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p> This service is used to execute a protection switch. The protection
+   * switch may be performed via a protection switch command, on a protection 
+   * group or on a CTP involved in an 
+   * SNCP. The NMS requests the EMS to move the traffic received from the fromTP
+   * to the toTP.  The same command is used to clear all existing commands.</p>
+   * 
+   * <p>For 4-fiber SONET/SDH SPRINGS, the span switch is performed on the PGT_MSP_1_FOR_N         
+   * protection group, and the ring switch on the PGT_4_FIBER_BLSR group.</p>
+   * 
+   * <p>See 
+   * <a href=supportingDocumentation/protectionSwitch.pdf>Protection Switch</a>
+   * for more information.</p>
+   *
+   * <br>   ProtectionCommand_T protectionCommand: The command to be performed
+   * <br>   globaldefs::NamingAttributes_T reliableSinkCtpOrGroupName:
+   *         This is the CTP that is the output of a service selector in case
+   *         of the SNC or the group name for which the switch data is being
+   *         requested.
+   * <br>   globaldefs::NamingAttributes_T fromTp: The present source of
+   *         the traffic
+   * <br>   globaldefs::NamingAttributes_T toTp:   The requested source of
+   *         the traffic after the command.
+   * <br>   protection::SwitchData_T switchData: The protection switch status
+   *         of the toTp provided after the execution of the command.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when reliableSinkCtpOrGroupName, fromTp, or toTp
+   *  reference objects of the correct type, but that are invalid in the context of this
+   *  operation<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when reliableSinkCtpOrGroupName references  
+   *  a CTP or PG object that does not exist, or when fromTp or toTp references a CTP
+   *  object that does not exist <br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised if the EMS is unable to perform the operation<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to the managed element is lost<br>
+   **/
+   void performProtectionCommand(
+         in  ProtectionCommand_T protectionCommand,
+         in  globaldefs::NamingAttributes_T reliableSinkCtpOrGroupName,
+         in  globaldefs::NamingAttributes_T fromTp,
+         in  globaldefs::NamingAttributes_T toTp,
+         out protection::SwitchData_T switchData)
+     raises(globaldefs::ProcessingFailureException);
+
+/**
+   * <p>Get adjacent TP of a TP (these two TPs are always CTP). For a TP, its adjacent
+   * TPs refer to: 1. those source TPs whose sink TP is the TP itself in an NE; 2. If these source TPs are in the
+   * protection group and protected, the adjacent TPs include those protecting TPs.</p>
+   *   
+   * <br> globaldefs::NamingAttributes_T tpName: The name of the adjacent TP for a TP to be queried.
+   * <br> globaldefs::NamingAttributesList_T tpNameList: Get the adjacent TP name list.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this 
+   *  service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tpName does not reference 
+   * a CTP.<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void getAdjacentTPs(in globaldefs::NamingAttributes_T tpName,     
+	 out globaldefs::NamingAttributesList_T tpNameList)
+	raises(globaldefs::ProcessingFailureException);      
+
+   /**
+   * <p>This operation is used by the client to discover all the 
+   * equipment protection groups currently in operation for the managed
+   * element.</p>
+   *
+   * <br>globaldefs::NamingAttributes_T meName:
+   * the name of the managed element for which the request is made.
+   * <br>unsigned long how_many: Maximum number of equipment protection 
+   * groups to report in the first batch.
+   * <br>EProtectionGroupList_T epgpList: First batch of equipment protection 
+   * groups.
+   * <br>EProtectionGroupIterator_I epgpIt: Iterator used to access the 
+   * remaining EPGs, if any.
+   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this 
+   *  service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when meName does not reference a 
+   *  managedElement object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when meName references object which does 
+   *  not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is 
+   *  lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+   *  that the EMS can support has been reached<br>
+   * <br>
+   **/
+   void getAllEProtectionGroups(
+		in globaldefs::NamingAttributes_T meName,
+		in unsigned long how_many,
+		out EProtectionGroupList_T epgpList,
+		out EProtectionGroupIterator_I epgpIt)
+ 	raises (globaldefs::ProcessingFailureException);
+
+/**
+   * <p>This operation is used to get the current status of a 
+   * Equipment Protection Group. This service is needed so that even if a 
+   * filter is established, the NMS can query the status of a 
+   * protection group.</p>
+   *
+   * <br>globaldefs::NamingAttributes_T ePGPname:
+   * the name of the equipment protection group that the client is
+   * interested in.
+   * <br>protection::EProtectionGroup_T eProtectionGroup: the returned 
+   * equipment protection group.
+   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this 
+   *  service<br>
+   * EXCPT_INVALID_INPUT - Raised when ePGPName does not reference an equipment  
+   *  protection group<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when ePGPName references an object which 
+   *  does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is 
+   *  lost<br>
+   * <br>
+   **/
+   void getEProtectionGroup(
+         in  globaldefs::NamingAttributes_T ePGPname,
+         out protection::EProtectionGroup_T eProtectionGroup)
+        raises (globaldefs::ProcessingFailureException);
+
+
+/**
+   * <p>This service is used by the NMS to get the latest switch status
+   * on an equipment protection group.<br>
+   *
+   * For a retrieval of a revertive M:N group, N ESwitchData_T 
+   * are returned as a result of retrieveESwitchData (one for 
+   * each worker equipment instance).<br>
+   * 
+   * For a retrieval of a non-revertive M:N group, N ESwitchData_T 
+   * are returned as a result of retrieveESwitchData (one for 
+   * each active equipment instance).<br>
+   * 
+   * <br>globaldefs::NamingAttributes_T ePGPName:
+   * This is the equipment protection group name for which 
+   * the switch data is being requested.
+   *       
+   * <br>protection::ESwitchDataList_T: The current protection switch status
+   * of the equipment protection group provided.
+   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this 
+   *  service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when ePGPName does not reference an equipment 
+   *  object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when ePGPName references object which does
+   *  not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is 
+   *  lost<br>
+   * <br>
+   **/
+   void retrieveESwitchData(
+         in globaldefs::NamingAttributes_T ePGPName,
+         out protection::ESwitchDataList_T eSwitchDataList)
+        raises(globaldefs::ProcessingFailureException);
+
+	
+/**
+   * <p>Query all protection subnets</p>
+   * 
+   * <br> unsigned long how_many: the first batch of queried data record entries returned
+   * <br> ProtectionSubnetworkList_T psnList: the first batch of protection subnet list returned
+   * <br> ProtectionSubnetworkIterator_I psnIt: iterative child object for protection subnet used for getting data in batches
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>      
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+    void getAllProtectionSubnetworks(
+		in unsigned long how_many,
+		out ProtectionSubnetworkList_T psnList,
+		out ProtectionSubnetworkIterator_I psnIt)
+ 		raises (globaldefs::ProcessingFailureException);
+
+/**
+   * <p>Get all WDM port protection groups for the specified NE</p>
+   * 
+   * <br> globaldefs::NamingAttributes_T meName: NE name
+   * <br> unsigned long how_many: the first batch of queried data record entries returned
+   * <br> WDMProtectionGroupList_T wpgpList: the first batch of WDM port protection group list returned
+   * <br> WDMProtectionGroupIterator_I wpgpIt: iterative child object for WDM port protection group used for getting data in batches
+
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when meName is invalid<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+	void getAllWDMProtectionGroups(
+         in globaldefs::NamingAttributes_T meName,
+         in unsigned long how_many,
+         out WDMProtectionGroupList_T wpgpList,
+         out WDMProtectionGroupIterator_I wpgpIt)
+         raises(globaldefs::ProcessingFailureException);
+
+/**
+   * <p>Query the specified WDM port protection group</p>
+   *   
+   * <br> globaldefs::NamingAttributes_T wpgpName: WDM port protection group name
+   * <br> protection::WDMProtectionGroup_T  wProtectionGroup: WDM port protection group object
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when wpgpName is invalid<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an 
+   *  object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void getWDMProtectionGroup(
+         in  globaldefs::NamingAttributes_T wpgpName,
+         out protection::WDMProtectionGroup_T  wProtectionGroup)
+         raises (globaldefs::ProcessingFailureException);
+
+/**
+   * <p>Query the switching status for the specified WDM port protection group</p>
+   *   
+   * <br> globaldefs::NamingAttributes_T wpgpName: WDM port protection group name
+   * <br> protection::WDMSwitchDataList_T  wSwitchDataList: Switching status data list of WDM port protection group
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when wpgpName is invalid<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an 
+   *  object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void retrieveWDMSwitchData(
+         in globaldefs::NamingAttributes_T wpgpName,
+         out protection::WDMSwitchDataList_T wSwitchDataList)
+        raises(globaldefs::ProcessingFailureException);
+
+/**
+   * <p>Execute the external switching command for the specified WDM port protection group</p>
+   *   
+   * <br> ProtectionCommand_T protectionCommand: External switching name
+   * <br> globaldefs::NamingAttributes_T wpgpName: WDM port protection group name
+   * <br> globaldefs::NamingAttributes_T fromTp: Switching source TP name
+   * <br> globaldefs::NamingAttributes_T toTp: Switching sink TP name
+   * <br> protection::WDMSwitchData_T wSwitchData: Switching status data for switched protection group
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when reliableSinkCtpOrGroupName does not reference 
+   *  a reliable CTP nor a PG object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when reliableSinkCtpOrGroupName references a CTP or PG
+   *  object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void performWDMProtectionCommand(
+         in  ProtectionCommand_T protectionCommand,
+         in  globaldefs::NamingAttributes_T wpgpName,
+         in  globaldefs::NamingAttributes_T fromTp,
+         in  globaldefs::NamingAttributes_T toTp,
+         out protection::WDMSwitchData_T wSwitchData)
+     raises(globaldefs::ProcessingFailureException);
+   };
+};  
+
+#endif

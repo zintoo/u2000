@@ -1,0 +1,72 @@
+#ifndef mtnmVersion_idl
+#define mtnmVersion_idl
+
+// *************************************
+// *                                   *
+// * mtnmVersion.idl                   *
+// *                                   *
+// *************************************
+
+//Include list
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the version interface
+   * of the NML-EML interface.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module mtnmVersion
+{
+  /**
+   * <p>The interface Version_I allows the NMS to query the current version
+   * of the IDL interface implemented by the EMS system.
+   * In order to use this interface, the NMS needs to invoke the getVersion
+   * service to figure out which version of the interface the EMS
+   * is providing.  getVersion() should be called by a client before 
+   * other communications with
+   * an EMS object.  The client can determine from the response string
+   * which version of the EMS is available.</p>
+   * <p> For details on how to support multiple versions of IDL see
+   * <a href=supportingDocumentation/versioning.pdf>Versioning strategy</a>.</p>
+   * 
+   * <h2> IDL change Process </h2> 
+   * <p>Once a change is approved, the EMS and NMS
+   * can implement the new changes.</p>
+   **/
+  interface Version_I
+  {
+  /**
+   * <p>This service returns the version of the IDL that the corresponding 
+   * EMS object supports.</p>
+   *
+   * The format of the return string is as follows:
+   * <i>Release</i>.<i>Major</i>[.<i>Minor</i>] where <i>Release</i>,
+   * <i>Major</i> and <i>Minor</i> are strings 
+   * that contain only digits.
+   * 
+   * For example, 2.1 indicates release 2 and major release 1, 
+   * 1.3 indicates release 1 and major release 3, and so on.
+   * Note that x.y has the same meaning as x.y.0 
+   * 
+   * The minor digit is used for bug fixing the major release.  
+   * e.g 1.2.1 is a minor release on 1.2.   
+   *
+   * Any changes to any IDL files must be approved by the 
+   * Specification Authority.
+   *
+   * For TMF 814 version 2.1, the version is "2.1".
+   *
+   * @returns string	the version of the interface 
+   **/
+   string getVersion();
+  };
+};
+
+#endif
+

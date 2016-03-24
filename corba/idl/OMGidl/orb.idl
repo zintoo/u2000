@@ -1,0 +1,45 @@
+//-----------------------------------------------------------------------
+// CopyRight String
+//
+// 1.1
+//
+//-----------------------------------------------------------------------
+
+//----------------------------------------------------------------------
+// File:	<orb.idl>
+//
+// Note:	The CORBA specification states that the file <orb.idl>
+//		may be handled in a special way by an IDL compiler.
+//
+//		For example, the C++ preprocessor in the Orbix IDL
+//		compiler just sets a flag when it encounters
+//		"#include <orb.idl>". As such, in the past, Orbix has
+//		not been shipped with an actual <orb.idl> file.
+//
+//		However, the IDLgen utility (which is part of the
+//		Orbix Code Generation Toolkit) uses a different
+//		algorithm in its C++ preprocessor, and IDLgen DOES
+//		require that <orb.idl> exist. In fact, IDLgen currently
+//		requires that <orb.idl> contains a module called CORBA.
+//		Inside IDLgen, the parser will
+//		recognise that the module CORBA has been encountered
+//		and will automagically register CORBA::TypeCode, 
+//		CORBA::NamedValue and CORBA::Principal as
+//		built-in types.
+//
+//		Do NOT delete or modify this file in any way. Doing so
+//		might cause IDLgen to stop working.
+//----------------------------------------------------------------------
+
+#ifndef CORBA_IDL_
+#define CORBA_IDL_
+
+
+//module CORBA
+//{
+//    interface Principal { };
+//    interface NamedValue { };
+//    interface TypeCode { };
+//};
+
+#endif

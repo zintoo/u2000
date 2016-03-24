@@ -1,0 +1,2333 @@
+#ifndef flowDomain_idl
+#define flowDomain_idl
+
+// ********************************
+// *                              *
+// *    flowDomain.idl            *
+// *                              *
+// ********************************
+
+// Include list
+#include "globaldefs.idl"
+#include "common.idl"
+#include "transmissionParameters.idl"
+#include "terminationPoint.idl"
+#include "flowDomainFragment.idl"
+#include "subnetworkConnection.idl"
+
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <p>This module defines the types that represent resources for 
+   * provisioning connectionless connectivity accross the NMS-EMS 
+   * interface, the flow domain (FD) and matrix flow
+   * domain (MFD).
+   * </p>
+   *
+   * <h5> Version 3.5 (DRAFT) </h5>
+   **/
+
+module flowDomain
+{
+  /**
+   * <p> This attribute provides an indication to the NMS about the server layer
+   * connectivity between the MFDs associated to an FD. It shall have one of the 
+   * following values: <br>
+   * CS_UNKNOWN:  the Connectivity state of the FD is not known by
+   *  the EMS <br>
+   * CS_FULLY_CONNECTED: all FD Edge CPTPs are reachable to each other <br>
+   * CS_NOT_FULLY_CONNECTED:  at least one FD Edge CPTP is not reachable by another
+   *   FD Edge CPTP <br>
+   * </p>
+   **/
+   enum ConnectivityState_T
+   {
+     CS_UNKNOWN,
+     CS_FULLY_CONNECTED,
+     CS_NOT_FULLY_CONNECTED
+   };
+  /**
+   * <p> This attribute This parameter shall identify (for a "connectivity-aware" EMS) 
+   * the requested operation mode in case not all FPs have potential connectivity 
+   * to one another. If the EMS is not connectivity-aware, this parameter is ignored.
+   * It shall have one of the following values: <br>
+   * CR_IGNORE: in case not all FPs have potential connectivity to one another, 
+   * add all Flow Points regardless of potential connectivity (default value).
+   * CR_REJECT: in case not all FPs have potential connectivity 
+   * to one another, reject the request. <br>
+   *    <br>
+   * </p>
+   **/
+   enum ConnectivityRequirement_T
+   {
+     CR_IGNORE,
+     CR_REJECT
+   };
+  /**
+   * <p> This (read-only) attribute provides an indication of the type 
+   * of the FD. It may have one of the following values: <br>
+   * "FDT_SINGLETON": The FD contains at most one MFD.
+   * "FDT_NETWORK": The FD may contain more than one MFD.
+   * </p>
+   **/
+   typedef string FDType_T; 
+
+  /**
+   * <p>A list or transmission parameter group names.</p>
+   **/
+   typedef sequence<string> ParameterGroupsList_T;
+
+  /**
+   * <p>A flow domain is associated with a set of flow domain edge CPTPs and
+   * matrix flow domains. Connectivity can be created between flow points 
+   * contained by flow domain edge CPTPs through flow domain fragments.<br>
+   * The read/write attributes can be set by the NMS by either the common methods 
+   * of the common::Common_I interface or by the createFlowDomain(), 
+   * modifyFlowDomain(), associateMFDsWithFlowDomain(), 
+   * deAssociateMFDsFromFlowDomain(), associateCPTPsWithFlowDomain(), 
+   * deAssociateCPTPsFromFlowDomain()
+   * methods of the FlowDomainMgr_I interface.
+   * </p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>The name represents the name of the flow domain
+   * which is assigned by the EMS upon creation. The EMS is responsible
+   * for guaranteeing the uniqueness of the name within the context
+   * of the FlowDomainMgr_I. See "REFERENCE" for the naming of flow domains. <br>
+   *
+   * string <b>userLabel</b>:
+   * <br>The user label of the flow domain is NMS data. The EMS may choose to
+   * display the value of the attribute to the EMS user, but this is not a 
+   * requirement. <br>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br>The name represents how the flow domain is referred to on EMS displays.
+   * Its aim is to provide a "nomenclature bridge" to aid relating information
+   * presented on NMS displays to EMS displays (via GUI cut through).
+   * The native name is defaulted to a NULL string. However, this could
+   * be used by the EMS for its implementation dependent purpose.<br>
+   *
+   * string <b>owner</b>:
+   * <br>The owner is provisionable by the NMS.<br>
+   *
+   * transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+   * <br>A list of layer rates on which connectivity can be established in the
+   * flow domain together with a set of connectionless technology parameters for 
+   * each layer rate. Refer to chapter "Connectionless Technology Parameters" of the
+   * supporting document LayeredParameters.pdf for details of the currently defined
+   * connectionless parameters.<br>
+   *
+   * string <b>networkAccessDomain</b>:
+   * <br> The Network Access Domain to which this flow domain has been assigned
+   * to.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>mfds</b>:
+   * <br>A List of names of matrix flow domains associated with the flow
+   * domain.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>fdEdgeCPTPs</b>:
+   * <br>A list of names of CPTPs on the edge of the flow domain. Each CPTP
+   * in this list must be contained by one of the matrix flow domains specified
+   * in the 'mfds' attribute. <br>
+   *
+   * globaldefs::NamingAttributesList_T <b>fdInternalCPTPs</b>:
+   * <br>A list of fdInternal Connectionless Port Termination Point names 
+   * (fdInternal CPTPs) that are associated with the FD. Each CPTP
+   * in this list must be contained by one of the matrix flow domains specified
+   * in the 'mfds' attribute. <br>
+   *
+   * ConnectivityState_T <b>fDConnectivityState</b>:
+   * <br>Indication about the server layer connectivity between matrix flow
+   * domains associated to the flow domain.<br>
+   * 
+   * FDType_T <b>fdType</b>:
+   * <br> This (read-only) attribute provides an indication of the type of the FD. 
+   * <br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>This attribute allows the communication from the EMS to the NMS of  
+   * additional information which is not explicitly modelled, e.g. vendor specific
+   * parameters. <br>
+   * <br>
+   **/
+   struct FlowDomain_T
+   {
+     globaldefs::NamingAttributes_T name;
+     string userLabel;
+     string nativeEMSName;
+     string owner;
+     transmissionParameters::LayeredParameterList_T transmissionParams;
+     string networkAccessDomain;
+     globaldefs::NamingAttributesList_T mfds;
+     globaldefs::NamingAttributesList_T fdEdgeCPTPs;
+     globaldefs::NamingAttributesList_T fdInternalCPTPs;
+     ConnectivityState_T fDConnectivityState;
+     FDType_T fdType;
+     globaldefs::NVSList_T additionalInfo;
+   };
+
+  /**
+   * <p>Sequence of FlowDomain_T objects.</p>
+   **/
+   typedef sequence<FlowDomain_T> FDList_T;
+
+  /**
+   * <p>In order to allow the NMS to deal with a large number of 
+   * flow domain objects, iterators are used.</p>
+   **/
+   interface FDIterator_I
+   {
+      boolean next_n(in  unsigned long   how_many,
+                     out FDList_T fdList)
+        raises (globaldefs::ProcessingFailureException);
+
+      unsigned long getLength()
+        raises (globaldefs::ProcessingFailureException);
+
+      void destroy()
+        raises (globaldefs::ProcessingFailureException);
+   };
+
+  /**
+   * <p>The read/write attributes required for the creation of an
+   * flow domain on the EMS are packed together in an FDCreateData
+   * structure which the NMS will pass to the EMS at flow domain
+   * creation time.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>The identifier of the flow domain which will be used over the interface.
+   * The EMS has to make sure that the name of the flow domain is unique within the
+   * FlowDomainMgr_I. If no name is provided by the NMS, the EMS has to define a
+   * unique name.<br>
+   *
+   * string <b>userLabel</b>:
+   * <br>An userLabel may be specified by the NMS. May be empty.<br>
+   *
+   * boolean <b>forceUniqueness</b>:
+   * <br>Specifies whether uniqueness of the userLabel is required amongst flow
+   * domains of the EMS. In case of uniqueness, the operation will fail if the
+   * userLabel is already in use.<br>
+   *
+   * string <b>owner</b>:
+   * <br>An owner may be specified by the NMS. May be empty.<br>
+   *
+   * string <b>networkAccessDomain</b>:
+   * <br> The Network Access Domain to which the flow domain shall be assigned
+   * to.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>mfds</b>:
+   * <br>Identifies the list of existing matrix flow domains to be associated to
+   * the flow domain. The MFDs must not already be associated to another flow domain.
+   * This may be an empty list.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>fdEdgeCPTPs</b>:
+   * <br>A list of names of CPTPs on the edge of the flow domain. Each CPTP
+   * in this list must be contained by one of the matrix flow domains specified
+   * in the 'mfds' attribute. <br>
+   *
+   * transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+   * <br>A list of layer rates on which connectivity can be established in the
+   * flow domain together with a set of connectionless parameters for each layer
+   * rate. Refer to chapter "Connectionless Technology Parameters" of the supporting
+   * document LayeredParameters.pdf for details of the currently defined connectionless
+   * parameters.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalCreationInfo</b>:
+   * <br>Additional creation information may be specified by the NMS. This may
+   * be an empty list.<br>
+   *<br>
+   **/
+   struct FDCreateData_T
+   {
+     globaldefs::NamingAttributes_T name;
+     string userLabel;
+     boolean forceUniqueness;
+     string owner;
+     string networkAccessDomain;
+     globaldefs::NamingAttributesList_T mfds;
+     globaldefs::NamingAttributesList_T fdEdgeCPTPs;
+     transmissionParameters::LayeredParameterList_T transmissionParams;
+     globaldefs::NVSList_T additionalCreationInfo;
+   };
+
+  /**
+   * <p>The read/write attributes required for the modification of a
+   * flow domain on the EMS are packed together in an FDModifyData
+   * structure which the NMS will pass to the EMS in a request to modify an 
+   * existing flow domain.</p>
+   *
+   * string <b>userLabel</b>:
+   * <br>An userLabel may be specified by the NMS. May be empty.<br>
+   *
+   * boolean <b>forceUniqueness</b>:
+   * <br>Specifies whether uniqueness of the userLabel is required amongst
+   * flow domains of the EMS. In case of uniqueness, the operation will fail
+   * if the userLabel is already in use.<br>
+   *
+   * string <b>owner</b>:
+   * <br>An owner may be specified by the NMS. May be empty.<br>
+   *
+   * string <b>networkAccessDomain</b>:
+   * <br> The Network Access Domain to which the flow domain shall be assigned
+   * to.<br>
+   *
+   * transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+   * <br>This list specifies the connectionless parameters that shall be modified.
+   * As an input only the list of parameters to be changed, removed, or added
+   * shall be provided. If an entry is to be removed, "-" must be specified as 
+   * a value. Refer to chapter "Connectionless Technology Parameters" of the supporting
+   * document LayeredParameters.pdf for details of the currently defined connectionless
+   * parameters.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalModificationInfo</b>:
+   * <br>Additional modification information may be specified by the NMS.<br>
+   *<br>
+   **/
+   struct FDModifyData_T
+   {
+     string userLabel;
+     boolean forceUniqueness;
+     string owner;
+     string networkAccessDomain;
+     transmissionParameters::LayeredParameterList_T transmissionParams;
+     globaldefs::NVSList_T additionalModificationInfo;
+   };
+
+  /**
+   * <p>A matrix flow domain is associated with a set of CPTPs. It reflects
+   * an atomic switching matrix.<br>
+   * The read/write attributes can be set by the NMS by either the common methods 
+   * of the common::Common_I interface or by the createMFD(), modifyMFD() 
+   * methods of the FlowDomainMgr_I interface.
+   * </p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>The name represents the name of the matrix flow domain
+   * which is assigned by the EMS upon creation. The EMS is responsible
+   * for guaranteeing the uniqueness of the name within the context
+   * of the FlowDomainMgr_I.<br>
+   *
+   * string <b>userLabel</b>:
+   * <br>The user label of the matrix flow domain is NMS data. The EMS may choose
+   * to display the value of the attribute to the EMS user, but this is not a
+   * requirement. <br>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br>The name represents how the matrix flow domain is referred to on
+   * EMS displays. Its aim is to provide a "nomenclature bridge" to aid
+   * relating information presented on NMS displays to EMS displays
+   * (via GUI cut through). The native name is defaulted to a NULL string.
+   * However, this could be used by the EMS for its implementation dependent
+   * purpose.<br>
+   *
+   * string <b>owner</b>:
+   * <br>The owner is provisionable by the NMS.<br>
+   *
+   * transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+   * <br>A list of connectionless technology-specific parameters associated 
+   * with the different connectionless layers that are supported by the matrix
+   * flow domain. Refer to chapter "Connectionless Technology Parameters" of the
+   * supporting document LayeredParameters.pdf for details of the currently defined
+   * connectionless parameters.<br>
+   *
+   * string <b>networkAccessDomain</b>:
+   * <br> The Network Access Domain to which the flow domain is assigned to.</br>
+   *
+   * globaldefs::NamingAttributesList_T <b>assignedCPTPs</b>:
+   * <br>A list of names of CPTPs that are being assigned to the matrix flow
+   * domain.<br>
+   *
+   * boolean <b>flexible</b>;
+   * <br>Indicates whether the MFD is fixed (i.e., cannot be configured by
+   * the NMS) or flexible.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>transmissionDescriptorName</b>:
+   * <br>The optional reference to a Transmission Descriptor. The Descriptor
+   * name will be empty if there is no associated Descriptor.<br>
+   *
+   * string <b>transmissionDescriptorState</b>:
+   * <br>This attribute shall indicate the state of consistency between the
+   * MFD and its associated Transmission Descriptor.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>This attribute allows the communication from the EMS to the NMS of  
+   * additional information which is not explicitly modelled. This concerns
+   * in particular vendor specific parameters.<br>
+   * <br>
+   **/
+   struct MatrixFlowDomain_T
+   {
+     globaldefs::NamingAttributes_T name;
+     string userLabel;
+     string nativeEMSName;
+     string owner;
+     transmissionParameters::LayeredParameterList_T transmissionParams;
+     string networkAccessDomain;
+     globaldefs::NamingAttributesList_T assignedCPTPs;
+     boolean flexible;
+     globaldefs::NamingAttributesList_T transmissionDescriptorName;
+     string transmissionDescriptorState;
+     globaldefs::NVSList_T additionalInfo;
+   };
+
+  /**
+   * <p>Sequence of MatrixFlowDomain_T objects.</p>
+   **/
+   typedef sequence<MatrixFlowDomain_T> MFDList_T;
+
+  /**
+   * <p>The read/write attributes required for the creation of a
+   * floating termination point on the EMS are packed together in an 
+   * FTPCreateData structure which the NMS will pass to the EMS at 
+   * FTP creation time.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>equipmentName</b>:
+   * <br>The identifier of the equipment hosting the new FTP in the NE.
+   * <br>
+   *
+   * string <b>userLabel</b>:
+   * <br>An userLabel may be specified by the NMS. May be empty.<br>
+   *
+   * boolean <b>forceUniqueness</b>:
+   * <br>Specifies whether uniqueness of the userLabel is required amongst
+   * FTPs of the EMS. In case of uniqueness, the operation will fail if the
+   * userLabel is already in use.<br>
+   *
+   * string <b>owner</b>:
+   * <br>An owner may be specified by the NMS. May be empty.<br>
+   *
+   * globaldefs::NamingAttributes_T <b>ingressTrafficDescriptorName</b>:
+   * <br>A connection termination point may have an optional reference to an 
+   * ingress (incoming)Traffic Descriptor or Transmission Descriptor. <br>
+   *
+   * globaldefs::NamingAttributes_T <b>egressTrafficDescriptorName</b>:
+   * <br>A connection termination point may have an optional reference to an 
+   * egress (outgoing)Traffic Descriptor or Transmission Descriptor.  <br>
+   *
+   *
+   * TPConnectionState_T <b>connectionState</b>:
+   * <br>This attribute is only applicable to CTPs and FTPs.
+   * If the source is connected to one entity and the sink is
+   * connected to another entity then the value of this attribute
+   * is TPCS_BI_CONNECTED.
+   * This is a readonly attribute.<br>
+   *
+   * TerminationMode_T <b>tpMappingMode</b>:
+   * <br>Within the façade definition, the CTP/FTP can act as an 
+   * aggregate of associated G.805 TCPs, G.805 Termination Functions and G.805 
+   * CPs at one or more LayerRates. The CTP is contained within a PTP or FTP. 
+   *
+   * The TerminationMode attribute indicates and controls the connection of
+   * the named CP at a specified LayerRate to the dedicated G.805 TCP and 
+   * associated G.805 Termination Function at the same LayerRate within the 
+   * CTP/FTP.
+   *
+   * The TerminationMode is used, for example, to control the Termination and
+   * mapping to VT1.5 of an STS1 Trail within an OC3 port. This capability
+   * could potentially be used to terminate an STS1 backbone Trail within 
+   * a lower order mux that has the capability to alternatively 
+   * cross-connect the STS1 unterminated. The same capability is used in SDH
+   * and is potentially applicable to any LayerRate.<br>
+   *
+   * Directionality_T <b>direction</b>:
+   * <br>The direction of the termination point. 
+   * It is a readonly attribute.<br>
+   *
+   * transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+   * <br>A list of layer rates on which connectivity can be established in the
+   * flow domain together with a set of connectionless parameters for each layer
+   * rate. Refer to chapter "Connectionless Technology Parameters" of the supporting
+   * document LayeredParameters.pdf for details of the currently defined connectionless
+   * parameters.<br>
+   *
+   * TPProtectionAssociation_T <b>tpProtectionAssociation</b>:
+   * <br>The associated TP indication. The NMS is responsible to invoke
+   * the multiLayerSubnetwork::MultiLayerSubnetworkMgr_I::getAssociatedTP()
+   * service to obtain the related TP if any.<br>
+   *
+   * boolean <b>edgePoint</b>:
+   * <br>Indicates if the TP is an edge point of at least one subnetwork,
+   * i.e. if it is an end
+   * point of a potential inter-subnetwork topological link.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalCreationInfo</b>:
+   * <br>Additional creation information may be specified by the NMS. This may
+   * be an empty list.<br>
+   *
+   * <p>The following TP attributes are fixed, and therefore do not appear in structure:</p>
+   *
+   * TPType_T <b>type</b>:
+   * <br> Fixed value TPT_PTP (FTPs use the same 
+   * type as PTPs for compatibility reasons.)
+   * <br>
+   *
+   * <p>The following TP attributes will have their value determined by the EMS
+   * at FTP creation time, and therefore do not appear in the structure:</p>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br>The name represents how the TP is refered to on EMS displays. Its
+   * aim is to provide a "nomenclature bridge" the aid relating information
+   * presented on NMS displays to EMS displays (via GUI cut through).
+   * It is never set to NULL string.<br>
+   *
+   *<br>
+   **/
+
+   struct FTPCreateData_T
+   {
+     globaldefs::NamingAttributes_T equipmentName;
+     string userLabel;
+     boolean forceUniqueness;
+     string owner;
+     globaldefs::NamingAttributes_T ingressTrafficDescriptorName;
+     globaldefs::NamingAttributes_T egressTrafficDescriptorName;
+     terminationPoint::TPConnectionState_T connectionState;
+     terminationPoint::TerminationMode_T tpMappingMode;
+     terminationPoint::Directionality_T direction;
+     transmissionParameters::LayeredParameterList_T transmissionParams;
+     terminationPoint::TPProtectionAssociation_T tpProtectionAssociation;
+     boolean edgePoint;
+     globaldefs::NVSList_T additionalCreationInfo;
+   };
+
+  /**
+   * <p>In order to allow the NMS to deal with a large number of 
+   * matrix flow domain objects, iterators are used.</p>
+   **/
+
+   interface MFDIterator_I
+   {
+      boolean next_n(in  unsigned long    how_many,
+                     out MFDList_T mfdList)
+        raises (globaldefs::ProcessingFailureException);
+
+      unsigned long getLength()
+        raises (globaldefs::ProcessingFailureException);
+
+      void destroy()
+        raises (globaldefs::ProcessingFailureException);
+   };
+
+  /**
+   * <p>The read/write attributes required for the creation of a
+   * matrix flow domain on the EMS are packed together in an MFDCreateData
+   * structure which the NMS will pass to the EMS at matrix flow domain
+   * creation time.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>The identifier of the matrix flow domain which will be used over
+   * the interface. The EMS has to make sure that the name of the matrix flow
+   * domain is unique within the EMS domain. If no name is provided by the NMS,
+   * the EMS has to define a unique name.<br>
+   *
+   * string <b>userLabel</b>:
+   * <br>An userLabel may be specified by the NMS. May be empty.<br>
+   *
+   * boolean <b>forceUniqueness</b>:
+   * <br>Specifies whether uniqueness of the userLabel is required amongst
+   * matrix flow domains of the EMS. In case of uniqueness, the operation will
+   * fail if userLabel is already in use.<br>
+   *
+   * string <b>owner</b>:
+   * <br>An owner may be specified by the NMS. May be empty.<br>
+   *
+   * string <b>networkAccessDomain</b>:
+   * <br> The Network Access Domain to which this flow domain has been assigned
+   * to.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>transmissionDescriptorName</b>:
+   * <br>The optional reference to a Transmission Descriptor. If the Descriptor
+   * name is empty, there will be no associated Descriptor.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>unassignedCPTPs</b>:
+   * <br>A list of names of unassigned CPTPs that shall be assigned to the
+   * matrix flow domain.<br>
+   *
+   * transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+   * <br>A list of connectionless technology-specific parameters associated 
+   * with the different connectionless layers that are supported by the matrix
+   * flow domain. Refer to the supporting document
+   * ConnectionlessLayeredParameters.pdf for details of the currently defined
+   * parameters.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalCreationInfo</b>:
+   * <br>Additional creation information may be specified by the NMS. This may
+   * be an empty list.<br>
+   *<br>
+   **/
+   struct MFDCreateData_T
+   {
+     globaldefs::NamingAttributes_T  name;
+     string  userLabel;
+     boolean  forceUniqueness;
+     string  owner;
+     string networkAccessDomain;
+     globaldefs::NamingAttributesList_T transmissionDescriptorName;
+     globaldefs::NamingAttributesList_T  unassignedCPTPs;
+     transmissionParameters::LayeredParameterList_T  transmissionParams;
+     globaldefs::NVSList_T  additionalCreationInfo;
+   };
+
+  /**
+   * <p>The read/write attributes (non best-effort) required for the modification of a
+   * matrix flow domain on the EMS are packed together in an MFDModifyData
+   * structure which the NMS will pass to the EMS in a request to modify an 
+   * existing matrix flow domain.</p>
+   *
+   * string <b>userLabel</b>:
+   * <br>An userLabel may be specified by the NMS. May be empty.<br>
+   *
+   * boolean <b>forceUniqueness</b>:
+   * <br>Specifies whether uniqueness of the userLabel is required amongst
+   * matrix flow domains of the EMS. In case of uniqueness, the operation 
+   * will fail if the userLabel is already in use.<br>
+   *
+   * string <b>owner</b>:
+   * <br>An owner may be specified by the NMS. May be empty.<br>
+   * string <b>networkAccessDomain</b>:
+   *
+   * string <b>networkAccessDomain</b>:
+   * <br> The Network Access Domain to which the flow domain shall be assigned
+   * to.<br>
+   *
+   **/
+   struct MFDModifyData_T
+   {
+     string userLabel;
+     boolean forceUniqueness;
+     string owner;
+     string networkAccessDomain;
+   };
+
+   /**
+   * <p> the direction about the ethernet operation, administration, maintenance (OAM) points: </p>
+   * <br>EOPD_BI: BIdirectional <br>
+   * <br>EOPD_INGRESS: Ingress <br>
+   * <br>EOPD_EGRESS: Egress <br>
+   * 
+   **/   
+    enum EthernetOAMPointDirection_T
+    {
+       EOPD_BI,
+       EOPD_INGRESS,
+       EOPD_EGRESS
+    };
+
+  /**
+   * <p> the type about the ethernet operation, administration, maintenance (OAM) points: </p>
+   * <br>EOT_MEP: Mainteance End Point <br>
+   * <br>EOP_MIP: Mainteance Intermediate Point <br>
+   * 
+   **/      
+    enum EthernetOAMPointType_T
+    {
+       EOT_MEP,
+       EOP_MIP
+    };
+
+  /**
+   * <p> the data structures about the ethernet operation, administration, maintenance (OAM) points.</p>
+   *
+   * string <b>Name</b>:
+   * <br>The name of ethernet OAM point.<br>
+   *
+   * EthernetOAMPointType_T <b>type</b>:
+   * <br>The type of ethernet OAM point.<br>
+   *
+   * EthernetOAMPointDirection_T <b>direction</b>:
+   * <br>The direction of ethernet OAM point.<br>
+   *
+   * unsigned long <b>level</b>:
+   * <br>The level of ethernet OAM point.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>This attribute allows the communication from the EMS to the NMS of additional 
+   * information which is not explicitly modelled.
+   * This may be an empty list.<br>
+   *
+   **/    
+    struct EthernetOAMPoint_T
+    {
+       string Name;
+       EthernetOAMPointType_T type;
+       EthernetOAMPointDirection_T direction;
+       unsigned long level;
+       globaldefs::NVSList_T  additionalInfo;
+    };
+
+  /**
+   * <p> the list of the ethernet operation, administration, maintenance (OAM) points. </p> 
+   *
+   **/  
+    typedef sequence<EthernetOAMPoint_T> EthernetOAMPointList_T;
+   
+  /**
+   * <p> the type about the ethernet operation, administration, maintenance (OAM) commond: </p>
+   * <br>EOCT_CC: Continuity-Check <br>
+   * <br>EOCT_LB: Loopback <br>
+   * <br>EOCT_LT: Linktrace <br>
+   * 
+   **/
+   enum  EthernetOAMCommandType_T
+   {
+     EOCT_CC,
+     EOCT_LB,
+     EOCT_LT
+   };
+
+  /**
+     * <p> the parameter about the ethernet operation, administration, maintenance (OAM) commond.</p>
+     *
+     * string <b>oamPointName</b>:
+     * <br>The name of ethernet OAM point.<br>
+     *
+     * unsigned long <b>period</b>:
+     * <br>The period of ethernet OAM commond.<br>
+     *
+     **/
+    struct EthernetOAMParamer_T
+    {
+      string oamPointName;
+      unsigned long period;
+    };
+
+   /**
+    * <p> the ethernet operation, administration, maintenance (OAM) commond:</p>
+    *
+    * EthernetOAMCommandType_T <b>command</b>:
+    * <br>the type about the ethernet OAM commond.<br>
+    *
+    * EthernetOAMParamer_T <b>srcPoint</b>:
+    * <br>the source OAM point.<br>
+    *
+    * EthernetOAMParamer_T <b>snkPoint</b>:
+    * <br>the sink OAM point.<br>
+    *
+    * globaldefs::NVSList_T <b>additionalInfo</b>:
+    * <br>This attribute allows the communication from the EMS to the NMS of additional 
+    * information which is not explicitly modelled.
+    * This may be an empty list.<br>
+    * 
+    **/
+    struct EthernetOAMOperation_T
+    {
+      EthernetOAMCommandType_T command;
+      EthernetOAMParamer_T srcPoint;
+      EthernetOAMParamer_T snkPoint;
+      globaldefs::NVSList_T additionalInfo;
+    };
+
+  /**
+    * <p> the result about the Ethernet EOCT_LT commond.</p>
+    *
+    * string <b>oamPointName</b>:
+    * <br>the name of the OAM point.<br>
+    *
+    * unsigned long <b>hopNumber</b>:
+    * <br>the hop-number of the Link-Trace.<br>
+    *
+    * boolean <b>result</b>:
+    * <br>the result of the Link-Trace.<br>
+    *
+    **/
+    struct EthernetLTTestResult_T
+    {
+      string oamPointName;
+      unsigned long hopNumber;
+      boolean result;
+    };  
+
+   /**
+     * <p> list of the result about the ethernet EOCT_LT commond.</p>
+     *
+     **/
+    typedef sequence<EthernetLTTestResult_T> EthernetLTTestResultList_T;
+
+  /**
+   * <p>The FlowDomainMgr_I is used to gain access to flow domains,
+   * matrix flow domains, flow domain fragments and their operations.</p>
+   *
+   * <p>A handle to an instance of this interface is gained via the
+   * emsSession::EmsSession_I::getManager() operation.</p>
+   **/
+
+  interface FlowDomainMgr_I : common::Common_I
+  {
+  /**
+   * <p>This method allows an NMS to request a list of the flow domains
+   * that exist in the EMS.</p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. </p>
+   *
+   * unsigned long <b>how_many</b>:
+   * <br>Maximum number of flow domains to return in the first batch.<br>
+   *
+   * FDList_T <b>flowDomains</b>:
+   * <br>First batch of flow domains.<br>
+   *
+   * FDIterator_I <b>fdIt</b>:
+   * <br>Iterator to retrieve the remaining flow domains.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+   *  that the EMS can support has been reached<br>
+   * <br>
+   **/
+   void getAllFlowDomains(
+         in unsigned long how_many,
+         out FDList_T flowDomains,
+         out FDIterator_I fdIt)
+	  raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This operation has exactly the same behaviour as getAllFlowDomains(), but
+   * instead of returning the entire object structures, this operation returns 
+   * their names.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. </p>
+   *
+   * unsigned long <b>how_many</b>:
+   * <br>Maximum number of flow domain names to return in the first batch.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>nameList</b>:
+   * <br>First batch of flow domain names.<br>
+   *
+   * globaldefs::NamingAttributesIterator_I <b>nameIt</b>: 
+   * <br>Iterator to retrieve the remaining flow domain names.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * As for getAllFlowDomains().
+   * <br>   
+   **/	
+   void getAllFlowDomainNames(
+         in unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+	  raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This operation returns the flow domain structures for the flow domains
+   * whose userLabel is supplied as a parameter.<br>
+   * The operation does not use an iterator, since the number of flow domains
+   * returned is usually expected to be 1.
+   * </p>
+   *
+   * in string <b>userLabel</b>:
+   * <br>The user label of the flow domains to retrieve.<br>
+   *
+   * FDList_T <b>flowDomains</b>:
+   * <br>The list of identified flow domains. <br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * <br>   
+   **/
+   void getFlowDomainsByUserLabel(
+         in string  userLabel,
+         out FDList_T  flowDomains)
+      raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service returns a flow domain given a flow domain name.</p>
+   * 
+   * globaldefs::NamingAttributes_T <b>fdName</b>:
+   * <br>Name of the flow domain to retrieve.<br>
+   *
+   * FlowDomain_T <b>flowDomain</b>:
+   * <br>Flow domain structure returned.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when fdName does not reference a 
+   *  flow domain object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdName references a 
+   *  flow domain object that does not exist<br>
+   * <br>
+   *   
+   **/
+   void getFlowDomain(
+         in globaldefs::NamingAttributes_T fdName,
+         out FlowDomain_T flowDomain)
+      raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This operation returns the flow domain structures for the (single) flow domain
+   * that is associated to the Matrix Flow Domain that is supplied as a parameter.<br>
+   * </p>
+   *
+   * in string <b>mfdNam</b>:
+   * <br>The name of MFD.<br>
+   *
+   * FlowDomain_T <b>flowDomain</b>:
+   * <br>The flow domain that is associated to the input MFD. <br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when mfdName does not reference a 
+   *  matrix flow domain object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName references a 
+   *  matrix flow domain object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to a managed element
+   *  involved in this operation<br>
+   * <br>
+   *
+   **/
+   void getFDfromMFD(
+         in globaldefs::NamingAttributes_T  mfdName,
+         out FlowDomain_T  flowDomain )
+      raises(globaldefs::ProcessingFailureException);
+
+ /**
+   * <p>This service returns the transmission parameters of a flow domain,
+   * matrix flow domain or flow domain fragment, given the name of the object.
+   * A set of groups of transmission parameters to be returned may be specified.</p>
+   * 
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>Name of the flow domain, matrix flow domain, flow domain fragment or transmission 
+   * descriptor for which the transmission parameters shall be retrieved.<br>
+   *
+   * ParameterGroupsList_T <b>filter</b>:
+   * <br>This filter allows to specify a set of parameter groups. Only transmission
+   * parameters that belong to one of the groups specified are returned. See the
+   * supporting document LayeredParameters.pdf for a set of available transmission
+   * parameters and their groupings. If an empty list is specified, all transmission
+   * parameters are returned.<br>
+   *
+   * transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+   * <br>A list or requested transmission parameters. For a flow domain fragment
+   * only one layer is contained by the list.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when name does not reference a 
+   *   valid object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when name references an 
+   *  object that does not exist<br>
+   * <br>
+   *
+   **/
+   void getTransmissionParams(
+         in globaldefs::NamingAttributes_T name,
+         in ParameterGroupsList_T filter,
+         out transmissionParameters::LayeredParameterList_T transmissionParams)
+      raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service allows the NMS to request from the EMS the creation of a
+   * flow domain given the parameters passed in the method. The NMS may specify
+   * matrix flow domains or flow domain edge CPTPs to be associated with
+   * the created flow domain.</p>
+   *
+   * FDCreateData_T <b>createData</b>:
+   * <br>Structure describing the flow domain structure to be created.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>fdEdgeCPTPs</b>:
+   * <br>Identifies the list of assigned CPTPs to be associated as flow
+   * domain edge CPTPs to the flow domain. This may be an empty list.
+   * Associating CPTPs to the flow domain is done on a best effort basis. 
+   * On method return the list contains the names of the CPTPs that could
+   * not be associated with the flow domain. <br>
+   * 
+   * FlowDomain_T <b>theFD</b>:
+   * <br>The new created FD. The EMS is responsible for guaranteeing
+   * uniqueness of the name of the FD. The name may be specified by the
+   * NMS in the createData. <br>
+   *
+   * string <b>errorReason</b>:
+   * <br>In case a "best effort" parameter could not be set or a CPTP could
+   * not be associated with the flow domain an indication of the fault reason
+   * is provided by the EMS.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. field of createData is invalid).<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable to execute the
+   *  request because at least one of the parameters although 
+   *  valid cannot be set and that parameter is identified as 
+   *  "not best effort" or when a CPTP is not assigned to one of
+   *  the matrix flow domains specified in the createData or when one of the
+   *  specified MFDs could not be associated. <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when at least one of the specified CPTPs or
+   *  MFDs does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to a managed element
+   *  involved in this operation<br>
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is 
+   *  not met<br>
+   * EXCPT_OBJECT_IN_USE - Raised if a specified matrix flow domain is already
+   *  associated to an existing flow domain or if the flow domain name specified by the
+   *  NMS is already assigned to an existing object.<br>
+   * <br>
+   *
+   **/
+   void createFlowDomain(
+         in FDCreateData_T createData,
+         inout globaldefs::NamingAttributesList_T fdEdgeCPTPs,
+         out FlowDomain_T theFD,
+         out string errorReason)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service allows an NMS to request the deletion of a flow domain from
+   * the EMS.</p>
+   *
+   * NamingAttributes_T <b>fdName</b>:
+   * <br>The name of the flow domain to be deleted.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactical 
+   *  incorrect, i.e. fdName does not refer to a flow domain object <br>
+   * EXCPT_OBJECT_IN_USE - Raised when the flow domain contains at least one
+   *  flow domain fragment <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdName references an object that does 
+   *  not exist <br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised if an associated flow domain edge CPTP
+   *  or matrix flow domain could not be de-associated<br> 
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to a managed element
+   *  involved in this operation<br>
+   * <br>
+   *
+   **/
+   void deleteFlowDomain(
+         in globaldefs::NamingAttributes_T fdName)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>The NMS invokes the modifyFD service to request from the EMS to modify an 
+   * existing flow domain as specified by the parameters passed in the method.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>fdName</b>:
+   * <br>The name of the flow domain to modify.<br>
+   *
+   * FDModifyData_T <b>fdModifyData</b>:
+   * <br>Structure describing how the flow domain should be modified. If the
+   * flow domain contains already the required information nothing is done on
+   * the EMS and the method returns successfully.<br>
+   *
+   * FlowDomain_T <b>newFD</b>:
+   * <br>The modified flow domain.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. field of fdModifyData is invalid).<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdName references an object that does 
+   *  not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable 
+   *  to execute the request because at least one of the parameters although 
+   *  valid cannot be set. <br>
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is 
+   *  not met<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to a managed element
+   *  involved in this operation, which prevents the creation of an MFD or CPTP.<br>
+   * <br>
+   *
+   **/
+   void modifyFlowDomain(
+         in globaldefs::NamingAttributes_T  fdName,
+         in FDModifyData_T  fdModifyData,
+         out FlowDomain_T  newFD)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   *<p>This service allows an NMS to request from the EMS the association
+   * of one or more matrix flow domains with a flow domain.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>fdName</b>:
+   * <br>The name of the flow domain to be modified.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>mfdNames</b>:
+   * <br>The names of the matrix flow domains to be associated with the flow domain.
+   * If the list is empty nothing is done on the EMS and the method returns
+   * successfully.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactical 
+   *  incorrect (e.g. fdName does not refer to a flow domain object)<br>
+   * EXCPT_OBJECT_IN_USE - Raised when a matrix flow domain is already
+   *  associated with another flow domain <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdName or one of the mfdNames
+   *  reference an object that does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when a matrix flow domain could not be
+   *  associated<br> 
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to a managed element
+   *  involved in this operation<br>
+   * <br>
+   *
+   **/
+   void associateMFDsWithFlowDomain(
+         in globaldefs::NamingAttributes_T  fdName,
+         in globaldefs::NamingAttributesList_T  mfdNames)
+      raises (globaldefs::ProcessingFailureException);
+
+  /**
+   *<p>This service allows an NMS to request from the EMS the de-association
+   * of one or more matrix flow domains from a flow domain.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>fdName</b>:
+   * <br>The name of the flow domain to be modified.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>mfdNames</b>:
+   * <br>The names of the matrix flow domains to be de-associated from the flow
+   * domain. If the list is empty nothing is done on the EMS and the method returns
+   * successfully.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactical 
+   *  incorrect (e.g. fdName does not refer to a flow domain object)<br>
+   * EXCPT_OBJECT_IN_USE - Raised when a matrix flow domain to be de-associated
+   *  carries traffic<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdName or one of the mfdNames
+   *  reference an object that does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when a matrix flow domain could not be
+   *  de-associated, e.g. because it is not associated with the flow domain, or if
+   *  a flow domain edge CPTP contained by one of the MFDs to be de-associated could
+   *  not be de-associated<br> 
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to a managed element
+   *  involved in this operation<br>
+   * <br>
+   *
+   **/
+   void deAssociateMFDsFromFlowDomain(
+         in globaldefs::NamingAttributes_T  fdName,
+         in globaldefs::NamingAttributesList_T  mfdNames)
+      raises (globaldefs::ProcessingFailureException);
+
+  /**
+   *<p>This service allows an NMS to request from the EMS the association
+   * of one or more CPTPs with a flow domain as flow domain edge CPTPs.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>fdName</b>:
+   * <br>The name of the flow domain to be modified.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>tpNames</b>:
+   * <br>The names of the CPTPs to be associated with the flow domain. 
+   * If the list is empty nothing is done on the EMS and the method returns
+   * successfully.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically
+   *  incorrect (e.g. fdName does not refer to a flow domain object)<br>
+   * EXCPT_OBJECT_IN_USE - Raised when a CPTP is already associated
+   *  with another flow domain<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdName or one of the tpNames
+   *  references an object that does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when a CPTP could not be associated,
+   *  e.g. because it is not assigned to one of the matrix flow domains
+   *  associated with the flow domain<br> 
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to a managed
+   *  element involved in this operation<br>
+   * <br>
+   *
+   **/
+   void associateCPTPsWithFlowDomain(
+         in globaldefs::NamingAttributes_T  fdName,
+         in globaldefs::NamingAttributesList_T  tpNames)
+      raises (globaldefs::ProcessingFailureException);
+
+  /**
+   *<p>This service allows an NMS to request from the EMS the de-association
+   * of one or more CPTPs from a flow domain.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>fdName</b>:
+   * <br>The name of the flow domain to be modified.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>tpNames</b>:
+   * <br>The names of the CPTPs to be de-associated from the flow domain. If
+   * the list is empty nothing is done on the EMS and the method returns
+   * successfully.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. fdName does not refer to a flow domain object)<br>
+   * EXCPT_OBJECT_IN_USE - Raised when a CPTP to be de-associated carries
+   *  traffic, i.e. is connected to a flow domain fragment<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdName or one of the tpNames
+   *  reference an object that does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when a CPTP could not be
+   *  de-associated, e.g. because it is not associated with the flow domain<br> 
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to a managed element
+   *  involved in this operation<br>
+   * <br>
+   *
+   **/
+   void deAssociateCPTPsFromFlowDomain(
+         in globaldefs::NamingAttributes_T  fdName,
+         in globaldefs::NamingAttributesList_T  tpNames)
+      raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service allows an NMS to request a list of matrix flow domains
+   * that are contained by a specified managed element or associated
+   * with a specified equipment, transmission descriptor or flow domain.</p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. </p>
+   *
+   * globaldefs::NamingAttributes_T <b>holderName</b>:
+   * <br>Name of the managed element, equipment, transmission descriptor
+   * or flow domain.<br>
+   *
+   * unsigned long <b>how_many</b>:
+   * <br>Maximum number of matrix flow domains to return in the first batch.<br>
+   *
+   * MFDList_T <b>mfds</b>:
+   * <br>First batch of matrix flow domains.<br>
+   *
+   * MFDIterator_I <b>mfdIt</b>:
+   * <br>Iterator to retrieve the remaining matrix flow domains.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when holderName does not reference a 
+   *  managed element, equipment or flow domain object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when holderName references an object that 
+   *  does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to a managed element
+   *  involved in this operation<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when the maximum number of iterators 
+   *  that the EMS can support has been reached<br>
+   * <br>
+   *
+   **/
+   void getAllMFDs(
+         in globaldefs::NamingAttributes_T holderName,
+         in unsigned long how_many,
+         out MFDList_T mfds,
+         out MFDIterator_I mfdIt)
+	  raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This operation has the same behaviour as  getAllMFDs(), but <ul>
+   * <li>instead of returning the entire object structures, this operation returns 
+   * their names. </li>
+   * <li>it only applies to managed elements and equipment. The names of the matrix
+   * flow domains associated with a flow domain are available as an attribute of the
+   * flow domain. </li>
+   * </ul> </p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>holderName</b>:
+   * <br>Name of the managed element or equipment.<br>
+   *
+   * unsigned long <b>how_many</b>: 
+   * <br>Maximum number of matrix flow domain names to return in the first batch.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>nameList</b>:
+   * <br>First batch of matrix flow domain names.<br>
+   *
+   * globaldefs::NamingAttributesIterator_I <b>nameIt</b>:
+   * <br>Iterator to retrieve the remaining matrix flow domain names.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * As for getAllMFDs().
+   * <br>
+   *
+   **/
+   void getAllMFDNames(
+         in globaldefs::NamingAttributes_T holderName,
+         in unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+	  raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service returns a matrix flow domain given a matrix flow domain
+   * name.</p>
+   * 
+   * globaldefs::NamingAttributes_T <b>mfdName</b>:
+   * <br>Name of the matrix flow domain to retrieve.<br>
+   *
+   * MatrixFlowDomain_T <b>mfd</b>:
+   * <br>Matrix flow domain structure returned.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when mfdName does not reference a 
+   *  matrix flow domain object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName references a 
+   *  matrix flow domain object that does not exist<br>
+   * <br>
+   *
+   **/
+   void getMFD(
+         in globaldefs::NamingAttributes_T mfdName,
+         out MatrixFlowDomain_T mfd)
+        raises(globaldefs::ProcessingFailureException);
+
+/**
+   * <p>This service returns the matrix flow domain to which is assigned
+   * a given "CPTP" termination point.</p>
+   * 
+   * globaldefs::NamingAttributes_T <b>cptpName</b>:
+   * <br>Name of the "CPTP" termination point to which the MFD is assigned.<br>
+   *
+   * MatrixFlowDomain_T <b>mfd</b>:
+   * <br>Matrix flow domain structure returned.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when cptpName does not reference a 
+   *  "CPTP" termination point <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName references a 
+   *  termination point object that does not exist<br>
+   * <br>
+   *
+   **/
+   void getAssigningMFD(
+         in globaldefs::NamingAttributes_T cptpName,
+         out MatrixFlowDomain_T mfd)
+        raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>Using this service the NMS requests from the EMS the creation of a
+   * matrix flow domain given the parameters passed in the method. The NMS
+   * must specify CPTPs to be associated with the created matrix flow domain.
+   * </p>
+   *
+   * MFDCreateData_T <b>createData</b>:
+   * <br>Structure describing the matrix flow domain structure to be created.<br>
+   *
+   * MatrixFlowDomain_T <b>theMFD</b>:
+   * <br>The new created matrix flow domain. The EMS is responsible for guaranteeing
+   * uniqueness of the name of the matrix flow domain. The name may be specified
+   * by the NMS in the createData. <br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. field of createData is invalid).<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable to execute the
+   *  request because at least one of the parameters although valid cannot be set
+   *  or if an unassigned CPTP could not be assigned <br>
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is 
+   *  not met<br>
+   * EXCPT_OBJECT_IN_USE - Raised if a specified CPTP is already associated to
+   *  an existing matrix flow domain or if the name for the matrix flow domain as
+   *  specified by the NMS is already assigned to an existing object.<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to the managed element
+   *  that shall contain the MFD<br>
+   * <br>
+   *
+   **/
+   void createMFD(
+         in MFDCreateData_T createData,
+         out MatrixFlowDomain_T theMFD)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service allows an NMS to request the deletion of a matrix flow domain
+   * from the EMS.</p>
+   *
+   * NamingAttributes_T <b>mfdName</b>:
+   * <br>The name of the matrix flow domain to be deleted.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically
+   *  incorrect (e.g. mfdName does not refer to a matrix flow domain object)<br>
+   * EXCPT_OBJECT_IN_USE - Raised when the matrix flow domain carries traffic<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName references an object that does 
+   *  not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised if an assigned CPTP could not be unassigned<br>
+   * EXCPT_ACCESS_DENIED - Raised if the matrix flow domain is fixed<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to the managed element
+   *  containing the MFD<br>
+   * <br>
+   *
+   **/
+   void deleteMFD(
+         in globaldefs::NamingAttributes_T mfdName)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This method allows a modification of a matrix flow domain as requested by
+   * the NMS.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>mfdName</b>:
+   * <br>The name of the matrix flow domain to modify.<br>
+   *
+   * MFDModifyData_T <b>mfdModifyData</b>:
+   * <br>Structure describing how the matrix flow domain shall be modified. This
+   * attribute contains the parameters that are not best effort. If the modification
+   * of one of the parameters fails an exception will be thrown.<br>
+   *
+   * globaldefs::NamingAttributes_T <b>transmissionDescriptorName</b>:
+   * <br> The name of a transmission descriptor to be assigned to the MFD.
+   * May be empty. <br>
+   *
+   * <p> <b> Note: </b> The assignment of a Transmission Descriptor (TMD) to a Matrix Flow Domain
+   * (MFD) by using the TMD's name amounts to an overwriting of the layered
+   * transmission parameters of the MFD by the layered transmission parameters of 
+   * the TMD, and to an overwriting of the additional info parameters of the MFD 
+   * by the "additional TP information" parameters of the TMD.</p>
+   *
+   * transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+   * <br>This list specifies the connectionless parameters that shall be
+   * modified. As an input only the list of parameters to be changed, removed, or added
+   * shall be provided. If an entry is to be removed, "-" shall be specified as 
+   * a value. Refer to chapter "Connectionless Technology Parameters" of the
+   * supporting document LayeredParameters.pdf for details of the currently defined
+   * connectionless parameters. On method return this attribute contains the list of
+   * parameters that could not be applied.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalModificationInfo</b>:
+   * <br>Additional modification information may be specified by the NMS. On method
+   * return this attribute contains the parameters that could not be applied.<br>
+   *
+   * MatrixFlowDomain_T <b>newMFD</b>:
+   * <br>The modified matrix flow domain.<br>
+   *
+   * string <b>errorReason</b>:
+   * <br>In case a "best effort" parameter could not be set the fault reason
+   * is provided by the EMS.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. field of mfdModifyData is invalid).<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName references an object that does 
+   *  not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable 
+   *  to execute the request because at least one of the parameters that are not
+   *  "best effort" although valid cannot be set. <br>
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is 
+   *  not met<br>
+   * EXCPT_ACCESS_DENIED - Raised when the matrix flow domain is fixed
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to a managed element
+   *  involved in this operation.<br>
+   * <br>
+   *
+   **/
+   void modifyMFD(
+         in globaldefs::NamingAttributes_T  mfdName,
+         in MFDModifyData_T  mfdModifyData,
+         in globaldefs::NamingAttributes_T transmissionDescriptorName,
+         inout transmissionParameters::LayeredParameterList_T  transmissionParams,
+         inout globaldefs::NVSList_T  additionalModificationInfo,
+         out MatrixFlowDomain_T  newMFD,
+         out string  errorReason)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   *<p>This service allows an NMS to request from the EMS the assignment
+   * of one or more "CPTP" TPs to a matrix flow domain.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>mfdName</b>:
+   * <br>The name of the matrix flow domain to be modified.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>tpNames</b>:
+   * <br>The names of the CPTPs to be assigned to the matrix flow domain.
+   * If the list is empty or all CPTPs are already assigned to the matrix flow domain
+   * nothing is done on the EMS and the method returns successfully.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. mfdName does not refer to a matrix flow domain object)<br>
+   * EXCPT_OBJECT_IN_USE - Raised when a CPTP is already assigned
+   *  to another matrix flow domain<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName or one of the tpNames
+   *  reference an object that does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when a CPTP could not be
+   *  assigned<br> 
+   * EXCPT_ACCESS_DENIED - Raised if the matrix flow domain is fixed<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to the managed element
+   *  containing the MFD<br>
+   * <br>
+   *
+   **/
+   void assignCPTPsToMFD(
+         in globaldefs::NamingAttributes_T  mfdName,
+         in globaldefs::NamingAttributesList_T  tpNames)
+      raises (globaldefs::ProcessingFailureException);
+
+  /**
+   *<p>This service allows an NMS to request from the EMS to unassign
+   * one or more CPTPs from a matrix flow domain.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>mfdName</b>:
+   * <br>The name of the matrix flow domain to be modified.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>tpNames</b>:
+   * <br>The names of the CPTPs to be unassigned from the matrix flow domain.
+   * If no CPTP has been specified, the method returns successfully.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically
+   *  incorrect (e.g. mfdName does not refer to a matrix flow domain object)<br>
+   * EXCPT_OBJECT_IN_USE - Raised when a CPTP to be unassigned carries
+   *  traffic or is connected to an ELL<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName or one of the tpNames
+   *  references an object that does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when a CPTP could not be
+   *  unassigned, e.g. because it is not assigned to the matrix flow domain<br> 
+   * EXCPT_ACCESS_DENIED - Raised if the matrix flow domain is fixed<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to the managed element
+   *  that contains the matrix flow domain<br>
+   * <br>
+   *
+   **/
+   void unassignCPTPsFromMFD(
+         in globaldefs::NamingAttributes_T  mfdName,
+         in globaldefs::NamingAttributesList_T  tpNames)
+      raises (globaldefs::ProcessingFailureException);
+
+   /**
+   * <p>Using this service the NMS requests from the EMS the creation of a
+   * "CPTP" FTP given the parameters passed in the method. 
+   * </p>
+   *
+   * FTPCreateData_T <b>createData</b>:
+   * <br>Structure describing the floating termination point structure to be created.<br>
+   *
+   * TerminationPoint_T <b>theFTP</b>:
+   * <br>The new floating termination point. The EMS is responsible for guaranteeing
+   * uniqueness of the name of the FTP. The name may be specified
+   * by the NMS in the createData. <br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. field of createData is invalid).<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS (or NE) does not support explicit creation 
+   * of CPTPs. <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when the specified equipment does not exist.
+   * <br>
+   * EXCPT_CAPACITY_EXCEEDED - Raised when The Equipment does not have the resources 
+   * (e.g., not enough overall back-plane bandwidth, not enough usable timeslots, etc.)<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to the managed element
+   *  that shall contain the FTP<br>
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is 
+   *  not met<br>
+   * <br>
+   *
+   **/
+   void createFTP(
+         in FTPCreateData_T createData,
+         out terminationPoint::TerminationPoint_T theFTP)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service allows an NMS to request the deletion of a floating termination point from
+   * the EMS. The service may be used to delete "CPTP" FTPs. </p>
+   *
+   * NamingAttributes_T <b>tpName</b>:
+   * <br>The name of the termination point to be deleted.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactical 
+   *  incorrect, i.e. tpName does not refer to a "CPTP" termination point object <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tpName references an object that does 
+   *  not exist <br>
+   * EXCPT_OBJECT_IN_USE - Raised when the CPTP is an ELL endpoint.
+   *  <br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised if the TP is is not deleteable.
+   *  <br> 
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost to a managed element
+   *  involved in this operation<br>
+   * <br>
+   *
+   **/
+   void deleteFTP(
+         in globaldefs::NamingAttributes_T ftpName)
+        raises (globaldefs::ProcessingFailureException);
+
+/**
+   * <p>This service returns the structures of all CPTPs assigned to a
+   * matrix flow domain or all flow domain edge CPTPs associated with a 
+   * flow domain. </p>
+   * 
+   * globaldefs::NamingAttributes_T <b>fdOrMfdName</b>:
+   * <br>Name of the flow domain whose associated edge CPTPs shall be returned
+   * or name of the matrix flow domain whose assigned CPTPs shall be returned.<br>
+   *
+   * unsigned long <b>how_many</b>:
+   * <br>Maximum number of CPTPs to return in the first batch.<br>
+   *
+   * terminationPoint::TerminationPointList_T <b>tpList</b>:
+   * <br>First batch of CPTPs.<br>
+   *
+   * terminationPoint::TerminationPointIterator_I <b>tpIt</b>:
+   * <br>Iterator to retrieve the remaining CPTPs.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when fdOrMfdName does not reference a
+   *  flow domain or matrix flow domain object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdOrMfdName references an object that 
+   *  does not exist<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+   *  that the EMS can support has been reached<br>
+   * <br>
+   *
+   **/
+   void getAllCPTPs(
+         in globaldefs::NamingAttributes_T  fdOrMfdName,
+         in unsigned long  how_many,  
+         out terminationPoint::TerminationPointList_T  tpList,  
+         out terminationPoint::TerminationPointIterator_I  tpIt)
+      raises(globaldefs::ProcessingFailureException);
+
+/**
+   * <p>This service returns the structures of all "CPTP" TPs that which are potentially 
+   * able to be assigned to a matrix flow domain </p>
+   * 
+   * <p> Potentially means: The CPTPs are on the same equipment or same rack with 
+   * backplane connectivity as the NMS specified MFD. It is irrelevant whether the CPTPs 
+   * are already assigned to an MFD or not. </p>
+   * 
+   * globaldefs::NamingAttributes_T <b>mfdName</b>:
+   * <br>Name of the matrix flow domain whose potential CPTPs shall be returned.<br>
+   *
+   * unsigned long <b>how_many</b>:
+   * <br>Maximum number of CPTPs to return in the first batch.<br>
+   *
+   * terminationPoint::TerminationPointList_T <b>tpList</b>:
+   * <br>First batch of CPTPs.<br>
+   *
+   * terminationPoint::TerminationPointIterator_I <b>tpIt</b>:
+   * <br>Iterator to retrieve the remaining CPTPs.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when fdOrMfdName does not reference a
+   *  flow domain or matrix flow domain object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdOrMfdName references an object that 
+   *  does not exist<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+   *  that the EMS can support has been reached<br>
+   * <br>
+   *
+   **/
+   void getAssignableCPTPs(
+         in globaldefs::NamingAttributes_T  mfdName,
+         in unsigned long  how_many,  
+         out terminationPoint::TerminationPointList_T  tpList,  
+         out terminationPoint::TerminationPointIterator_I  tpIt)
+      raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This allows an NMS to request a list of flow domain fragments for the
+   * specified flow domain at the specified connectivityRates.
+   * </p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>fdName</b>: 
+   * <br>Name of the flow domain.<br>
+   *
+   * transmissionParameters::LayerRateList_T <b>connectivityRateList</b>:
+   * <br>List of rates of the flow domain fragments to be reported.
+   * If an empty list is specified, then all flow domain fragments of all 
+   * rates are to be reported.<br>
+   *
+   * unsigned long <b>how_many</b>:
+   * <br>Maximum number of flow domai fragments to be reported in the first
+   * batch.<br>
+   *
+   * flowDomainFragment::FDFrList_T <b>fdfrList</b>:
+   * <br>First batch of flow domain fragments.<br>
+   *
+   * flowDomainFragment::FDFrIterator_I <b>fdfrIt</b>:
+   * <br>Iterator to retrieve the remaining flow domain fragment.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when fdName does not reference a
+   *  flow domain object or connectivityRateList contains undefined 
+   *  values<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdName references an object that 
+   *  does not exist<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+   *  that the EMS can support has been reached<br>
+   * <br>
+   **/
+   void getAllFDFrs(
+         in globaldefs::NamingAttributes_T fdName,
+         in unsigned long how_many,
+         in transmissionParameters::LayerRateList_T connectivityRateList,
+         out flowDomainFragment::FDFrList_T fdfrList,
+         out flowDomainFragment::FDFrIterator_I fdfrIt) 
+        raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This operation has exactly the same behaviour as 
+   * getAllFDFrs(), but instead of returning the entire object structures this 
+   * operation returns their names.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>fdName</b>:
+   * <br>Name of the flow domain.<br>
+   *
+   * transmissionParameters::LayerRateList_T <b>connectivityRateList</b>:
+   * <br>List of rates of the flow domain fragments whose names to be reported.
+   * If an empty list is specified, then the names of flow domain fragments of 
+   * all rates are to be reported.<br>
+   *
+   * unsigned long <b>how_many</b>:
+   * <br>Maximum number of flow domain fragment names to be reported in 
+   * the first batch.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>nameList</b>:
+   * <br>First batch of flow domain fragment names.<br>
+   *
+   * globaldefs::NamingAttributesIterator_I <b>nameIt</b>:
+   * <br>Iterator to retrieve the remaining flow domain fragment names.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * As for getAllFDFrs().
+   * <br>
+   **/
+   void getAllFDFrNames(
+         in globaldefs::NamingAttributes_T fdName,
+         in unsigned long how_many,
+         in transmissionParameters::LayerRateList_T connectivityRateList,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+        raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service allows the NMS to request from the EMS the flow domain
+   * fragments that are connected to a specified flow point or CPTP. In case
+   * of a flow point as input parameter not more then one flow domain fragment
+   * will be returned.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>tpName</b>:
+   * <br>The name of the flow point or CPTP for which the connected flow
+   * domain fragments shall be returned.<br>
+   *
+   * unsigned long <b>how_many</b>:
+   * <br>Maximum number of flow domain fragments to be reported in the first
+   * batch.<br>
+   *
+   * flowDomainFragment::FDFrList_T <b>fdfrList</b>:
+   * <br>First batch of flow domain fragments.<br>
+   *
+   * flowDomainFragment::FDFrIterator_I <b>fdfrIt</b>:
+   * <br>Iterator to retrieve the remaining flow domain fragments.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tpName does not reference a flow point
+   *  or CPTP<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised tpName references an object that does not
+   *  exist<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+   *  that the EMS can support has been reached<br>
+   * <br>
+   *
+   **/
+   void getFDFrsWithTP(
+         in globaldefs::NamingAttributes_T  tpName,
+         in unsigned long  how_many,
+         out flowDomainFragment::FDFrList_T  fdfrList,
+         out flowDomainFragment::FDFrIterator_I  fdfrIt) 
+      raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This operation returns the flow domain fragment structures for the
+   * flow domain fragments whose userLabel is supplied as a parameter.<br>
+   * The operation does not use an iterator, since the number of flow domain
+   * fragments returned is usually expected to be 1.
+   * </p>
+   *
+   * in string <b>userLabel</b>:
+   * <br>The user label of the flow domain fragments to retrieve.<br>
+   *
+   * FDFrList_T <b>fdfrs</b>:
+   * <br>The list of identified flow domain fragments. <br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * <br>
+   *
+   **/
+   void getFDFrsByUserLabel(
+         in string  userLabel,
+         out flowDomainFragment::FDFrList_T  fdfrs)
+      raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This operation returns the flow domain fragment structure 
+   * for the flow domain fragment whose name is supplied as a parameter.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>fdfrName</b>:
+   * <br>The name of the flow domain fragment to retrieve.<br>
+   *
+   * flowDomainFragment::FlowDomainFragment_T <b>fdfr</b>:
+   * <br>The flow domain fragment structure retrieved.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   * failure<br>
+   * EXCPT_INVALID_INPUT - Raised when fdfrName does not reference a 
+   *  flow domain fragment object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdfrName references a flow domain
+   *  fragment object that does not exist<br>
+   * <br>
+   **/
+   void getFDFr(
+         in globaldefs::NamingAttributes_T fdfrName,
+         out flowDomainFragment::FlowDomainFragment_T fdfr)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>The NMS invokes the createFDFr service to request the EMS to create a
+   * flow domain fragment given the parameters passed in the method.</p>
+   *
+   * flowDomainFragment::FDFrCreateData_T <b>createData</b>:
+   * <br>Structure describing the FDFr structure to be created. Setting of
+   * connectionless parameters is best effort (except where specified otherwise
+   * for a particular parameter).<br>
+   *
+   * ConnectivityRequirement_T <b>connectivityRequirement</b>:
+   * <br> For a "connectivity-aware" EMS, this parameter shall identify 
+   * the requested operation mode in case not all FPs have potential connectivity 
+   * to one another. If the EMS is not connectivity-aware, this parameter is ignored.
+   * <br>
+   *
+   * globaldefs::NamingAttributesList_T <b>endTPs</b>:
+   * <br>A list of names of flow points between which the flow domain fragment shall
+   * provide connectivity. The names can be determined by the flow point naming rules.
+   * <br>
+   * Connecting flow points is best effort. On method return the list contains the 
+   * names of the flow points that could not be connected to the flow domain fragment.
+   * <br>
+   *
+   * globaldefs::NamingAttributesList_T <b>internalTPs</b>:
+   * <br>A (possibly empty) list of internal CPTP names that must be included 
+   * in the route in the route of the FDFr. As a result of creating the FDFr, 
+   * FPs are created as clients of the internal CPTPs.
+   * <br>
+   *
+   * flowDomainFragment::MatrixFlowDomainFragmentList_T <b>mfdfrs</b>:
+   * <br> An optional (possibly empty) list of MFDFrs that make up the route 
+   * of the FDFr. This attribute may be omitted if the FDFr is routed by the network. 
+   * As a result of creating the FDFr, MFDFrs are created in the various MFDs.
+   * <br>
+   *
+   * subnetworkConnection::TPDataList_T <b>tpsToModify</b>: 
+   * <br>A list of TPs and parameters to apply. On method return the list is 
+   * updated to provide the resulting parameters. The list may refer to
+   * flow points that are being created during the createFDFr request or to the
+   * containing CPTPs. <br>
+   * 
+   * flowDomainFragment::FlowDomainFragment_T <b>theFDFr</b>:
+   * <br>The new created flow domain fragment. The EMS is responsible for guaranteeing
+   * uniqueness of the name of the flow domain fragment. <br>
+   *
+   * string <b>errorReason</b>:
+   * <br>In case a "best effort" parameter could not be set or a flow point could not
+   * be connected an indication of the fault reason is provided by the EMS.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. field of createData is invalid).<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when One of the provided CPTPs does not exist.
+   * <br>
+   * EXCPT_OBJECT_IN_USE - Raised if a specified flow point is already in use by 
+   *  an existing flow domain fragment. <br>
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is 
+   *  not met.<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable 
+   *  to execute the request because of one of the following conditions:<ul> 
+   * <li> at least one of the parameters although 
+   *  valid cannot be set and that parameter is identified as 
+   *  "not best effort"; </li>
+   *  <li> The FP total connectivity constraint is not met;</li>
+   * <li> Unrecognized mapping criteria;</li>
+   * <li> Frames map to more than one FDFr;</li>
+   * <li> The FDFr would have less than two FPs.</li>
+   * </ul>  <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when a flow point name references an object
+   *  that does not exist<br>
+   * EXCPT_PROTECTION_EFFORT_NOT_MET - Raised if the NMS requests a flow domain
+   *  fragment with a static protection level and protection effort that cannot 
+   *  be met by the EMS.<br>
+   * EXCPT_NAME_IN_USE - Raised when the name specified by the NMS exists
+   *  already in the EMS<br>
+   * EXCPT_NE_COMM_LOSS - Raised in case of Communications failure between the EMS 
+   * and the ME(s).<br>
+   * EXCPT_NOT_IN_VALID_STATE - Raised when At least one edge CPTP is not an FD edge CPTP.
+   * <br>
+   **/
+   void createFDFr(
+         in flowDomainFragment::FDFrCreateData_T createData,
+         in ConnectivityRequirement_T connectivityRequirement,
+         inout globaldefs::NamingAttributesList_T endTPs,
+         inout globaldefs::NamingAttributesList_T internalTPs,
+         inout flowDomainFragment::MatrixFlowDomainFragmentList_T mfdfrs,
+         inout subnetworkConnection::TPDataList_T tpsToModify,
+         out flowDomainFragment::FlowDomainFragment_T theFDFr, 
+         out string errorReason)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>The NMS invokes the activateFDFr service to request the EMS to activate a
+   * flow domain fragment given the parameters passed in the method.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>fdfrName</b>:
+   * <br>The name of the FDFr to activate.<br>
+   * 
+   * flowDomainFragment::FlowDomainFragment_T <b>theFDFr</b>:
+   * <br>The new created flow domain fragment. The EMS is responsible for guaranteeing
+   * uniqueness of the name of the flow domain fragment. <br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. field of createData is invalid).<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when One of the provided CPTPs does not exist.
+   * <br>
+   * EXCPT_OBJECT_IN_USE - Raised if a specified flow point is already in use by 
+   *  an existing flow domain fragment. <br>
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is 
+   *  not met.<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable 
+   *  to execute the request because of one of the following conditions:<ul> 
+   * <li> at least one of the parameters although 
+   *  valid cannot be set and that parameter is identified as 
+   *  "not best effort"; </li>
+   *  <li> The FP total connectivity constraint is not met;</li>
+   * <li> Unrecognized mapping criteria;</li>
+   * <li> Frames map to more than one FDFr;</li>
+   * <li> The FDFr would have less than two FPs.</li>
+   * </ul>  <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when a flow point name references an object
+   *  that does not exist<br>
+   * EXCPT_PROTECTION_EFFORT_NOT_MET - Raised if the NMS requests a flow domain
+   *  fragment with a static protection level and protection effort that cannot 
+   *  be met by the EMS.<br>
+   * EXCPT_NAME_IN_USE - Raised when the name specified by the NMS exists
+   *  already in the EMS<br>
+   * EXCPT_NE_COMM_LOSS - Raised in case of Communications failure between the EMS 
+   * and the ME(s).<br>
+   * EXCPT_NOT_IN_VALID_STATE - Raised when At least one edge CPTP is not an FD edge CPTP.
+   * <br>
+   **/
+   void activateFDFr(
+         in globaldefs::NamingAttributes_T fdfrName,
+         out flowDomainFragment::FlowDomainFragment_T fdfr)
+        raises (globaldefs::ProcessingFailureException);
+        
+  /**
+   * <p>The NMS invokes the deactivateFDFr service to request the EMS to deactivate a
+   * flow domain fragment given the parameters passed in the method.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>fdfrName</b>:
+   * <br>The name of the FDFr to deactivate.<br>
+   * 
+   * flowDomainFragment::FlowDomainFragment_T <b>theFDFr</b>:
+   * <br>The new created flow domain fragment. The EMS is responsible for guaranteeing
+   * uniqueness of the name of the flow domain fragment. <br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. field of createData is invalid).<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when One of the provided CPTPs does not exist.
+   * <br>
+   * EXCPT_OBJECT_IN_USE - Raised if a specified flow point is already in use by 
+   *  an existing flow domain fragment. <br>
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is 
+   *  not met.<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable 
+   *  to execute the request because of one of the following conditions:<ul> 
+   * <li> at least one of the parameters although 
+   *  valid cannot be set and that parameter is identified as 
+   *  "not best effort"; </li>
+   *  <li> The FP total connectivity constraint is not met;</li>
+   * <li> Unrecognized mapping criteria;</li>
+   * <li> Frames map to more than one FDFr;</li>
+   * <li> The FDFr would have less than two FPs.</li>
+   * </ul>  <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when a flow point name references an object
+   *  that does not exist<br>
+   * EXCPT_PROTECTION_EFFORT_NOT_MET - Raised if the NMS requests a flow domain
+   *  fragment with a static protection level and protection effort that cannot 
+   *  be met by the EMS.<br>
+   * EXCPT_NAME_IN_USE - Raised when the name specified by the NMS exists
+   *  already in the EMS<br>
+   * EXCPT_NE_COMM_LOSS - Raised in case of Communications failure between the EMS 
+   * and the ME(s).<br>
+   * EXCPT_NOT_IN_VALID_STATE - Raised when At least one edge CPTP is not an FD edge CPTP.
+   * <br>
+   **/
+   void deactivateFDFr(
+         in globaldefs::NamingAttributes_T fdfrName,
+         out flowDomainFragment::FlowDomainFragment_T fdfr)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   *<p>This service allows an NMS to request the deletion of a flow domain
+   * fragment from a flow domain.</p>
+   *
+   * <br>NamingAttributes_T <b>fdfrName</b>:
+   * <br>The name of the flow domain fragment to be deleted.<br>
+   *
+   * subnetworkConnection::TPDataList_T <b>tpsToModify</b>: 
+   * <br>A list of TPs and parameters to apply. On method return the list is 
+   * updated to provide the resulting parameters. The list may refer only to
+   * TPs that take part in the flow domain fragment deletion process. 
+   * <br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactical 
+   *  incorrect (e.g. fdfrName does not refer to an FDFr object)<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdfrName references an object that does 
+   *  not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised if the EMS is unable to delete the flow
+   *  domain fragment. All CPTPs have been freed from the association to the 
+   *  flow domain fragment (i.e. flow points have been deleted) but the flow domain
+   *  fragment remains present in the EMS <br> 
+   * EXCPT_ACCESS_DENIED - Raised if the EMS does not allow the NMS to delete the
+   *  flow domain fragment, e.g. if the flow domain fragment is fixed <br>
+   * <br>
+   **/
+   void deleteFDFr(
+         in globaldefs::NamingAttributes_T fdfrName,
+         inout subnetworkConnection::TPDataList_T tpsToModify)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>The NMS invokes the modifyFDFr service to request the EMS to modify an 
+   * existing flow domain fragment as specified by the parameters passed in the
+   * method.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>fdfrName</b>:
+   * <br>The name of the flow domain fragment to modify.<br>
+   *
+   * flowDomainFragment::FDFrModifyData_T <b>fdfrModifyData</b>:
+   * <br>Structure describing how the flow domain fragment should be modified.
+   * Modification of connectionless parameters is best effort (except where 
+   * specified otherwise for a particular parameter).<br>
+   *
+   * subnetworkConnection::TPDataList_T <b>tpsToModify</b>: 
+   * <br>A list of TPs and parameters to apply. On method return the list is 
+   * updated to provide the resulting parameters. The list may refer to
+   * flow points or to the containing CPTPs. <br>
+   * 
+   * subnetworkConnection::GradesOfImpact_T <b>tolerableImpact</b>:
+   * <br>The maximum tolerable impact allowed.<br>
+   *
+   * flowDomainFragment::FlowDomainFragment_T <b>newFDFr</b>:
+   * <br>The modified flow domain fragment.<br>
+   *
+   * string <b>errorReason</b>:
+   * <br>In case a "best effort" parameter could not be set an indication of the 
+   * fault reason is provided by the EMS.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. field of fdfrModifyData is invalid).<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdfrName references an object that does 
+   *  not exist<br>
+   * EXCPT_PROTECTION_EFFORT_NOT_MET - Raised if the NMS requests a flow domain
+   *  fragment with a static protection level and protection effort that cannot 
+   *  be met by the EMS
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable 
+   *  to execute the request because at least one of the parameters although 
+   *  valid cannot be set and that parameter is identified as 
+   *  "not best effort" or if the EMS cannot meet the GradesOfImpact requested by
+   *  the NMS <br>
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is 
+   *  not met<br>
+   * EXCPT_ACCESS_DENIED - Raised if the EMS does not allow the NMS to modify the
+   *  flow domain fragment, e.g. if the flow domain fragment is fixed <br>
+   * <br>
+   *
+   **/
+   void modifyFDFr(
+         in globaldefs::NamingAttributes_T fdfrName,
+         in flowDomainFragment::FDFrModifyData_T fdfrModifyData,
+         inout subnetworkConnection::TPDataList_T tpsToModify,
+         in subnetworkConnection::GradesOfImpact_T  tolerableImpact,
+         out flowDomainFragment::FlowDomainFragment_T newFDFr,
+         out string errorReason)
+        raises (globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This service allows the NMS to request from the EMS the addition of
+   * fow points to a flow domain fragment. </p>
+   *
+   * globaldefs::NamingAttributes_T <b>fdfrName</b>:
+   * <br>The name of the flow domain fragment to be modified.<br>
+   * 
+   * ConnectivityRequirement_T <b>connectivityRequirement</b>:
+   * <br> For a "connectivity-aware" EMS, this parameter shall identify 
+   * the requested operation mode in case not all FPs have potential connectivity 
+   * to one another. If the EMS is not connectivity-aware, this parameter is ignored.
+   * <br>
+   *
+   * globaldefs::NamingAttributesList_T <b>tpNames</b>:
+   * <br>The names of the potential flow points to be added to the flow domain
+   * fragment. Connecting flow points is best effort. On method return the list
+   * contains the names of the flow points that could not be connected to the 
+   * flow domain fragment.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>internalTpNames</b>:
+   * <br>The names of internal "CPTP" TPs to be added to the FDFr as additional 
+   * internal points. May be an empty list. <br>
+   *
+   * subnetworkConnection::TPDataList_T <b>tpsToModify</b>: 
+   * <br>A list of TPs and parameters to apply. On successfull method return the
+   * list is updated to provide the resulting parameters. The list may refer to
+   * flow points that are being created during the operation. <br>
+   * 
+   * string <b>errorReason</b>:
+   * <br>In case a flow point could not be connected an indication of the fault 
+   * reason is provided by the EMS.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. fdfrName does not refer to a flow domain fragment object).<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdfrName or one of the flow point names
+   *  references an object that does not exist<br>
+   * EXCPT_OBJECT_IN_USE - Raised if a flow point to add is already in use by another
+   *  flow domain fragment <br>
+   * EXCPT_ACCESS_DENIED - Raised if the EMS does not allow the NMS to modify the
+   *  flow domain fragment, e.g. if the flow domain fragment is fixed <br>
+   * <br>
+   *
+   **/
+   void addFPsToFDFr(
+         in globaldefs::NamingAttributes_T  fdfrName,
+         in ConnectivityRequirement_T connectivityRequirement,
+         inout globaldefs::NamingAttributesList_T  tpNames,
+         inout globaldefs::NamingAttributesList_T  internalTpNames,
+         inout subnetworkConnection::TPDataList_T  tpsToModify,
+         out string errorReason)
+      raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service allows the NMS to request from the EMS the removal of flow
+   * points from a flow domain fragment. </p>
+   *
+   * globaldefs::NamingAttributes_T <b>fdfrName</b>:
+   * <br>The name of the flow domain fragment to be modified.<br>
+   * 
+   * globaldefs::NamingAttributesList_T <b>tpNames</b>:
+   * <br>The names of the flow points to be removed from the flow domain fragment. 
+   * Disconnecting flow points is best effort. On method return the list
+   * contains the names of the flow points that could not be disconnected from the 
+   * flow domain fragment.<br>
+   *
+   * string <b>errorReason</b>:
+   * <br>In case a flow point could not be disconnected an indication of the fault 
+   * reason is provided by the EMS.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. fdfrName does not refer to a flow domain fragment object).<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when fdfrName or one of the flow point names
+   *  references an object that does not exist<br>
+   * EXCPT_ACCESS_DENIED - Raised if the EMS does not allow the NMS to modify the
+   *  flow domain fragment, e.g. if the flow domain fragment is fixed <br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised if after removal of the flow points less than
+   *  two flow points would be connected to the flow domain fragment <br>
+   * <br>
+   *
+   **/
+   void removeFPsFromFDFr(
+         in globaldefs::NamingAttributes_T  fdfrName,
+         inout globaldefs::NamingAttributesList_T  tpNames,
+         out string errorReason)
+      raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service validates the TMD state
+   * of the specified MFD identified by mfdName.</p>
+   *
+   * <p>It first verifies the existence of the assigned TMD
+   * and then compares the transmission parameters of the TMD and MFD,
+   * and the "additional TP info" parameters of the TMD with the additional
+   * info parameters of the MFD.</p>
+   *
+   * <p>If a TMD parameter is not present as an MFD parameter or is present but
+   * with a different value, this is called a "parameter mismatch", and the TMD
+   * state will take the value "mismatch".  The service returns the current
+   * TMD state and all mismatched transmission or "additional TP info"
+   * parameters of the TMD (which should mostly be none) as its output.</p>
+   *
+   * <br>globaldefs::NamingAttributes_T mfdName:
+   * the MFD whose TMD assignment shall be verified
+   *
+   * <br>string tmdAssignmentState: the TMD state (s) of the MFD
+   * as determined by the verification procedure;
+   *
+   * <br>transmissionParameters::LayeredParameterList_T transmissionParams:
+   * a "delta" list of mismatched TMD transmission parameters, or empty. See<a 
+   * href=supportingDocumentation/LayeredParameters.pdf>
+   * Layered Transmission Parameters</a> for more details.
+   *
+   * <br>globaldefs::NVSList_T additionalTPInfo: a "delta" list
+   * of mismatched "additional TP info" parameters, or empty
+   *
+   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if the EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal
+   *  failure (see errorReason attribute of ProcessingFailureException())<br>
+   * EXCPT_INVALID_INPUT - Raised when mfdName is incorrectly formed <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName references an object
+   *  that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when the communication to the managed
+   *  element containing mfdName is lost<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable or unwilling to 
+   *  execute the request<br>
+   * <br>
+   *
+   **/
+   void validateTMDAssignmentToMFD(
+         in globaldefs::NamingAttributes_T mfdName,
+         out string tmdAssignmentState,
+         out transmissionParameters::LayeredParameterList_T transmissionParams,
+         out globaldefs::NVSList_T additionalTPInfo)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service query the server trail for a specifical flowDomainFragment by fdfrName.</p>
+   *
+   * <br>globaldefs::NamingAttributes_T fdfrName:
+   * the name of the flowDomainFragment
+   *
+   * <br>globaldefs::NamingAttributesList_T serverNameList:
+   * the server trail name list for the flowDomainFragment
+   *
+   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if the EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal
+   *  failure (see errorReason attribute of ProcessingFailureException())<br>
+   * EXCPT_INVALID_INPUT - Raised when mfdName is incorrectly formed <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName references an object
+   *  that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when the communication to the managed
+   *  element containing mfdName is lost<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable or unwilling to 
+   *  execute the request<br>
+   * <br>
+   *
+   **/
+   void getFDFrServerTrail (
+         in globaldefs::NamingAttributes_T fdfrName,
+         out globaldefs::NamingAttributesList_T serverNameList )
+        raises (globaldefs::ProcessingFailureException);
+
+   /**
+    * <p>This service query all the ethernet OAM point for a specifical flowDomainFragment by fdfrName.</p>
+    *
+    * <br>globaldefs::NamingAttributes_T fdfrName:
+    * the name of the flowDomainFragment
+    *
+    * <br>EthernetOAMPointList_T oamPointList:
+    * the ethernet OMA point list for the flowDomainFragment
+    *
+    * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+    * EXCPT_NOT_IMPLEMENTED - Raised if the EMS does not support this service<br>
+    * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal
+    *  failure (see errorReason attribute of ProcessingFailureException())<br>
+    * EXCPT_INVALID_INPUT - Raised when mfdName is incorrectly formed <br>
+    * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName references an object
+    *  that does not exist<br>
+    * EXCPT_NE_COMM_LOSS - Raised when the communication to the managed
+    *  element containing mfdName is lost<br>
+    * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable or unwilling to 
+    *  execute the request<br>
+    * <br>
+    *
+    **/
+   void getAllEthernetOAMPoint (
+             in globaldefs::NamingAttributes_T Fdfrname,
+             out EthernetOAMPointList_T oamPointList)
+        raises (globaldefs::ProcessingFailureException);
+ 
+   /**
+    * <p>This service performace the ethernet OAM point operation.</p>
+    *
+    * <br>EthernetOAMOperation_T operation:
+    * the operation to be performanced
+    *
+    * <br>EthernetLTTestResultList_T ltTestResult:
+    * the result of Linktrace
+    *
+    * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+    * EXCPT_NOT_IMPLEMENTED - Raised if the EMS does not support this service<br>
+    * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal
+    *  failure (see errorReason attribute of ProcessingFailureException())<br>
+    * EXCPT_INVALID_INPUT - Raised when mfdName is incorrectly formed <br>
+    * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName references an object
+    *  that does not exist<br>
+    * EXCPT_NE_COMM_LOSS - Raised when the communication to the managed
+    *  element containing mfdName is lost<br>
+    * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable or unwilling to 
+    *  execute the request<br>
+    * <br>
+    *
+    **/
+   void performEthernetOAMCommand (
+             in EthernetOAMOperation_T operation,
+             out EthernetLTTestResultList_T ltTestResult )
+        raises (globaldefs::ProcessingFailureException);
+
+   };
+
+};
+
+#endif 
+

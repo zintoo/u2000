@@ -1,0 +1,615 @@
+﻿
+
+"Cable Connection Report"
+"Save Time: 2013/08/26 09:34:40"
+"User Name:admin"
+""
+
+"Total 605 Records"
+
+"Name","Level/Capacity","Rate (bit/s)","Direction","Source NE","Source Port","Sink NE","Sink Port","Length (km)","Designed Attenuation(EOL)","Fiber/Cable Type","Medium Type","Creation Time","Creator","Maintainer","Remarks","Alarm Severity","Disabled Status","Alarm Generation Time"
+f-68,STM-1,--,Two-Fiber Bidirectional,MKM-025,2-OI2S-1(KSN-014),KSN-014,1-OI2D-2(MKM-025),1.0,0.0,Fiber,G.652,2012/09/14 03:43:16,noppadolt,noppadolt,-,Normal,Enable,-
+f-16,STM-1,--,Two-Fiber Bidirectional,MKM-003,3-OI2D-2(MKM-014),MKM-014,1-OI2D-1(DIR:MKM-003),1.0,0.0,Fiber,G.652,2012/09/18 10:01:21,noppadolt,noppadolt,-,Normal,Enable,-
+f-17,STM-1,--,Two-Fiber Bidirectional,MKM-014,1-OI2D-2(DIR:MKM-017),MKM-017,2-OI2S-1(MKM-014),1.0,0.0,Fiber,G.652,2012/09/18 10:01:41,noppadolt,noppadolt,-,Normal,Enable,-
+f-69,STM-1,--,Two-Fiber Bidirectional,UDN-002,2-OI2D-1(DIR:UDN-017),UDN-017,3-OI2D-1(DIR:UDN-002),1.0,0.0,Fiber,G.652,2012/09/18 11:58:26,noppadolt,noppadolt,"use core No.23,24(project Ason 24 core)",Critical,Enable,2013/08/14 16:50:34
+f-4,STM-4,--,Two-Fiber Bidirectional,C-2-Ext.2-BFKT_(OSN3500),11-N1SLD4-1(SDH-1),TrueH_POI2G_1,17-OSB4-1(SDH-1),1.0,0.0,Fiber,G.652,2012/09/19 11:39:44,admin,admin,-,Normal,Enable,-
+f-72,STM-1,--,Two-Fiber Bidirectional,SNK-030,2-OI2S-1(SNK-015),SNK-015_Y52,1-OI2D-1(SNK-030),1.0,0.0,Fiber,G.652,2012/09/21 03:55:53,noppadolt,noppadolt,-,Normal,Enable,-
+f-73,STM-1,--,Two-Fiber Bidirectional,SNK-015_Y52,1-OI2D-2(SNK-020),SNK-020,1-OI2D-1(SNK-015),1.0,0.0,Fiber,G.652,2012/09/21 03:56:06,noppadolt,noppadolt,-,Normal,Enable,-
+f-74,STM-1,--,Two-Fiber Bidirectional,SNK-020,1-OI2D-2(SNK-009),SNK-009,1-OI2D-1(SNK-020),1.0,0.0,Fiber,G.652,2012/09/21 03:56:19,noppadolt,noppadolt,-,Normal,Enable,-
+f-75,STM-1,--,Two-Fiber Bidirectional,SNK-006,14-SL1-1(SNK-022),SNK-022,2-OI2D-1(SNK-006),1.0,0.0,Fiber,G.652,2012/09/21 08:00:09,noppadolt,noppadolt,-,Normal,Enable,-
+f-76,STM-4,--,Two-Fiber Bidirectional,MKM-006,11-N1SLD4-2(RET-007),RET-007,3-SL4-1(MKM-006),1.0,0.0,Fiber,G.652,2012/09/21 11:51:09,noppadolt,noppadolt,-,Normal,Enable,-
+f-77,STM-1,--,Two-Fiber Bidirectional,KSN-021,14-SD1-1(KSN-006),KSN-006,1-OI2D-2(SDH-2),1.0,0.0,Fiber,G.652,2012/09/24 00:30:41,noppadolt,noppadolt,-,Normal,Enable,-
+f-78,STM-1,--,Two-Fiber Bidirectional,KSN-013,1-OI2D-1(SDH-1),KSN-002,2-OI2D-2(KSN-013),1.0,0.0,Fiber,G.652,2012/09/24 00:32:05,noppadolt,noppadolt,-,Normal,Enable,-
+f-5,STM-4,--,Two-Fiber Bidirectional,C-2-Ext.2-BFKT_(OSN3500),11-N1SLD4-2(SDH-2),NTBAIS_POI2G_3,18-OSB4-1(SDH-1),1.0,0.0,Fiber,G.652,2012/09/25 03:19:40,admin,admin,-,Normal,Enable,-
+f-18,STM-1,--,Two-Fiber Bidirectional,SNK-001,13-SL1-1(NPM-007),NPM-007,1-OI2S-1(SNK-001),1.0,0.0,Fiber,G.652,2012/09/26 08:51:25,noppadolt,noppadolt,-,Normal,Enable,-
+f-20,STM-1,--,Two-Fiber Bidirectional,NPM-001,2-OI2D-1(NPM-016),NPM-016,2-OI2S-1(NPM-001),1.0,0.0,Fiber,G.652,2012/09/26 09:08:56,noppadolt,noppadolt,-,Normal,Enable,-
+f-21,STM-1,--,Two-Fiber Bidirectional,NPM-016,1-OI2S-1(NPM-023),NPM-023,1-OI2D-2(NPM-016),1.0,0.0,Fiber,G.652,2012/09/26 09:10:09,noppadolt,noppadolt,-,Normal,Enable,-
+f-22,STM-1,--,Two-Fiber Bidirectional,NPM-007,2-OI2S-1(NPM-011),NPM-011,1-OI2D-2(SDH-2),1.0,0.0,Fiber,G.652,2012/09/26 13:48:54,noppadolt,noppadolt,-,Normal,Enable,-
+f-23,STM-1,--,Two-Fiber Bidirectional,NPM-011,1-OI2D-1(SDH-1),NPM-008,1-OI2D-1(NPM-011),1.0,0.0,Fiber,G.652,2012/09/27 01:46:05,noppadolt,noppadolt,-,Normal,Enable,-
+f-26,STM-1,--,Two-Fiber Bidirectional,NKI-019,1-OI2D-2(DIR:NPM-005),NPM-005,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2012/09/27 03:25:11,noppadolt,noppadolt,-,Normal,Enable,-
+f-27,STM-1,--,Two-Fiber Bidirectional,NPM-005,1-OI2D-2(SDH-2),NPM-020,1-OI2D-2(NPM-005),1.0,0.0,Fiber,G.652,2012/09/27 03:26:08,noppadolt,noppadolt,-,Normal,Enable,-
+f-28,STM-1,--,Two-Fiber Bidirectional,NPM-020,1-OI2D-1(NPM-021),NPM-021,1-OI2D-2(SDH-2),1.0,0.0,Fiber,G.652,2012/09/27 04:48:36,noppadolt,noppadolt,-,Normal,Enable,-
+f-29,STM-1,--,Two-Fiber Bidirectional,NPM-021,1-OI2D-1(SDH-1),NPM-001,1-OI2D-2(NPM-021),1.0,0.0,Fiber,G.652,2012/09/27 04:54:24,noppadolt,noppadolt,-,Critical,Enable,2013/08/22 23:23:16
+f-30,STM-1,--,Two-Fiber Bidirectional,NPM-017,2-OI2S-1(NPM-019),NPM-019,2-OI2S-1(NPM-017),1.0,0.0,Fiber,G.652,2012/09/27 04:59:54,noppadolt,noppadolt,-,Normal,Enable,-
+f-31,STM-1,--,Two-Fiber Bidirectional,NPM-022,2-OI2S-1(NPM-019),NPM-019,1-OI2S-1(NPM-022),1.0,0.0,Fiber,G.652,2012/09/27 07:08:23,noppadolt,noppadolt,-,Normal,Enable,-
+f-32,STM-1,--,Two-Fiber Bidirectional,NPM-022,1-OI2S-1(NPM-002),NPM-002,12-SD1-2(NPM-022),1.0,0.0,Fiber,G.652,2012/09/27 07:09:05,noppadolt,noppadolt,-,Normal,Enable,-
+f-33,STM-1,--,Two-Fiber Bidirectional,NPM-018,12-SD1-2(NPM-017),NPM-017,1-OI2S-1(NPM-018),1.0,0.0,Fiber,G.652,2012/09/27 07:10:36,noppadolt,noppadolt,-,Normal,Enable,-
+f-79,STM-1,--,Two-Fiber Bidirectional,SNK-010,5-SD1-1(SNK-009),SNK-009,2-OI2S-1(SNK-010),1.0,0.0,Fiber,G.652,2012/10/01 07:46:38,noppadolt,noppadolt,-,Critical,Enable,2013/05/09 18:40:20
+f-5,STM-1,--,Two-Fiber Bidirectional,MKM-007,3-SD1-2(MKM-022),MKM-022,1-OI2D-1(MKM-007),1.0,0.0,Fiber,G.652,2012/10/01 09:42:55,admin,admin,"use core NO.21,22,( project kk-sarakarm 24 core ) BJ out core 3,4 / in core 11,12 ( project thai-sato )",Normal,Enable,-
+f-80,STM-1,--,Two-Fiber Bidirectional,SNK-010,6-SD1-2(SNK-018),SNK-018,2-OI2S-1(SNK-010),1.0,0.0,Fiber,G.652,2012/10/02 06:54:13,noppadolt,noppadolt,-,Normal,Enable,-
+f-82,STM-1,--,Two-Fiber Bidirectional,SNK-012,2-OI2S-1(NPM-004),NPM-004,1-OI2S-1(SNK-012),1.0,0.0,Fiber,G.652,2012/10/08 06:09:34,noppadolt,noppadolt,-,Normal,Enable,-
+f-1,10GE_WAN,--,Two-Fiber Bidirectional,8029_KKN-015_H,8-N2PEX1-1(PORT-1),8054_KKN-004,8-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2012/12/17 21:10:36,admin,admin,-,Normal,Enable,-
+f-2,10GE_WAN,--,Two-Fiber Bidirectional,8053_NMA_021,7-N2PEX1-1(PORT-1),8054_KKN-004,11-N2PEX1-1(Port-1),1.0,0.0,Fiber,G.652,2012/12/18 17:55:25,admin,admin,-,Normal,Enable,-
+f-3,10GE_WAN,--,Two-Fiber Bidirectional,8052_NMA-017_H,11-N2PEX1-1(PORT-1),8053_NMA_021,12-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2012/12/19 18:13:35,admin,admin,-,Normal,Enable,-
+f-4,10GE_WAN,--,Two-Fiber Bidirectional,8052_NMA-017_H,8-N2PEX1-1(PORT-1),8051_NMA-020_H,7-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2012/12/20 22:36:06,admin,admin,O/F BFKT-3G,Normal,Enable,-
+f-5,10GE_WAN,--,Two-Fiber Bidirectional,8029_KKN-015_H,30-N2PEX1-1(PORT-1),RNC_KKN_MSTP-TP,8-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2012/12/21 14:41:21,admin,admin,"use core No. 61/37,62/38 ( project 96 core central ) BJ core No. 3,4   true 3G",Normal,Enable,-
+f-1,10GE_WAN,--,Two-Fiber Bidirectional,8050-SRN-006_H,7-N2PEX1-1(PORT-1),8051_NMA-020_H,12-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2012/12/21 23:19:29,admin,admin,-,Normal,Enable,-
+f-1,10GE_WAN,--,Two-Fiber Bidirectional,8050-SRN-006_H,12-N2PEX1-1(PORT-1),8049_SSK-010_H,8-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/07 00:12:21,admin,admin,-,Normal,Enable,-
+f-13,STM-16,--,Two-Fiber Bidirectional,SRN-006,11-N1SL16-1(SDH-1),8049_SSK-010_H,7-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/07 00:57:54,admin,admin,-,Normal,Enable,-
+f-14,STM-16,--,Two-Fiber Bidirectional,8049_SSK-010_H,6-N3SL16-1(SDH-1),SSK-010,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/07 00:58:07,admin,admin,-,Normal,Enable,-
+f-16,STM-16,--,Two-Fiber Bidirectional,SSK-010,10-S16-1(SDH-1),8049_SSK-010_H,13-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/07 01:11:04,admin,admin,-,Normal,Enable,-
+f-17,10GE_WAN,--,Two-Fiber Bidirectional,8049_SSK-010_H,11-N2PEX1-1(PORT-1),8048-SSK-007_H,8-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/08 00:10:08,admin,admin,-,Normal,Enable,-
+f-1,STM-16,--,Two-Fiber Bidirectional,8049_SSK-010_H,12-N3SL16-1(SDH-1),8048-SSK-007_H,7-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/08 00:43:24,admin,admin,-,Normal,Enable,-
+f-2,STM-16,--,Two-Fiber Bidirectional,8048-SSK-007_H,14-N3SL16-1(SDH-1),UBN-008,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/08 00:43:39,admin,admin,-,Normal,Enable,-
+f-3,STM-16,--,Two-Fiber Bidirectional,8048-SSK-007_H,6-N3SL16-1(SDH-1),SSK-007,5-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/08 00:44:04,admin,admin,-,Normal,Enable,-
+f-4,STM-16,--,Two-Fiber Bidirectional,SSK-007,6-S16-1(SDH-1),8048-SSK-007_H,13-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/08 00:44:28,admin,admin,-,Normal,Enable,-
+f-5,10GE_WAN,--,Two-Fiber Bidirectional,8048-SSK-007_H,11-N2PEX1-1(PORT-1),8047-UBN-011_H,11-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/08 16:49:57,admin,admin,-,Normal,Enable,-
+f-2,STM-16,--,Two-Fiber Bidirectional,8048-SSK-007_H,12-N3SL16-1(SDH-1),8047-UBN-011_H,6-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/08 17:59:40,admin,admin,-,Normal,Enable,-
+f-6,STM-16,--,Two-Fiber Bidirectional,8047-UBN-011_H,13-N3SL16-1(SDH-1),UBN-004,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/09 00:36:13,admin,admin,-,Normal,Enable,-
+f-8,STM-16,--,Two-Fiber Bidirectional,8047-UBN-011_H,12-N3SL16-1(SDH-1),1006-UBN-011 Ext1,8-N2SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/09 00:36:50,admin,admin,-,Normal,Enable,-
+f-9,STM-16,--,Two-Fiber Bidirectional,8047-UBN-011_H,28-N3SL16-1(SDH-1),UBN-015,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/09 00:37:17,admin,admin,-,Normal,Enable,-
+f-10,STM-16,--,Two-Fiber Bidirectional,8047-UBN-011_H,4-N3SL16-1(SDH-1),UBN-011,5-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/09 00:37:33,admin,admin,-,Normal,Enable,-
+f-11,STM-16,--,Two-Fiber Bidirectional,8047-UBN-011_H,15-N3SL16-1(SDH-1),UBN-011,6-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/09 00:37:46,admin,admin,-,Normal,Enable,-
+f-5,10GE_WAN,--,Two-Fiber Bidirectional,8042_RET-007_H,7-N2PEX1-1(PORT-1),8043_KSN-021_H,12-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/09 11:23:34,admin,admin,-,Normal,Enable,-
+f-6,10GE_WAN,--,Two-Fiber Bidirectional,8042_RET-007_H,8-N2PEX1-1(PORT-1),8043_KSN-021_H,11-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/09 11:30:36,admin,admin,-,Normal,Enable,-
+f-3,10GE_WAN,--,Two-Fiber Bidirectional,8047-UBN-011_H,8-N2PEX1-1(PORT-1),8046-UBN-002_H,11-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/10 00:24:21,admin,admin,-,Normal,Enable,-
+f-3,STM-16,--,Two-Fiber Bidirectional,8047-UBN-011_H,7-N3SL16-1(SDH-1),8046-UBN-002_H,12-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/10 00:44:31,admin,admin,-,Normal,Enable,-
+f-4,STM-16,--,Two-Fiber Bidirectional,8046-UBN-002_H,13-N3SL16-1(SDH-1),UBN-002,6-S16-1(CDMA2010),1.0,0.0,Fiber,G.652,2013/01/10 00:45:27,admin,admin,-,Normal,Enable,-
+f-5,STM-16,--,Two-Fiber Bidirectional,8046-UBN-002_H,6-N3SL16-1(SDH-1),UBN-002,5-S16-1(CDMA2010),1.0,0.0,Fiber,G.652,2013/01/10 00:45:44,admin,admin,-,Normal,Enable,-
+f-7,10GE_WAN,--,Two-Fiber Bidirectional,8043_KSN-021_H,7-N2PEX1-1(PORT-1),8044_MKM-008_H,12-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/10 10:11:55,admin,admin,-,Normal,Enable,-
+f-8,10GE_WAN,--,Two-Fiber Bidirectional,8043_KSN-021_H,8-N2PEX1-1(PORT-1),8044_MKM-008_H,11-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/10 10:13:26,admin,admin,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,UDN-006_Ext..1,14-N1SLQ1-2(SDH-2),KKN-015_Ext.1_(3GsHSPA),15-N1SLQ1-2(SDH-2),1.0,0.0,Fiber,G.652,2013/01/10 16:11:58,admin,admin,TRUNK STM-1 UDN-KKN: Over SDH(Ring Protection)-2,Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,UDN-006_Ext..1,14-N1SLQ1-3(SDH-3),KKN-015_Ext.1_(3GsHSPA),15-N1SLQ1-3(SDH-3),1.0,0.0,Fiber,G.652,2013/01/10 16:14:23,admin,admin,TRUNK STM-1 UDN-KKN: Over SDH(Ring Protection)-3,Normal,Enable,-
+f-2,10GE_WAN,--,Two-Fiber Bidirectional,8041_YST-005-H,7-N2PEX1-1(PORT-1),8046-UBN-002_H,8-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/10 23:55:13,admin,admin,-,Normal,Enable,-
+f-3,STM-16,--,Two-Fiber Bidirectional,8041_YST-005-H,6-N3SL16-1(SDH-1),8046-UBN-002_H,7-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/11 00:53:26,admin,admin,-,Normal,Enable,-
+f-4,STM-16,--,Two-Fiber Bidirectional,8041_YST-005-H,13-N3SL16-1(SDH-1),YST-005,6-S16-1(CDMA2010),1.0,0.0,Fiber,G.652,2013/01/11 00:53:41,admin,admin,-,Normal,Enable,-
+f-1,10GE_WAN,--,Two-Fiber Bidirectional,8041_YST-005-H,12-N2PEX1-1(PORT-1),8042_RET-007_H,12-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/11 14:36:16,litianyi123,litianyi123,-,Normal,Enable,-
+f-1,10GE_WAN,--,Two-Fiber Bidirectional,8041_YST-005-H,11-N2PEX1-1(PORT-1),8042_RET-007_H,11-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/11 15:09:50,litianyi123,litianyi123,-,Critical,Enable,2013/08/01 09:15:39
+f-2,STM-16,--,Two-Fiber Bidirectional,8041_YST-005-H,5-N3SL16-1(SDH-1),8042_RET-007_H,13-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/12 02:36:51,litianyi123,litianyi123,-,Normal,Enable,-
+f-1,STM-16,--,Two-Fiber Bidirectional,RET-007,9-S16-1(SDH-1),8042_RET-007_H,5-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/12 02:42:16,litianyi123,litianyi123,-,Normal,Enable,-
+f-2,STM-16,--,Two-Fiber Bidirectional,RET-007,10-S16-1(SDH-1),8042_RET-007_H,14-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/12 02:42:54,litianyi123,litianyi123,-,Normal,Enable,-
+f-1,STM-16,--,Two-Fiber Bidirectional,8042_RET-007_H,6-N3SL16-1(SDH-1),8043_KSN-021_H,13-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/13 00:09:30,admin,admin,-,Normal,Enable,-
+f-2,STM-16,--,Two-Fiber Bidirectional,KSN-021,9-S16-1(SDH-1),8043_KSN-021_H,5-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/13 00:13:20,admin,admin,-,Normal,Enable,-
+f-3,STM-16,--,Two-Fiber Bidirectional,KSN-021,10-S16-1(SDH-1),8043_KSN-021_H,14-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/13 00:13:44,admin,admin,-,Normal,Enable,-
+f-7,STM-16,--,Two-Fiber Bidirectional,8043_KSN-021_H,6-N3SL16-1(SDH-1),8044_MKM-008_H,13-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/15 01:35:05,admin,admin,-,Normal,Enable,-
+f-9,STM-16,--,Two-Fiber Bidirectional,8044_MKM-008_H,5-N3SL16-1(SDH-1),MKM-008,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/15 01:36:00,admin,admin,-,Normal,Enable,-
+f-10,STM-16,--,Two-Fiber Bidirectional,8044_MKM-008_H,14-N3SL16-1(SDH-1),MKM-008,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/15 01:36:12,admin,admin,-,Normal,Enable,-
+f-11,10GE_WAN,--,Two-Fiber Bidirectional,8044_MKM-008_H,8-N2PEX1-1(PORT-1),8045_MKM_007_H,11-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/16 00:00:27,admin,admin,-,Normal,Enable,-
+f-12,10GE_WAN,--,Two-Fiber Bidirectional,8045_MKM_007_H,12-N2PEX1-1(PORT-1),8044_MKM-008_H,7-N2PEX1-1(Port-1),1.0,0.0,Fiber,G.652,2013/01/16 00:00:49,admin,admin,-,Normal,Enable,-
+f-4,STM-16,--,Two-Fiber Bidirectional,8045_MKM_007_H,13-N3SL16-1(SDH-1),8044_MKM-008_H,6-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/17 00:24:11,admin,admin,-,Normal,Enable,-
+f-5,STM-16,--,Two-Fiber Bidirectional,8045_MKM_007_H,14-N3SL16-1(SDH-1),MKM-007,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/17 00:24:33,admin,admin,-,Normal,Enable,-
+f-6,STM-16,--,Two-Fiber Bidirectional,MKM-007,9-S16-1(SDH-1),8045_MKM_007_H,5-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/17 00:24:49,admin,admin,Patch-cord เชื่อม,Normal,Enable,-
+f-7,10GE_WAN,--,Two-Fiber Bidirectional,8029_KKN-015_H,12-N2PEX1-1(PORT-1),8045_MKM_007_H,7-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/18 00:46:11,admin,admin,"use core No.3,4 ( project kk-sarakam- ubon 24 core) distance 58 Km",Normal,Enable,-
+f-8,10GE_WAN,--,Two-Fiber Bidirectional,8029_KKN-015_H,11-N2PEX1-1(PORT-1),8045_MKM_007_H,8-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/18 00:46:39,admin,admin,"use core No.3,4 ( project kk-sarakam- ubon 24 core) Distance 58 Km.",Normal,Enable,-
+f-22,STM-16,--,Two-Fiber Bidirectional,8029_KKN-015_H,4-N3SL16-1(SDH-1),KKN-015,5-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/18 01:39:26,admin,admin,patch coard  5 th floor,Normal,Enable,-
+f-23,STM-16,--,Two-Fiber Bidirectional,KKN-015,6-S16-1(SDH-1),8029_KKN-015_H,14-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/18 01:39:48,admin,admin,patch coard  5 th floor,Normal,Enable,-
+f-24,STM-16,--,Two-Fiber Bidirectional,8029_KKN-015_H,13-N3SL16-1(SDH-1),8045_MKM_007_H,6-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/18 01:40:03,admin,admin,"use core No.3,4 ( project kk-sarakam-ubon 24 core)",Normal,Enable,-
+f-2,STM-16,--,Two-Fiber Bidirectional,8031-KKN-026_H,12-N3SL16-1(SDH-1),8029_KKN-015_H,6-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/19 00:58:37,admin,admin,"use core No.3,4 (project kk-ud 2000Km 24 core )",Normal,Enable,-
+f-4,STM-16,--,Two-Fiber Bidirectional,8031-KKN-026_H,13-N3SL16-1(SDH-1),KKN-026_HSPA,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/19 01:05:28,admin,admin,patch cord,Normal,Enable,-
+f-6,STM-16,--,Two-Fiber Bidirectional,8031-KKN-026_H,6-N3SL16-1(SDH-1),KKN-026_HSPA,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/19 01:08:18,admin,admin,patch coard,Normal,Enable,-
+f-9,10GE_WAN,--,Two-Fiber Bidirectional,8031-KKN-026_H,11-N2PEX1-1(PORT-1),8029_KKN-015_H,7-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/19 01:19:43,admin,admin,"use core No.3,4 (project kk-ud 2000Km 24 core ) BJ core No.1,2,3,4 ( project CDMA BJ )",Normal,Enable,-
+f-4,STM-16,--,Two-Fiber Bidirectional,8032-UDN-004_H,12-N3SL16-1(SDH-1),8031-KKN-026_H,7-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/20 02:13:18,admin,admin,-,Normal,Enable,-
+f-6,STM-16,--,Two-Fiber Bidirectional,UDN-004_HSPA,9-S16-1(UDN006),8032-UDN-004_H,6-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/20 02:13:54,admin,admin,-,Normal,Enable,-
+f-7,STM-16,--,Two-Fiber Bidirectional,UDN-004_HSPA,10-S16-1(SDH-1),8032-UDN-004_H,13-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/20 02:14:08,admin,admin,-,Normal,Enable,-
+f-10,10GE_WAN,--,Two-Fiber Bidirectional,8033-UDN-006_H,11-N2PEX1-1(PORT-1),8032-UDN-004_H,8-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/20 14:57:00,admin,admin,-,Normal,Enable,-
+f-7,STM-16,--,Two-Fiber Bidirectional,8033-UDN-006_H,12-N3SL16-1(SDH-1),8032-UDN-004_H,7-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/21 00:10:47,admin,admin,-,Normal,Enable,-
+f-8,STM-16,--,Two-Fiber Bidirectional,8033-UDN-006_H,13-N3SL16-1(SDH-1),UDN-006,10-S16-1(UDN004),1.0,0.0,Fiber,G.652,2013/01/21 00:11:04,admin,admin,เชื่อมโดยสาย patch-cord,Normal,Enable,-
+f-10,STM-16,--,Two-Fiber Bidirectional,8033-UDN-006_H,6-N3SL16-1(SDH-1),UDN-006,9-S16-1(SNK010),1.0,0.0,Fiber,G.652,2013/01/21 00:11:58,admin,admin,-,Normal,Enable,-
+f-22,STM-16,--,Two-Fiber Bidirectional,8034-SNK-010_H,6-N3SL16-1(SDH-1),SNK-010,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/22 02:18:34,admin,admin,-,Normal,Enable,-
+f-23,STM-16,--,Two-Fiber Bidirectional,8034-SNK-010_H,13-N3SL16-1(SDH-1),SNK-010,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/22 02:18:49,admin,admin,-,Normal,Enable,-
+f-26,STM-16,--,Two-Fiber Bidirectional,8034-SNK-010_H,12-N3SL16-1(SDH-1),8033-UDN-006_H,7-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/22 02:26:42,admin,admin,"use core No. 3,4 ( project 2000Km 24 core )",Normal,Enable,-
+f-27,10GE_WAN,--,Two-Fiber Bidirectional,8034-SNK-010_H,11-N2PEX1-1(PORT-1),8033-UDN-006_H,8-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/22 03:08:43,admin,admin,"use core No. 3,4 ( project 2000Km 24 core )",Normal,Enable,-
+f-28,10GE_WAN,--,Two-Fiber Bidirectional,8034-SNK-010_H,8-N2PEX1-1(PORT-1),8035-SNK-006_H,11-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/22 03:09:09,admin,admin,-,Normal,Enable,-
+f-11,STM-16,--,Two-Fiber Bidirectional,8034-SNK-010_H,7-N3SL16-1(SDH-1),8035-SNK-006_H,12-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/23 01:07:17,admin,admin,-,Normal,Enable,-
+f-13,STM-16,--,Two-Fiber Bidirectional,8035-SNK-006_H,6-N3SL16-1(SDH-1),SNK-006,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/23 01:08:30,admin,admin,-,Normal,Enable,-
+f-14,STM-16,--,Two-Fiber Bidirectional,8035-SNK-006_H,13-N3SL16-1(SDH-1),SNK-006,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/23 01:08:43,admin,admin,-,Normal,Enable,-
+f-16,STM-16,--,Two-Fiber Bidirectional,SNK-001,9-S16-1(SDH-1),8036-SNK-001_H,6-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/24 01:11:28,admin,admin,-,Normal,Enable,-
+f-17,STM-16,--,Two-Fiber Bidirectional,SNK-001,10-S16-1(SDH-1),8036-SNK-001_H,13-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/24 01:11:51,admin,admin,-,Normal,Enable,-
+f-18,STM-16,--,Two-Fiber Bidirectional,8036-SNK-001_H,12-N3SL16-1(SDH-1),8035-SNK-006_H,7-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/24 01:13:22,admin,admin,-,Normal,Enable,-
+f-11,10GE_WAN,--,Two-Fiber Bidirectional,8035-SNK-006_H,8-N2PEX1-1(PORT-1),8036-SNK-001_H,11-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/24 02:58:41,admin,admin,-,Normal,Enable,-
+f-21,10GE_WAN,--,Two-Fiber Bidirectional,8036-SNK-001_H,8-N2PEX1-1(PORT-1),8037-NPM-018_H,11-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/25 00:27:12,admin,admin,-,Normal,Enable,-
+f-22,STM-16,--,Two-Fiber Bidirectional,8036-SNK-001_H,7-N3SL16-1(SDH-1),8037-NPM-018_H,12-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/25 00:41:16,admin,admin,-,Normal,Enable,-
+f-24,STM-16,--,Two-Fiber Bidirectional,8037-NPM-018_H,6-N3SL16-1(SDH-1),NPM-018,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/25 00:42:04,admin,admin,-,Normal,Enable,-
+f-25,STM-16,--,Two-Fiber Bidirectional,8037-NPM-018_H,13-N3SL16-1(SDH-1),NPM-018,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/25 00:42:20,admin,admin,-,Normal,Enable,-
+f-13,STM-16,--,Two-Fiber Bidirectional,8038-NPM-002_H,12-N3SL16-1(SDH-1),8037-NPM-018_H,7-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/26 00:50:56,admin,admin,-,Normal,Enable,-
+f-14,STM-16,--,Two-Fiber Bidirectional,8038-NPM-002_H,6-N3SL16-1(SDH-1),NPM-002,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/26 00:51:21,admin,admin,-,Normal,Enable,-
+f-15,STM-16,--,Two-Fiber Bidirectional,8038-NPM-002_H,13-N3SL16-1(SDH-1),NPM-002,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/26 00:51:46,admin,admin,-,Normal,Enable,-
+f-15,10GE_WAN,--,Two-Fiber Bidirectional,8037-NPM-018_H,8-N2PEX1-1(PORT-1),8038-NPM-002_H,11-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/26 22:57:53,admin,admin,-,Normal,Enable,-
+f-16,STM-16,--,Two-Fiber Bidirectional,8039-MDH-009_H,6-N3SL16-1(SDH-1),MDH-009,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/27 00:18:14,admin,admin,-,Normal,Enable,-
+f-17,STM-16,--,Two-Fiber Bidirectional,8039-MDH-009_H,13-N3SL16-1(SDH-1),MDH-009,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/27 00:18:32,admin,admin,-,Normal,Enable,-
+f-19,STM-16,--,Two-Fiber Bidirectional,8039-MDH-009_H,12-N3SL16-1(SDH-1),8038-NPM-002_H,7-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/27 00:21:02,admin,admin,-,Normal,Enable,-
+f-27,10GE_WAN,--,Two-Fiber Bidirectional,8038-NPM-002_H,8-N2PEX1-1(PORT-1),8039-MDH-009_H,11-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/27 00:40:26,admin,admin,-,Normal,Enable,-
+f-29,STM-16,--,Two-Fiber Bidirectional,8041_YST-005-H,14-N3SL16-1(SDH-1),8040_AMR-001_H,7-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/29 00:27:04,admin,admin,-,Normal,Enable,-
+f-30,STM-16,--,Two-Fiber Bidirectional,8039-MDH-009_H,7-N3SL16-1(SDH-1),8040_AMR-001_H,12-N3SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/29 00:27:30,admin,admin,-,Normal,Enable,-
+f-31,STM-16,--,Two-Fiber Bidirectional,8040_AMR-001_H,13-N3SL16-1(SDH-1),AMR-001,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/29 00:27:53,admin,admin,-,Normal,Enable,-
+f-32,STM-16,--,Two-Fiber Bidirectional,8040_AMR-001_H,6-N3SL16-1(SDH-1),AMR-001,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2013/01/29 00:28:10,admin,admin,-,Normal,Enable,-
+f-33,10GE_WAN,--,Two-Fiber Bidirectional,8039-MDH-009_H,8-N2PEX1-1(PORT-1),8040_AMR-001_H,11-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/29 00:28:28,admin,admin,-,Normal,Enable,-
+f-34,10GE_WAN,--,Two-Fiber Bidirectional,8040_AMR-001_H,8-N2PEX1-1(PORT-1),8041_YST-005-H,8-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/01/29 00:30:53,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,RET-002,2-OI2S-1(RET-027),RET-027,2-OI2S-1(RET-002),1.0,0.0,Fiber,G.652,2013/01/29 09:55:35,admin,admin,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,RET-027,1-OI2S-1(RET-017),RET-017,1-OI2S-1(RET-017),1.0,0.0,Fiber,G.652,2013/01/29 09:55:44,admin,admin,-,Normal,Enable,-
+f-1,STM-4,--,Two-Fiber Bidirectional,TRUE-BRK_3Gs,9-SL4-1(AWN_(AIS_3G)),C-1-2_BTCAIS_POI_Ext.3,18-OSB4-1(Temp),1.0,0.0,Fiber,G.652,2013/02/01 16:49:18,admin,admin,-,Normal,Enable,-
+f-2,STM-4,--,Two-Fiber Bidirectional,C-1-2_BTCAIS_POI_Ext.3,17-OSB4-1(SDH-1),C-1-2_BTCAIS_POI_Ext.2,18-OSB4-1(SDH-1),1.0,0.0,Fiber,G.652,2013/02/01 16:49:28,admin,admin,-,Normal,Enable,-
+f-31,10GE_WAN,--,Two-Fiber Bidirectional,8029_KKN-015_H,31-N2PEX1-1(PORT-1),RNC_KKN_MSTP-TP,11-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/02/14 14:29:47,admin,admin,"use core No. 63/39,64/40 ( project 96 core central ) BJ core No. 5,6   true 3G  to true-builing           ย้ายไป Core 19/20 (project 3G 24core ) เมื่อ 2 กค.2556",Normal,Enable,-
+f-6,STM-4,--,Two-Fiber Bidirectional,TrueH_POI2G_1,18-OSB4-1(SDH-1),NTBAIS_POI2G_2,17-OSB4-1(SDH-1),1.0,0.0,Fiber,G.652,2013/02/18 13:17:24,admin,admin,-,Normal,Enable,-
+f-7,STM-4,--,Two-Fiber Bidirectional,NTBAIS_POI2G_2,18-OSB4-1(SDH-1),NTBAIS_POI2G_3,17-OSB4-1(SDH-1),1.0,0.0,Fiber,G.652,2013/02/18 13:17:36,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,RNC_TMV_CAT3Gs_FL.3,3-N1SLQ1-1(Metro Fl2),TRUE_KKN,3-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2013/03/04 14:54:00,admin,admin,-,Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,KKN-015_Ext.1_(3GsHSPA),4-N1SLQ1-3(KKN-040),KKN-040,1-OI2D-2(KKN015 S4P3),1.0,0.0,Fiber,G.652,2013/03/08 15:10:06,admin,admin,"use core No.5,6 ( project kk-changmai 24 Core ) BJ core No.3,4 ( project Ason )",Normal,Enable,-
+f-4,STM-1,--,Two-Fiber Bidirectional,RET-017,2-OI2S-1(RET-008),RET-008,2-OI2D-1(RET-017),1.0,0.0,Fiber,G.652,2013/03/11 07:47:39,admin,admin,-,Normal,Enable,-
+f-5,STM-1,--,Two-Fiber Bidirectional,KKN-040,1-OI2D-1(KKN-006),KKN-006,1-OI2D-1(KKN-040),1.0,0.0,Fiber,G.652,2013/03/11 15:41:05,admin,admin,"use core No.3,4 ( project 3G CAT&&BFKT 12 core )",Normal,Enable,-
+f-8,STM-1,--,Two-Fiber Bidirectional,C-2-Ext.2-BFKT_(OSN3500),1-N1SLQ1-4(RBT_(BRK-NTB)),1048_C2_(RBT 3GHSPA),1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2013/03/15 01:57:51,admin,admin,-,Normal,Enable,-
+f-11,STM-1,--,Two-Fiber Bidirectional,KSN-021,13-SL1-1(KSN-023),KSN-023,1-OI2D-1(KSN-023),1.0,0.0,Fiber,G.652,2013/03/18 19:05:27,admin,admin,-,Normal,Enable,-
+f-12,STM-1,--,Two-Fiber Bidirectional,KSN-023,1-OI2D-2(KSN-005),KSN-005,1-OI2D-1(KSN-023),1.0,0.0,Fiber,G.652,2013/03/18 19:12:16,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,UDN-021,2-OI2D-1(NLP-007),NLP-007,1-OI2S-1(UDN-021),1.0,0.0,Fiber,G.652,2013/03/21 07:37:48,admin,admin,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,NLP-002,3-OI2D-1(NLP-007),NLP-007,2-OI2S-1(NLP-002),1.0,0.0,Fiber,G.652,2013/03/21 07:39:31,admin,admin,"use core No. 23,24  ( project ASON ) ระหว่างตู้ 1,2",Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,UDN-003,1-OI2S-1(UDN-025),UDN-025,3-OI2S-1(DIR:UDN-003),1.0,0.0,Fiber,G.652,2013/04/02 17:52:24,admin,admin,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,UDN-006_Ext..1,3-N1SLQ1-3(DIR:UDN-014),UDN-014,1-OI2S-1(UDN-006),1.0,0.0,Fiber,G.652,2013/04/02 18:09:56,admin,admin,-,Normal,Enable,-
+f-4,STM-1,--,Two-Fiber Bidirectional,KSN-018,2-OI2S-1(KSN-001),KSN-001,2-OI2D-1(KSN-018),1.0,0.0,Fiber,G.652,2013/04/05 10:42:33,admin,admin,-,Normal,Enable,-
+f-5,STM-1,--,Two-Fiber Bidirectional,KSN-005,1-OI2D-2(MKM-001),MKM-001,1-OI2D-2(KSN-005),1.0,0.0,Fiber,G.652,2013/04/05 16:40:46,admin,admin,-,Critical,Enable,2012/08/21 22:31:30
+f-87,10GE_WAN,--,Two-Fiber Bidirectional,8031-KKN-026_H,8-N2PEX1-1(Port-1),8032-UDN-004_H,11-N2PEX1-1(PORT-1),1.0,0.0,Fiber,G.652,2013/04/17 13:53:05,admin,admin,-,Normal,Enable,-
+DWDM_Link No.2,STM-1,--,Two-Fiber Bidirectional,NMA-017,4-N1SLQ1-3(DWDM_Route Link 2),NON-002 (109-C-2-EXT1),3-N1SLQ1-2(SDH-2),1.0,0.0,Fiber,G.652,2013/06/05 10:43:01,admin,admin,-,Normal,Enable,-
+f-2,STM-4,--,Two-Fiber Bidirectional,BRK-002 (C-1-2)12floor,7-N1SLD4-1(DIR:AIS/AWN(Metro1050)),C-1-2_BTCAIS_POI_Ext.4,17-OSB4-1(SDH-1),1.0,0.0,Fiber,G.652,2013/07/25 15:10:21,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,SRN-003,11-SL1-1(RET-008),RET-008,1-OI2D-1(SRN-003),1.0,0.0,Fiber,G.652,2011/11/21 06:15:33,Laksiclient,Laksiclient,-,Critical,Enable,2013/08/12 04:56:28
+f-2,STM-1,--,Two-Fiber Bidirectional,RET-008,1-OI2D-2(RET-031),RET-031,2-OI2S-1(RET-008),1.0,0.0,Fiber,G.652,2011/11/21 06:15:40,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-6,STM-1,--,Two-Fiber Bidirectional,SNK-012,1-OI2S-1(SNK-008),SNK-008,3-OI2D-1(SNK012),1.0,0.0,Fiber,G.652,2011/11/22 08:32:46,admin,admin,-,Normal,Enable,-
+f-13,STM-1,--,Two-Fiber Bidirectional,UDN-008_HSPA,1-OI2D-2(UDN022),UDN-022,1-OI2D-1(UDN-008),1.0,0.0,Fiber,G.652,2011/11/24 06:41:02,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-8,STM-1,--,Two-Fiber Bidirectional,UDN-022,1-OI2D-2(UDN-002),UDN-002,1-OI2D-1(UDN-022),1.0,0.0,Fiber,G.652,2011/11/24 07:56:49,admin,admin,-,Normal,Enable,-
+f-14,STM-1,--,Two-Fiber Bidirectional,UDN-002,1-OI2D-2(UDN015),UDN-015_HSPA,1-OI2D-1(UDN-002),1.0,0.0,Fiber,G.652,2011/11/24 08:21:16,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-15,STM-1,--,Two-Fiber Bidirectional,MKM-029,1-OI2D-1(SDH-1),MKM-013,1-OI2S-1(MKM-029),1.0,0.0,Fiber,G.652,2011/11/24 08:55:41,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-12,STM-64,--,Two-Fiber Bidirectional,UDN-006_Ext..1,8-N2SL64-1(to DWDM HUAWEI UDUDNO1602-9-LWF(193.10 THz)),225-NMA-017-EXT3,11-N1SL64-1(to DWDM NMNMAO1609-S3-LWF-Port1(192.30 THZ) To UBN: C),1.0,0.0,Fiber,G.652,2011/11/29 23:49:40,admin,admin,NOT Uswed : Via DWDM K.Chatree,Critical,Enable,2012/05/21 16:04:23
+f-17,STM-1,--,Two-Fiber Bidirectional,UDN-006_Ext..1,3-N1SLQ1-2(UDN-034),UDN-034,1-OI2S-1(UDN006 Ext 1),1.0,0.0,Fiber,G.652,2011/12/09 03:49:08,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-18,STM-1,--,Two-Fiber Bidirectional,UDN-034,2-OI2S-1(UDN025),UDN-025,1-OI2D-1(UDN034),1.0,0.0,Fiber,G.652,2011/12/09 04:31:37,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-20,STM-1,--,Two-Fiber Bidirectional,SNK-028,1-OI2D-2(UDN033),UDN-033,2-OI2S-1(SNK028),1.0,0.0,Fiber,G.652,2011/12/14 04:59:20,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-22,STM-1,--,Two-Fiber Bidirectional,UDN-025,1-OI2D-2(UDN033),UDN-033,1-OI2S-1(UDN025),1.0,0.0,Fiber,G.652,2011/12/14 06:02:37,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-12,STM-1,--,Two-Fiber Bidirectional,KKN-015_Ext.1_(3GsHSPA),4-N1SLQ1-2(KKN005),KKN-005,1-OI2D-1(KKN015-Ext1),1.0,0.0,Fiber,G.652,2011/12/22 06:05:01,admin,admin,"use core No.15,16 ( project kk-chiengmai 24 core ) BJ xxxx   ( project thai-sato )",Normal,Enable,-
+f-23,STM-1,--,Two-Fiber Bidirectional,KKN-039_HSPA,2-OI2S-1(KKN030),KKN-030,1-OI2S-1(KKN039),1.0,0.0,Fiber,G.652,2011/12/27 04:46:40,Laksiclient,Laksiclient,"use core No.5,6 ( project kk-ubon 24 core ) BJ ----",Normal,Enable,-
+f-4,STM-1,--,Two-Fiber Bidirectional,NMA-062,2-OI2S-1(To-From NMA-002),NMA-002,1-OI2D-2(To-From NMA-062),1.0,0.0,Fiber,G.652,2012/01/10 03:42:56,admin,admin,-,Normal,Enable,-
+f-5,STM-1,--,Two-Fiber Bidirectional,NMA-062,1-OI2S-1(To-From NMA-020),NMA-020,16-N1SL1-1(To-From NMA-062),1.0,0.0,Fiber,G.652,2012/01/10 03:48:18,admin,admin,-,Normal,Enable,-
+f-24,STM-1,--,Two-Fiber Bidirectional,KKN-030,2-OI2S-1(MKM027),MKM-027,1-OI2S-1(KKN-030),1.0,0.0,Fiber,G.652,2012/01/13 06:12:55,Laksiclient,Laksiclient,"BJ core No. xxxx  ( project thai-sato )  main use core No.5,6 ( project kk-sarakarm 24 core )",Normal,Enable,-
+f-26,STM-1,--,Two-Fiber Bidirectional,NKI-008,2-OI2S-1(NKI-014),NKI-014,1-OI2D-1(NKI-008),1.0,0.0,Fiber,G.652,2012/01/16 10:41:49,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-27,STM-1,--,Two-Fiber Bidirectional,KKN-005,1-OI2D-2(KKN044),KKN-044,1-OI2S-1(KKN005),1.0,0.0,Fiber,G.652,2012/01/26 08:24:00,Laksiclient,Laksiclient,"use core No.15,16 ( project kk-chiengmai 24 core )          BJ in 1.2 / out 3,4   ( project thai-sato )",Normal,Enable,-
+f-12,STM-1,--,Two-Fiber Bidirectional,SNK-027_outdoor,1-OI2D-2(SNK007),SNK-007,1-OI2D-1(SNK-027),1.0,0.0,Fiber,G.652,2012/01/30 07:41:37,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-13,STM-1,--,Two-Fiber Bidirectional,KKN-025,1-OI2D-2(KKN-010),KKN-010,1-OI2D-1(KKN-025),1.0,0.0,Fiber,G.652,2012/02/01 04:13:50,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-28,STM-1,--,Two-Fiber Bidirectional,KKN-010,1-OI2D-2(KKN-020),KKN-020,1-OI2D-1(KKN-010),1.0,0.0,Fiber,G.652,2012/02/01 05:41:32,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-6,STM-1,--,Two-Fiber Bidirectional,NMA-017,2-N1SLQ1-2(To-From NMA-026),NMA-026,2-OI2D-1(To-From NMA-017),1.0,0.0,Fiber,G.652,2012/02/07 01:40:05,admin,admin,-,Normal,Enable,-
+f-7,STM-4,--,Two-Fiber Bidirectional,NMA-026,1-OI4-1(To-From NMA-007),NMA-007,1-OI4-1(To-From NMA-026),1.0,0.0,Fiber,G.652,2012/02/07 01:42:52,admin,admin,-,Normal,Enable,-
+f-8,STM-4,--,Two-Fiber Bidirectional,NMA-007,2-OI4-1(To-From NMA-006),NMA-006,1-OI4-1(To-From NMA-007),1.0,0.0,Fiber,G.652,2012/02/07 01:44:31,admin,admin,-,Normal,Enable,-
+f-9,STM-4,--,Two-Fiber Bidirectional,NMA-006,2-OI4-1(To-From NMA-011),NMA-011,1-OI4-1(To-From NMA-006),1.0,0.0,Fiber,G.652,2012/02/07 01:46:50,admin,admin,-,Normal,Enable,-
+f-10,STM-1,--,Two-Fiber Bidirectional,NMA-011,2-OI2D-1(To-From NMA-001),NMA-001,1-OI2S-1(To-From NMA-011),1.0,0.0,Fiber,G.652,2012/02/07 01:49:37,admin,admin,-,Normal,Enable,-
+f-11,STM-1,--,Two-Fiber Bidirectional,NMA-001,2-OI2S-1(To-From NMA-022),NMA-022,2-OI2S-1(To-From NMA-001),1.0,0.0,Fiber,G.652,2012/02/07 01:51:38,admin,admin,-,Normal,Enable,-
+f-12,STM-1,--,Two-Fiber Bidirectional,NMA-022,1-OI2S-1(To-From NMA-021),NMA-021,15-N1SL1-1(To-From NMA-022),1.0,0.0,Fiber,G.652,2012/02/07 01:52:26,admin,admin,-,Normal,Enable,-
+f-30,STM-1,--,Two-Fiber Bidirectional,MKM-006,7-N1SLQ1-1(DIR:MKM-025),MKM-025,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2012/02/10 04:28:41,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-34,STM-1,--,Two-Fiber Bidirectional,NKI-002,1-OI2D-2(SDH-2),NKI-007,1-OI2D-2(SDH-2),1.0,0.0,Fiber,G.652,2012/02/10 06:20:04,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-35,STM-1,--,Two-Fiber Bidirectional,UDN-020,1-OI2D-2(SDH-2),UDN-025,2-OI2S-1(UDN-020),1.0,0.0,Fiber,G.652,2012/02/10 06:20:34,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-36,STM-1,--,Two-Fiber Bidirectional,NKI-004,2-OI2S-1(SDH-1),NKI-007,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2012/02/10 06:22:08,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-9,STM-4,--,Two-Fiber Bidirectional,C-2-Ext.2-BFKT_(OSN3500),6-N1SLD4-1(SDH-1),1048-C-2_Ext.1_3G,17-OSB4-1(SDH-1),1.0,0.0,Fiber,G.652,2012/02/13 03:43:41,admin,admin,-,Normal,Enable,-
+f-10,STM-4,--,Two-Fiber Bidirectional,1048-C-2_Ext.1_3G,18-OSB4-1(SDH-1),1048-C-2_Ext.2_3G,17-OSB4-1(SDH-1),1.0,0.0,Fiber,G.652,2012/02/13 03:46:01,admin,admin,-,Normal,Enable,-
+f-11,STM-4,--,Two-Fiber Bidirectional,1048-C-2_Ext.2_3G,18-OSB4-1(SDH-1),1048-C-2_Ext.3_3G,17-OSB4-1(SDH-1),1.0,0.0,Fiber,G.652,2012/02/13 03:46:06,admin,admin,-,Normal,Enable,-
+f-12,STM-4,--,Two-Fiber Bidirectional,1048-C-2_Ext.3_3G,18-OSB4-1(SDH-1),C-2-Ext.2-BFKT_(OSN3500),6-N1SLD4-2(SDH-2),1.0,0.0,Fiber,G.652,2012/02/13 03:46:12,admin,admin,-,Normal,Enable,-
+f-13,STM-4,--,Two-Fiber Bidirectional,NMA-046,4-SL4-1(To-From NMA-029),NMA-029,2-OI4-1(To-From NMA-046),1.0,0.0,Fiber,G.652,2012/02/16 04:01:53,admin,admin,-,Normal,Enable,-
+f-14,STM-4,--,Two-Fiber Bidirectional,NMA-029,1-OI4-1(To-From CPM-005),CPM-005,1-OI4-1(To-From NMA-029),1.0,0.0,Fiber,G.652,2012/02/16 07:23:30,admin,admin,-,Normal,Enable,-
+f-16,STM-1,--,Two-Fiber Bidirectional,CPM-020,2-OI2S-1(To-From CPM-025),CPM-025,1-OI2D-1(To-From CPM020),1.0,0.0,Fiber,G.652,2012/02/16 08:47:28,admin,admin,-,Normal,Enable,-
+f-18,STM-1,--,Two-Fiber Bidirectional,CPM-010,3-SL1-1(To-From CPM-020),CPM-020,1-OI2S-1(To-From CPM-010),1.0,0.0,Fiber,G.652,2012/02/17 02:02:38,admin,admin,-,Normal,Enable,-
+f-19,STM-4,--,Two-Fiber Bidirectional,CPM-010,11-SL4-1(To-From CPM-021),CPM-021,2-OI4-1(To-From CPM-010),1.0,0.0,Fiber,G.652,2012/02/17 05:25:53,admin,admin,-,Normal,Enable,-
+f-21,STM-4,--,Two-Fiber Bidirectional,CPM-010,12-SL4-1(To-From CPM-019),CPM-019,1-OI4-1(To-From CPM-010),1.0,0.0,Fiber,G.652,2012/02/17 05:54:24,admin,admin,-,Normal,Enable,-
+f-37,STM-1,--,Two-Fiber Bidirectional,MKM-006,7-N1SLQ1-2(DIR:MKM-005),MKM-005,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2012/02/21 06:34:11,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-23,STM-4,--,Two-Fiber Bidirectional,NMA-024,1-OI4-1(To-From NMA-032),NMA-032,2-OI4-1(To-From NMA-024),1.0,0.0,Fiber,G.652,2012/02/22 01:15:58,admin,admin,-,Normal,Enable,-
+f-24,STM-4,--,Two-Fiber Bidirectional,NMA-032,1-OI4-1(To-From CPM-019),CPM-019,2-OI4-1(To-From NMA-032),1.0,0.0,Fiber,G.652,2012/02/22 01:16:10,admin,admin,-,Normal,Enable,-
+f-25,STM-1,--,Two-Fiber Bidirectional,NMA-021,16-N1SL1-1(To-From NMA-008),NMA-008,1-OI2D-2(To-From NMA-021),1.0,0.0,Fiber,G.652,2012/02/22 01:27:37,admin,admin,-,Normal,Enable,-
+f-78,STM-1,--,Two-Fiber Bidirectional,KKN-029_HSPA,1-OI2D-2(KKN042),KKN-042,1-OI2D-1(KKN-029),1.0,0.0,Fiber,G.652,2012/02/28 04:28:10,admin,admin,"use core No. 1,2 ( project thai-sato 24 core )",Normal,Enable,-
+f-26,STM-1,--,Two-Fiber Bidirectional,NMA-069,1-OI2D-1(SDH-1),NMA-065_HSPA,3-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2012/03/12 03:29:13,admin,admin,-,Normal,Enable,-
+f-27  off system,STM-1,--,Two-Fiber Bidirectional,UBN-038,2-OI2S-1(To-From UBN-042),UBN-042  off system,1-OI2S-1(To-From UBN-038),1.0,0.0,Fiber,G.652,2012/03/21 02:04:19,admin,admin,-,Critical,Enable,2013/08/23 09:57:36
+f-28,STM-1,--,Two-Fiber Bidirectional,UBN-011,4-SD1-1(To-From UBN-013),UBN-013,1-OI2S-1(To-From UBN-011),1.0,0.0,Fiber,G.652,2012/03/21 08:10:37,admin,admin,-,Normal,Enable,-
+f-29,STM-1,--,Two-Fiber Bidirectional,UBN-011,4-SD1-2(To-From UBN-020),UBN-020,1-OI2S-1(To-From UBN-011),1.0,0.0,Fiber,G.652,2012/03/21 08:31:01,admin,admin,-,Normal,Enable,-
+f-14,STM-1,--,Two-Fiber Bidirectional,SNK-023,2-OI2D-1(SNK-024),SNK-024,1-OI2D-2(SDH-2),1.0,0.0,Fiber,G.652,2012/04/10 08:46:22,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-15,STM-1,--,Two-Fiber Bidirectional,SNK-007,1-OI2D-2(SNK-024),SNK-024,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2012/04/10 08:47:05,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-5,STM-4,--,Two-Fiber Bidirectional,BRK-002 (C-1-2)12floor,7-N1SLD4-2(DIR:POI AIS),C-1-2_BTCAIS_POI_Ext.1,17-OSB4-1(SDH-1),1.0,0.0,Fiber,G.652,2012/04/11 07:57:57,admin,admin,-,Normal,Enable,-
+f-6,STM-4,--,Two-Fiber Bidirectional,C-1-2_BTCAIS_POI_Ext.1,18-OSB4-1(SDH-1),C-1-2_BTCAIS_POI_Ext.2,17-OSB4-1(SDH-1),1.0,0.0,Fiber,G.652,2012/04/11 08:00:08,admin,admin,-,Normal,Enable,-
+f-17,STM-1,--,Two-Fiber Bidirectional,NKI-014,2-OI2S-1(NKI-002),UDN-020,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2012/04/26 11:33:05,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-18,STM-1,--,Two-Fiber Bidirectional,NKI-014,1-OI2D-2(UDN-020),NKI-002,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2012/04/26 11:33:35,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-13,STM-1,--,Two-Fiber Bidirectional,KKN-020,1-OI2D-2(SDH-2),CPM-002,1-OI2D-2(to KKN-020),1.0,0.0,Fiber,G.652,2012/05/02 01:17:46,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-23,STM-1,--,Two-Fiber Bidirectional,KKN-044,2-OI2S-1(KKN027),KKN-027,1-OI2S-1(KKN-044),1.0,0.0,Fiber,G.652,2012/05/02 07:33:51,Laksiclient,Laksiclient,"use core No.15,16 ( project kk-chiengmai 24 core )          BJ in 1.2 / out 7,8   ( project thai-sato )",Normal,Enable,-
+f-27,STM-1,--,Two-Fiber Bidirectional,KKN-027,2-OI2D-2(KKN-009),KKN-009,2-OI2D-1(KKN-027),1.0,0.0,Fiber,G.652,2012/05/02 07:46:06,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-14,STM-1,--,Two-Fiber Bidirectional,KKN-027,2-OI2D-1(KKN-035),KKN-035,1-OI2S-1(KKN-027),1.0,0.0,Fiber,G.652,2012/05/03 02:39:56,Laksiclient,Laksiclient,"use core No.15,16 ( project kk-chiengmai 24 core )          BJ in 1.2 / out 7,8   ( project thai-sato )",Normal,Enable,-
+f-4,STM-1,--,Two-Fiber Bidirectional,KKN-003_GW_1418_No.2,14-SD1-1(KKN0024_TMV),KKN0024_TMV,3-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2012/05/02 22:42:24,admin,admin,-,Normal,Enable,-
+f-5,STM-1,--,Two-Fiber Bidirectional,KKN-003_GW_1418_No.2,14-SD1-2(KKN0022_TMV),KKN0022_TMV,3-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2012/05/02 22:42:31,admin,admin,-,Normal,Enable,-
+f-19,STM-1,--,Two-Fiber Bidirectional,KKN-035,2-OI2S-1(KKN-003),KKN-003_GW_1418_No.2,13-SD1-1(KKN035),1.0,0.0,Fiber,G.652,2012/05/03 07:46:45,Laksiclient,Laksiclient,"use core No.15,16 ( project kk-chiengmai 24 core )",Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,KKN-029_HSPA,2-OI2S-1(KKN001),KKN-001,1-OI2S-1(KKN-029),1.0,0.0,Fiber,G.652,2012/05/08 10:23:56,Laksiclient,Laksiclient,"use core No.5,6 ( project kk-banpai 24 core ) BJ in 5,6 out 1,2 ( project thai-sato )",Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,NPM-004,2-OI2S-1(NPM010),NPM-010,1-OI2S-1(NPM-004),1.0,0.0,Fiber,G.652,2012/05/08 10:26:08,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-20,STM-1,--,Two-Fiber Bidirectional,KKN-001,2-OI2D-1(KKN-052),KKN-052,1-OI2D-1(KKN-001),1.0,0.0,Fiber,G.652,2012/05/09 05:01:38,Laksiclient,Laksiclient,"use core No.5,6 ( project kk-banpai 24 core ) BJ in 1,2 out 7,8 ( project thai-sato )",Normal,Enable,-
+f-25,STM-1,--,Two-Fiber Bidirectional,MKM-016,1-OI2D-2(SDH-2),MKM-007,3-SD1-1(MKM016),1.0,0.0,Fiber,G.652,2012/05/10 03:31:50,Laksiclient,Laksiclient,"use core No. 1,2 ( project thai-sato 24 core )",Normal,Enable,-
+f-26,STM-1,--,Two-Fiber Bidirectional,KKN-042,1-OI2D-2(MKM-016),MKM-016,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2012/05/10 03:32:04,Laksiclient,Laksiclient,"use core No. 1,2 ( project thai-sato 24 core )",Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,SNK-008,3-OI2D-2(SNK-017),SNK-017,1-OI2D-2(DIR:SNK-018),1.0,0.0,Fiber,G.652,2012/05/10 04:04:47,admin,admin,"use core 21,22 ( project Ason 24 core )",Normal,Enable,-
+f-27,STM-1,--,Two-Fiber Bidirectional,SNK-017,1-OI2D-1(SNK-002),SNK-002,1-OI2D-1(SNK-017),1.0,0.0,Fiber,G.652,2012/05/10 05:42:18,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-28,STM-1,--,Two-Fiber Bidirectional,SNK-002,1-OI2D-2(NKI-001),NKI-001,2-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2012/05/10 06:47:16,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-31,STM-1,--,Two-Fiber Bidirectional,UDN-004_HSPA,13-SL1-1(KKN024),KKN-024,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2012/05/11 06:28:59,Laksiclient,Laksiclient,"use Core No.19,20 (cable project kk-ud 24 Core)",Normal,Enable,-
+f-32,STM-1,--,Two-Fiber Bidirectional,KKN-024,2-OI2S-1(SDH-1),KKN-049,1-OI2S-1(KKN-024),1.0,0.0,Fiber,G.652,2012/05/11 06:33:48,Laksiclient,Laksiclient,"use core No.19,20 ( Fiber project kk-ud 24 core )  /  use Core No.17,18 ( cable project Ason 24 core )",Normal,Enable,-
+f-33,STM-1,--,Two-Fiber Bidirectional,KKN-049,2-OI2S-1(KKN-051),KKN-051,1-OI2S-1(KKN-049),1.0,0.0,Fiber,G.652,2012/05/11 06:34:04,Laksiclient,Laksiclient,"Use core No.17,18 ( Project Ason 24 core )",Normal,Enable,-
+f-34,STM-1,--,Two-Fiber Bidirectional,NKI-001,2-OI2D-2(SDH-2),NKI-019,1-OI2D-1(NKI-001),1.0,0.0,Fiber,G.652,2012/05/23 07:07:43,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-35,STM-1,--,Two-Fiber Bidirectional,KKN-052,1-OI2D-2(KKN-004),KKN-004_GW_ID1418_No.1,13-SL1-1(SDH-1),1.0,0.0,Fiber,G.652,2012/05/24 07:03:48,Laksiclient,Laksiclient,"use core No.5,6 ( project kk-banpai 24 core ) BJ in 3,4 out 7,8 ( project thai-sato )",Normal,Enable,-
+f-36,STM-1,--,Two-Fiber Bidirectional,KKN-037,1-OI2S-1(SDH-1),NMA-008,1-OI2D-1(KKN-037),1.0,0.0,Fiber,G.652,2012/05/25 06:31:08,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-37,STM-1,--,Two-Fiber Bidirectional,KKN-037,2-OI2S-1(SDH-1),KKN-036,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2012/05/25 06:32:35,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-38,STM-1,--,Two-Fiber Bidirectional,KKN-036,2-OI2S-1(SDH-1),KKN-022,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2012/05/25 06:33:53,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-39,STM-1,--,Two-Fiber Bidirectional,KKN-025,1-OI2D-1(KKN-004),KKN-022,2-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2012/05/25 06:35:03,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-40,STM-1,--,Two-Fiber Bidirectional,NKI-004,3-OI2S-1(NKI-011),NKI-011,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2012/05/28 11:24:43,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,KKN-051,2-OI2S-1(KKN-002),KKN-002,1-OI2D-1(KKN-051),1.0,0.0,Fiber,G.652,2012/06/12 04:29:11,Laksiclient,Laksiclient,"Use core No.17,18 ( Project Ason 24 core )",Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,MKM-003,3-OI2D-1(MKM-010),MKM-010,1-OI2D-1(MKM-003),1.0,0.0,Fiber,G.652,2012/06/19 00:23:38,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-31,STM-1,--,Two-Fiber Bidirectional,NMA-018,3-SD1-1(To-From NMA-023),NMA-023,2-OI2S-1(To-From NMA-018),1.0,0.0,Fiber,G.652,2012/06/21 06:31:39,admin,admin,-,Normal,Enable,-
+f-39,STM-1,--,Two-Fiber Bidirectional,NMA-017,2-N1SLQ1-1(To-From NMA-036),NMA-036,1-OI2D-1(To-From NMA-017),1.0,0.0,Fiber,G.652,2012/06/22 03:06:46,admin,admin,-,Normal,Enable,-
+f-40,STM-1,--,Two-Fiber Bidirectional,NMA-036,1-OI2D-2(To-From NMA-002),NMA-002,1-OI2D-1(To-From NMA-036),1.0,0.0,Fiber,G.652,2012/06/22 03:06:57,admin,admin,-,Normal,Enable,-
+f-5,STM-1,--,Two-Fiber Bidirectional,KKN-045,1-OI2D-2(NLP-006),NLP-006,1-OI2S-1(KKN-045),1.0,0.0,Fiber,G.652,2012/06/29 04:10:38,noppadolt,noppadolt,-,Normal,Enable,-
+f-6,STM-1,--,Two-Fiber Bidirectional,NLP-006,2-OI2S-1(NLP-002),NLP-002,2-OI2D-2(NLP-006),1.0,0.0,Fiber,G.652,2012/06/29 04:10:57,noppadolt,noppadolt,-,Normal,Enable,-
+f-7,STM-1,--,Two-Fiber Bidirectional,C-2-Ext.2-BFKT_(OSN3500),1-N1SLQ1-3(CAT_Outgoing),C-2 M1000POI_2,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2012/07/05 02:36:54,admin,admin,-,Normal,Enable,-
+f-10,STM-1,--,Two-Fiber Bidirectional,MDH-004,1-OI2D-1(MDH-003),MDH-003,2-OI2D-2(To MDH-004),1.0,0.0,Fiber,G.652,2012/07/04 20:27:20,admin,admin,-,Critical,Enable,2013/07/26 06:09:11
+f-2,STM-1,--,Two-Fiber Bidirectional,SNK-022,1-OI2D-2(SNK-030),SNK-030,1-OI2D-1(SNK-022),1.0,0.0,Fiber,G.652,2012/07/06 02:27:34,admin,admin,-,Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,SNK-030,1-OI2D-2(SNK-029),SNK-029,1-OI2D-1(SNK-030),1.0,0.0,Fiber,G.652,2012/07/06 02:29:24,admin,admin,-,Critical,Enable,2013/05/23 18:00:20
+f-44,STM-4,--,Two-Fiber Bidirectional,CPM-021,1-OI4-1(To-From CPM-003),CPM-003,2-OI4-1(To-From CPM-021),1.0,0.0,Fiber,G.652,2012/07/11 05:15:00,admin,admin,-,Normal,Enable,-
+f-45,STM-4,--,Two-Fiber Bidirectional,CPM-003,1-OI4-1(To-From CPM-002),CPM-002,2-OI4-1(To-From CPM-003),1.0,0.0,Fiber,G.652,2012/07/11 05:17:21,admin,admin,-,Normal,Enable,-
+f-8,STM-1,--,Two-Fiber Bidirectional,KKN-003_GW_1418_No.2,13-SD1-2(KKN034),KKN-034,1-OI2S-1(KKN-003),1.0,0.0,Fiber,G.652,2012/07/12 06:28:36,noppadolt,noppadolt,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,MKM-027,2-OI2S-1(MKM002),MKM-002,1-OI2S-1(MKM-027),1.0,0.0,Fiber,G.652,2012/07/17 05:42:16,noppadolt,noppadolt,"use core No.21,22 ( project kk-sarakarm 24 core ) BJ in core No.5,6 / out core No.11,12  ( project thai-sato )",Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,MKM-002,2-OI2D-1(DIR:MKM-022),MKM-022,1-OI2D-2(MKM-002),1.0,0.0,Fiber,G.652,2012/07/17 06:02:39,noppadolt,noppadolt,"use core No.21,22,( project kk-mahasarakarm 24 core ) BJ out core NO.11,12,/ in core No.1,2 ( project thai-sato ) ระยะ 12 Km",Normal,Enable,-
+f-11,STM-4,--,Two-Fiber Bidirectional,MKM-008,4-SL4-1(MKM-023),MKM-023,1-OI4-1(MKM-020),1.0,0.0,Fiber,G.652,2012/07/18 03:51:35,noppadolt,noppadolt,"use core No.15,16 ( project kk-sarakarm) BJ out core No.9,10 / in core No.3,4",Normal,Enable,-
+f-12,STM-4,--,Two-Fiber Bidirectional,MKM-023,2-OI4-1(MKM-008),MKM-020,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2012/07/18 03:53:49,noppadolt,noppadolt,"use core NO.15,16 ( project kk-sarakarm ) BJ out 5,6 / in core 3,4",Normal,Enable,-
+f-15,STM-1,--,Two-Fiber Bidirectional,MKM-024,1-OI2D-1(SDH-1),MKM-013,2-OI2S-1(MKM-024),1.0,0.0,Fiber,G.652,2012/07/18 05:51:32,noppadolt,noppadolt,-,Normal,Enable,-
+f-16,STM-1,--,Two-Fiber Bidirectional,MKM-005,2-OI2S-1(MKM-024),MKM-024,1-OI2D-2(SDH-2),1.0,0.0,Fiber,G.652,2012/07/18 05:53:33,noppadolt,noppadolt,-,Normal,Enable,-
+f-17,STM-1,--,Two-Fiber Bidirectional,MKM-010,1-OI2D-2(MKM-012),MKM-012,1-OI2D-1(MKM-010),1.0,0.0,Fiber,G.652,2012/07/18 06:01:48,noppadolt,noppadolt,-,Normal,Enable,-
+f-19,STM-1,--,Two-Fiber Bidirectional,KKN-008,1-OI2D-1(KKN-034),KKN-034,2-OI2S-1(KKN-008),1.0,0.0,Fiber,G.652,2012/07/18 09:03:51,noppadolt,noppadolt,-,Normal,Enable,-
+f-20,STM-1,--,Two-Fiber Bidirectional,LEI-023,1-OI2D-2(KKN-008),KKN-008,1-OI2D-2(LEI-023),1.0,0.0,Fiber,G.652,2012/07/18 23:52:57,noppadolt,noppadolt,-,Normal,Enable,-
+f-5,STM-1,--,Two-Fiber Bidirectional,RET-006,3-OI2D-2(RET-028),RET-028,2-OI2S-1(RET-006),1.0,0.0,Fiber,G.652,2012/07/19 02:58:28,noppadolt,noppadolt,-,Normal,Enable,-
+f-6,STM-1,--,Two-Fiber Bidirectional,RET-028,1-OI2S-1(KSN-002),KSN-002,2-OI2D-1(RET-028),1.0,0.0,Fiber,G.652,2012/07/19 03:01:21,noppadolt,noppadolt,-,Normal,Enable,-
+f-23,STM-1,--,Two-Fiber Bidirectional,MKM-012,1-OI2D-2(MKM-004),MKM-004,3-SL1-1(SDH-1),1.0,0.0,Fiber,G.652,2012/07/19 06:21:10,noppadolt,noppadolt,-,Normal,Enable,-
+f-24,STM-1,--,Two-Fiber Bidirectional,SNK-023,2-OI2D-2(SNK-014),SNK-014,1-OI2D-1(SNK-023),1.0,0.0,Fiber,G.652,2012/07/19 08:14:17,noppadolt,noppadolt,-,Normal,Enable,-
+f-7,STM-1,--,Two-Fiber Bidirectional,RET-007,13-SD1-1(RET-015),RET-015,1-OI2S-1(RET007),1.0,0.0,Fiber,G.652,2012/07/20 06:59:33,noppadolt,noppadolt,"use core NO.19,20 ( project kk-ubon 24 core ) BJ 1,2,3,4 ( thai sato )",Normal,Enable,-
+f-9,STM-1,--,Two-Fiber Bidirectional,RET-015,2-OI2S-1(KSN-001),KSN-001,2-OI2D-2(RET-015),1.0,0.0,Fiber,G.652,2012/07/20 07:07:22,noppadolt,noppadolt,"use core NO.19,20 ( project kk-ubon 24 core ) BJ 1,2(กมราไสบ)3,4(บ้านปาผา) ( thai sato )",Normal,Enable,-
+f-11,STM-1,--,Two-Fiber Bidirectional,KSN-013,1-OI2D-2(SDH-2),KSN-006,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2012/07/20 08:31:21,noppadolt,noppadolt,-,Normal,Enable,-
+f-28,STM-1,--,Two-Fiber Bidirectional,KSN-021,4-SL1-1(KSN-025),KSN-025,2-OI2D-1(KSN021),1.0,0.0,Fiber,G.652,2012/07/23 01:15:21,noppadolt,noppadolt,-,Critical,Enable,2013/05/27 17:44:14
+f-30,STM-4,--,Two-Fiber Bidirectional,MKM-020,2-OI4-1(SDH-1),MKM-007,4-SL4-1(SDH-1),1.0,0.0,Fiber,G.652,2012/07/23 06:55:20,noppadolt,noppadolt,"use core No.15,16 ( project kk-sarakarm 24 core ) BJ out core No.9,10 / in core No. 3,4 )",Normal,Enable,-
+f-31,STM-1,--,Two-Fiber Bidirectional,KSN-007,1-OI2D-1(KSN-025),KSN-025,2-OI2D-2(KSN-007),1.0,0.0,Fiber,G.652,2012/07/24 07:44:22,noppadolt,noppadolt,-,Normal,Enable,-
+f-32,STM-4,--,Two-Fiber Bidirectional,KKN-003_GW_1418_No.2,4-SL4-1(NLP003),KKN-017,1-OI4D-1(SDH-1),1.0,0.0,Fiber,G.652,2012/07/27 08:48:50,noppadolt,noppadolt,-,Normal,Enable,-
+f-33,STM-4,--,Two-Fiber Bidirectional,KKN-017,1-OI4D-2(SDH-2),NLP-003,1-OI4D-2(KKN017),1.0,0.0,Fiber,G.652,2012/07/27 08:52:37,noppadolt,noppadolt,-,Normal,Enable,-
+f-34,STM-1,--,Two-Fiber Bidirectional,KSN-009,3-OI2S-1(KSN016),KSN-016,1-OI2S-1(KSN-009),1.0,0.0,Fiber,G.652,2012/07/28 04:10:53,noppadolt,noppadolt,-,Critical,Enable,2013/06/17 13:19:23
+f-1,STM-1,--,Two-Fiber Bidirectional,RET-002,1-OI2S-1(RET-007),RET-007,13-SD1-2(RET-002),1.0,0.0,Fiber,G.652,2012/07/30 04:18:34,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,MKM-008,12-SD1-1(MKM-009),MKM-009_Spacial_Site,1-OI2D-1(DIR:MKM-008),1.0,0.0,Fiber,G.652,2012/07/30 08:17:55,admin,admin,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,MKM-009_Spacial_Site,1-OI2D-2(DIR:MKM-028),MKM-028_Y52,1-OI2D-1(MKM-009),1.0,0.0,Fiber,G.652,2012/07/30 08:20:52,admin,admin,"use core No.3,4 ( project out-door Expansion )",Critical,Enable,2013/06/07 13:24:59
+f-13,STM-1,--,Two-Fiber Bidirectional,NPM-010,2-OI2S-1(SDH-1),NPM-001,1-OI2D-1(NPM-010),1.0,0.0,Fiber,G.652,2012/07/31 09:37:23,noppadolt,noppadolt,-,Normal,Enable,-
+f-14,STM-1,--,Two-Fiber Bidirectional,NPM-001,2-OI2D-2(NPM-006),NPM-006,1-OI2D-2(NPM-001),1.0,0.0,Fiber,G.652,2012/07/31 09:39:59,noppadolt,noppadolt,-,Normal,Enable,-
+f-15,STM-1,--,Two-Fiber Bidirectional,NPM-006,1-OI2D-1(SNK-001),SNK-001,12-SD1-2(NPM-006),1.0,0.0,Fiber,G.652,2012/07/31 09:42:35,noppadolt,noppadolt,-,Normal,Enable,-
+f-36,STM-1,--,Two-Fiber Bidirectional,NPM-008,1-OI2D-2(NPM-023),NPM-023,1-OI2D-1(NPM-008),1.0,0.0,Fiber,G.652,2012/09/13 23:40:38,noppadolt,noppadolt,-,Normal,Enable,-
+f-37,STM-1,--,Two-Fiber Bidirectional,MDH-009,3-SD1-1(MDH-011),MDH-011,1-OI2S-1(DIR:MDH009),1.0,0.0,Fiber,G.652,2012/09/13 23:41:27,noppadolt,noppadolt,-,Normal,Enable,-
+f-38,STM-1,--,Two-Fiber Bidirectional,MDH-011,2-OI2S-1(DIR:MDH001),MDH-001,1-OI2D-1(DIR:MDH011),1.0,0.0,Fiber,G.652,2012/09/13 23:41:57,noppadolt,noppadolt,-,Critical,Enable,2013/07/17 16:51:31
+f-39,STM-1,--,Two-Fiber Bidirectional,MDH-009,3-SD1-2(MDH-010),MDH-010,1-OI2S-1(DIR:MDH009),1.0,0.0,Fiber,G.652,2012/09/13 23:42:17,noppadolt,noppadolt,-,Normal,Enable,-
+f-41,STM-1,--,Two-Fiber Bidirectional,NPM-002,13-SD1-1(DIR:NPM-014),NPM-014,1-OI2S-1(NPM-002),1.0,0.0,Fiber,G.652,2012/09/13 23:44:21,noppadolt,noppadolt,-,Normal,Enable,-
+f-46,STM-1,--,Two-Fiber Bidirectional,NKI-010_HSPA,2-OI2S-1(NKI-017),NKI-017,1-OI2D-1(NKI-010),1.0,0.0,Fiber,G.652,2012/09/13 23:47:02,noppadolt,noppadolt,-,Normal,Enable,-
+f-47,STM-1,--,Two-Fiber Bidirectional,NKI-006,2-OI2S-1(NKI-015),NKI-015,1-OI2S-1(NKI-006),1.0,0.0,Fiber,G.652,2012/09/13 23:47:31,noppadolt,noppadolt,-,Normal,Enable,-
+f-48,STM-1,--,Two-Fiber Bidirectional,KKN0059,3-SL1D-2(KKN-019),KKN-019,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2012/09/13 23:48:33,noppadolt,noppadolt,-,Normal,Enable,-
+f-49,STM-1,--,Two-Fiber Bidirectional,KKN-019,2-OI2S-1(SDH-1),KKN-045,1-OI2D-1(KKN-019),1.0,0.0,Fiber,G.652,2012/09/13 23:48:45,noppadolt,noppadolt,-,Normal,Enable,-
+f-50,STM-1,--,Two-Fiber Bidirectional,KKN-038_HSPA,2-OI2S-1(KKN-031),KKN-031,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2012/09/13 23:49:19,noppadolt,noppadolt,"use core No.13,14 ( project kk-nampong 24 core ) BJ in 1,2 out 7,8",Normal,Enable,-
+f-51,STM-1,--,Two-Fiber Bidirectional,KKN-002,1-OI2D-2(KKN-050),KKN-050,1-OI2S-1(KKN-002),1.0,0.0,Fiber,G.652,2012/09/13 23:55:01,noppadolt,noppadolt,"use core No. 3,4  ( project 3G-BFKT 12 core ) change main core 11,12 BJ core 9,10",Normal,Enable,-
+f-52,STM-1,--,Two-Fiber Bidirectional,KKN-050,2-OI2S-1(KSN-003),KSN-003,1-OI2D-1(KKN-050),1.0,0.0,Fiber,G.652,2012/09/13 23:55:14,noppadolt,noppadolt,"use core No. 5,6  ( project 3G-BFKT 12 core )",Normal,Enable,-
+f-53,STM-1,--,Two-Fiber Bidirectional,KSN-003,1-OI2D-2(KSN-003),UDN-017,1-OI2D-1(KSN-003),1.0,0.0,Fiber,G.652,2012/09/13 23:55:47,noppadolt,noppadolt,"use core No.23,24(project Ason 24 core)",Critical,Enable,2013/08/24 21:54:43
+f-54,STM-1,--,Two-Fiber Bidirectional,UDN-017,1-OI2D-2(UDN-029),UDN-029,1-OI2S-1(UDN-017),1.0,0.0,Fiber,G.652,2012/09/13 23:56:00,noppadolt,noppadolt,-,Normal,Enable,-
+f-55,STM-1,--,Two-Fiber Bidirectional,KKN-002,2-OI2S-1(KSN-022),KSN-022,1-OI2D-1(KKN-002),1.0,0.0,Fiber,G.652,2012/09/13 23:56:25,noppadolt,noppadolt,-,Normal,Enable,-
+f-56,STM-1,--,Two-Fiber Bidirectional,KSN-022,1-OI2D-2(KSN-012),KSN-012,1-OI2D-1(KSN-022),1.0,0.0,Fiber,G.652,2012/09/13 23:56:54,noppadolt,noppadolt,-,Normal,Enable,-
+f-59,STM-1,--,Two-Fiber Bidirectional,NPM-014,2-OI2S-1(SDH-1),MDH-010,2-OI2S-1(DIR:NPM014),1.0,0.0,Fiber,G.652,2012/09/14 00:02:47,noppadolt,noppadolt,-,Normal,Enable,-
+f-60,STM-1,--,Two-Fiber Bidirectional,MDH-001,1-OI2D-2(MDH-006),MDH-006,2-OI2D-1(MDH-001),1.0,0.0,Fiber,G.652,2012/09/14 00:25:30,noppadolt,noppadolt,-,Critical,Enable,2013/08/07 18:04:56
+f-61,STM-1,--,Two-Fiber Bidirectional,KSN-021,14-SD1-2(KSN-018),KSN-018,1-OI2D-1(KSN-021),1.0,0.0,Fiber,G.652,2012/09/14 00:44:40,noppadolt,noppadolt,"use core No.21,22 ( project Ason 24 core )",Normal,Enable,-
+f-62,STM-1,--,Two-Fiber Bidirectional,KSN-018,1-OI2D-2(KSN-014),KSN-014,1-OI2D-1(KSN-018),1.0,0.0,Fiber,G.652,2012/09/14 00:46:16,noppadolt,noppadolt,"use core No.1,2 ( project thai sato 24 core )",Normal,Enable,-
+f-63,STM-1,--,Two-Fiber Bidirectional,MKM-006,7-N1SLQ1-3(DIR:MKM-001),MKM-001,1-OI2D-1(MKM-001),1.0,0.0,Fiber,G.652,2012/09/14 03:23:53,noppadolt,noppadolt,-,Normal,Enable,-
+f-64,STM-1,--,Two-Fiber Bidirectional,KKN-007,12-SD1-2(KKN-018),KKN-018,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2012/09/14 03:24:40,noppadolt,noppadolt,-,Normal,Enable,-
+f-65,STM-1,--,Two-Fiber Bidirectional,KKN-007,13-SL1-1(KKN-033),KKN-033,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2012/09/14 03:25:03,noppadolt,noppadolt,-,Normal,Enable,-
+f-66,STM-1,--,Two-Fiber Bidirectional,KKN-028_HSPA,2-OI2S-1(MKM-017),MKM-017,1-OI2S-1(KKN-028),1.0,0.0,Fiber,G.652,2012/09/14 03:25:40,noppadolt,noppadolt,"use core 41,42 ( project Ason 48 core ) BJ Cat use core xxxx",Normal,Enable,-
+f-67,STM-1,--,Two-Fiber Bidirectional,KKN-025,2-OI2S-1(KKN-016),KKN-016,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2012/09/14 03:37:15,noppadolt,noppadolt,-,Normal,Enable,-
+f-13,STM-1,--,Two-Fiber Bidirectional,NKI-021,1-OI2S-1(SDH-1),NKI-005,13-SD1-2(NKI-021),1.0,0.0,Fiber,G.652,2011/03/18 08:49:19,admin,admin,-,Normal,Enable,-
+f-3,STM-4,--,Two-Fiber Bidirectional,MKM-006,11-N1SLD4-1(MKM-008),MKM-008,11-SL4-1(MKM-006),1.0,0.0,Fiber,G.652,2011/03/16 05:14:36,admin,admin,"use core No.21,22,( project kk-sarakarm )",Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,SRN-031,1-OI2D-2(SDH-2),SRN-029,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/03/14 10:20:48,admin,admin,-,Normal,Enable,-
+f-14,STM-1,--,Two-Fiber Bidirectional,SRN-005,12-SD1-1(SDH-1),SRN-031,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/03/07 08:48:44,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,RET-007,2-SL1-1(DIR:MKM029(L-1.2)),MKM-029,2-OI2S-1(DIR:RET007(L-1.2)),1.0,0.0,Fiber,G.652,2011/01/10 07:46:40,admin,admin,-,Normal,Enable,-
+new MSP,STM-16,--,Two-Fiber Bidirectional,UBN-009,5-S16-1(CDMA2010),1006-UBN-011 Ext1,11-N2SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2010/11/06 17:56:19,admin,admin,-,Normal,Enable,-
+new MSP,STM-16,--,Two-Fiber Bidirectional,AMR-001,5-S16-1(CDMA2010),UBN-009,6-S16-1(CDMA2010),1.0,0.0,Fiber,G.652,2010/11/06 16:12:20,admin,admin,-,Normal,Enable,-
+new MSP,STM-16,--,Two-Fiber Bidirectional,YST-005,5-S16-1(CDMA2010),AMR-001,6-S16-1(CDMA2010),1.0,0.0,Fiber,G.652,2010/11/04 08:31:19,admin,admin,-,Normal,Enable,-
+f-18,STM-4,--,Two-Fiber Bidirectional,BRM-025,2-OI4-1(SDH-1),BRM-017,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2010/10/21 07:48:24,admin,admin,-,Normal,Enable,-
+f-17,STM-1,--,Two-Fiber Bidirectional,SNK-005,2-OI2S-1(SNK008),SNK-008,2-OI2D-1(SNK-005),1.0,0.0,Fiber,G.652,2010/10/21 02:15:52,admin,admin,-,Normal,Enable,-
+f-15,STM-1,--,Two-Fiber Bidirectional,CPM-002,1-OI2D-1(to CPM-022),CPM-022,1-OI2D-2(to CPM-002),1.0,0.0,Fiber,G.652,2010/10/20 05:36:54,admin,admin,-,Normal,Enable,-
+f-4,STM-1,--,Two-Fiber Bidirectional,NMA_DTAC,10-SD1-2(1001)-Cenmary),1001-NMA-017-EXT5,2-N1SLQ1-3(NMA-DTAC)-Cenmary),6.0,0.0,Fiber,G.652,2010/10/13 08:02:20,admin,admin,-,Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,NMA-017,4-N1SLQ1-4(DIR:NMA-DTAC)-Maharat),NMA_DTAC,10-SD1-1(NMA-017)Maharat),7.0,0.0,Fiber,G.652,2010/10/13 08:00:52,admin,admin,-,Normal,Enable,-
+new MSP,STM-16,--,Two-Fiber Bidirectional,NMA-021,7-N1SL16-1(SDH-1),BRM-006,6-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2010/10/06 16:29:02,admin,admin,-,Critical,Enable,2013/05/06 12:44:19
+new MSP,STM-16,--,Two-Fiber Bidirectional,RET-001,5-S16-1(SDH-1),RET-007,6-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2010/10/06 04:01:23,admin,admin,-,Normal,Enable,-
+new MSP,STM-16,--,Two-Fiber Bidirectional,SRN-003,6-S16-1(SDH-1),RET-007,5-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2010/10/06 03:42:28,admin,admin,-,Normal,Enable,-
+f-5,STM-4,--,Two-Fiber Bidirectional,RET-007,4-SL4-1(SDH-1),RET-012,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2010/10/06 03:41:37,admin,admin,-,Normal,Enable,-
+new MSP,STM-16,--,Two-Fiber Bidirectional,MKM-004,5-S16-1(SDH-1),RET-001,6-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2010/10/05 08:53:33,admin,admin,-,Normal,Enable,-
+new MSP,STM-16,--,Two-Fiber Bidirectional,SRN-013,6-S16-1(SDH-1),SRN-003,5-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2010/10/05 08:53:18,admin,admin,-,Normal,Enable,-
+new MSP,STM-16,--,Two-Fiber Bidirectional,BRM-006,5-S16-1(SDH-1),MKM-004,6-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2010/10/05 06:03:47,admin,admin,-,Normal,Enable,-
+new MSP,STM-16,--,Two-Fiber Bidirectional,SRN-006,7-N1SL16-1(CDMA 2010),SRN-013,5-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2010/10/04 11:44:39,admin,admin,-,Normal,Enable,-
+new Link CDMA 2010,STM-64,--,Two-Fiber Bidirectional,NMA-017,7-N1SL64-1(CDMA 2010),1001-NMA-017-EXT5,12-N1SL64-1(CDMA 2010),1.0,0.0,Fiber,G.652,2010/10/04 02:35:01,admin,admin,-,Normal,Enable,-
+f-18,STM-16,--,Two-Fiber Bidirectional,C-2-Ext.2-BFKT_(OSN3500),12-N2SL16-1(SDH-1),NON-002 (109-C-2-EXT1),12-N2SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2010/08/24 05:49:22,admin,admin,-,Normal,Enable,-
+f-14,STM-1,--,Two-Fiber Bidirectional,C77_Hoh_Puk-Laksi,1-OI2D-1(C-2_(NCC_Fl.2)),NON-002 (109-C-2-EXT1),2-N1SLQ1-1(SDH-1),1.0,0.0,Fiber,G.652,2010/07/01 05:23:37,admin,admin,-,Normal,Enable,-
+f-5,STM-1,--,Two-Fiber Bidirectional,DTAC_KKN,1-OI2S-1(KKN015),KKN-015,11-SD1-1(DTAC),1.0,0.0,Fiber,G.652,2010/04/12 04:10:48,Laksiclient,Laksiclient,"use core NO.3,5-3,5(project cdma) to dtac",Normal,Enable,-
+f-4,STM-1,--,Two-Fiber Bidirectional,TRUE_KKN,1-OI2S-1(DTAC),DTAC_KKN,2-OI2S-1(DIR:TRUE_FL.2),1.0,0.0,Fiber,G.652,2010/04/12 04:10:43,Laksiclient,Laksiclient,"use core No. 3,5-3,5   /     to true building",Normal,Enable,-
+f-1,STM-4,--,Two-Fiber Bidirectional,MDH-009,11-SL4-1(SDH-1),MDH-003,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2010/02/25 07:02:17,Laksiclient,Laksiclient,-,Normal,Enable,-
+MW,STM-1,--,Two-Fiber Bidirectional,KSN-021,3-SD1-1(MW KSN025),KSN-025,1-OI2S-1(MW KSN021),1.0,0.0,Fiber,G.652,2009/12/19 05:30:56,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,SNK-010,4-SL1-1(SNK026),SNK-026,1-OI2S-1(SNK026),1.0,0.0,Fiber,G.652,2009/12/19 04:33:34,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,NKI-005,12-SD1-2(NKI-025),NKI-025,8-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2009/11/26 00:43:46,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,NKI-005,12-SD1-1(NKI-008),NKI-008,1-OI2S-1(NKI-005),1.0,0.0,Fiber,G.652,2009/11/20 06:51:34,Laksiclient,Laksiclient,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,NLP-004,1-OI2S-1(SDH-1),UDN-016_HSPA,4-SL1-1(SDH-1),1.0,0.0,Fiber,G.652,2009/11/17 01:43:56,Laksiclient,Laksiclient,-,Normal,Enable,-
+MW,STM-1,--,Two-Fiber Bidirectional,KSN-002,1-OI2D-1(MW RET-006),RET-006,3-OI2D-1(MW KSN002),1.0,0.0,Fiber,G.652,2009/11/06 04:26:18,Laksiclient,Laksiclient,-,Critical,Enable,2013/05/30 12:53:04
+f-2,STM-1,--,Two-Fiber Bidirectional,NKI-003,1-OI2S-1(UDN-021),UDN-021,1-OI2D-2(NKI-003),1.0,0.0,Fiber,G.652,2009/11/05 08:13:08,Laksiclient,Laksiclient,-,Normal,Enable,-
+M/W,STM-1,--,Two-Fiber Bidirectional,NKI-003,2-OI2S-1(NKI-005),NKI-005,3-SL1-1(NKI-003),1.0,0.0,Fiber,G.652,2009/11/05 08:13:03,Laksiclient,Laksiclient,M/W,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,NKI-010_HSPA,1-OI2D-2(SDH-2),NKI-012,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2009/11/05 05:31:29,Laksiclient,Laksiclient,"use core No. 1,4   (project CDMA)    change use core No. 11,12   ( project Ason 31กค.56 / อรรณพ )",Normal,Enable,-
+f-88,STM-4,--,Two-Fiber Bidirectional,RET-007,11-SL4-1(SDH-1),RET-023,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/30 04:56:10,admin,admin,-,Normal,Enable,-
+f-89,STM-4,--,Two-Fiber Bidirectional,RET-006,2-OI4-1(SDH-1),RET-009,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/30 04:55:37,admin,admin,-,Normal,Enable,-
+f-90,STM-4,--,Two-Fiber Bidirectional,RET-006,1-OI4-1(SDH-1),RET-012,2-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/30 04:55:37,admin,admin,-,Normal,Enable,-
+f-91,STM-4,--,Two-Fiber Bidirectional,RET-003,1-OI4-1(SDH-1),RET-014,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/30 04:55:37,admin,admin,-,Normal,Enable,-
+f-92,STM-4,--,Two-Fiber Bidirectional,RET-009,2-OI4-1(SDH-1),RET-014,2-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/30 04:55:37,admin,admin,-,Normal,Enable,-
+f-93,STM-4,--,Two-Fiber Bidirectional,RET-023,2-OI4-1(SDH-1),RET-022,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/30 04:55:37,admin,admin,-,Normal,Enable,-
+f-94,STM-4,--,Two-Fiber Bidirectional,RET-003,2-OI4-1(SDH-1),RET-022,2-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/30 04:55:37,admin,admin,-,Critical,Enable,2013/05/07 07:19:25
+f-4,STM-1,--,Two-Fiber Bidirectional,SNK-005,1-OI2S-1(SNK010),SNK-010,3-SL1-1(SNK005),1.0,0.0,Fiber,G.652,2009/09/24 15:11:47,cdma1234,cdma1234,"use core No. 13,14 ( Project cat2000Km )",Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,KSN-009,1-OI2S-1(KSN-002),KSN-002,1-OI2D-2(KSN-009),1.0,0.0,Fiber,G.652,2009/09/24 15:09:55,cdma1234,cdma1234,"use core No. 1,2 ( project CDMA )",Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,NKI-005,4-SL1-1(NKI-010),NKI-010_HSPA,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/03/18 09:42:04,admin,admin,-,Normal,Enable,-
+f-12,STM-1,--,Two-Fiber Bidirectional,NKI-021,2-OI2S-1(UDN-021),UDN-021,2-OI2D-2(NKI-021),1.0,0.0,Fiber,G.652,2011/05/03 01:15:58,admin,admin,"UDN021-NKI003-NKI021   use core No.6,9 (project CDMA) patch 18,24 ( project Ason )",Normal,Enable,-
+f-7,STM-1,--,Two-Fiber Bidirectional,NKI-005,13-SD1-1(NKI-023),NKI-023,1-OI2D-1(NKI-005),1.0,0.0,Fiber,G.652,2011/05/11 07:25:12,admin,admin,"use core No.23,24 ason",Normal,Enable,-
+f-8,STM-1,--,Two-Fiber Bidirectional,KKN-048,3-OI2D-2(DIR:KKN-039),KKN-039_HSPA,1-OI2S-1(KKN048),1.0,0.0,Fiber,G.652,2011/05/12 01:34:14,admin,admin,"use core No.5,6 ( project CDMA 12 core KKN048-KKN041 )",Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,NKI-023,1-OI2D-2(NKI-024),NKI-024,1-OI2D-1(NKI-023),1.0,0.0,Fiber,G.652,2011/05/12 07:48:52,admin,admin,"use core No.ason 23,24",Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,NKI-024,1-OI2D-2(NKI-006),NKI-006,1-OI2D-1(NKI-024),1.0,0.0,Fiber,G.652,2011/05/12 08:23:43,admin,admin,"use core No.23,24 ason",Normal,Enable,-
+f-7,STM-4,--,Two-Fiber Bidirectional,KKN-015,12-SL4-1(SDH-1),KKN-015_Ext.1_(3GsHSPA),14-N1SL4-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/11 09:16:01,admin,admin,patch coard  5 th floor,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,NKI-025,8-SL1D-2(SDH-2),NKI0002_TMV,3-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/15 09:25:55,admin,admin,-,Normal,Enable,-
+f-2,STM-4,--,Two-Fiber Bidirectional,KKN-015_Ext.1_(3GsHSPA),6-N1SL4-1(DIR:KKN-046),KKN-046_HSPA,8-SL4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/17 06:31:20,admin,admin,"use core 1,6 ( project CDMA 12 core )",Normal,Enable,-
+f-3,STM-4,--,Two-Fiber Bidirectional,KKN-046_HSPA,8-SL4D-2(SDH-2),KKN-014_HSPA,8-SL4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/17 06:47:32,admin,admin,"use core No. 11,12 ( project CDMA 12 core )",Normal,Enable,-
+f-4,STM-4,--,Two-Fiber Bidirectional,KKN-014_HSPA,8-SL4D-2(SDH-2),KKN-043_HSPA,8-SL4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/17 08:36:30,admin,admin,"use core No.2,3 ( project CDMA 12 core )",Normal,Enable,-
+f-8,STM-16,--,Two-Fiber Bidirectional,NKI-005,6-S16-1(SDH-1),UDN-006_Ext..1,7-N1SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/17 12:21:34,admin,admin,-,Normal,Enable,-
+f-7,STM-16,--,Two-Fiber Bidirectional,UDN-006,11-S16-1(SDH-1),UDN-006_Ext..1,13-N1SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/20 02:51:16,admin,admin,-,Normal,Enable,-
+f-8,STM-4,--,Two-Fiber Bidirectional,KKN-043_HSPA,8-SL4D-2(SDH-2),KKN-011_HSPA,8-SL4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/20 05:17:14,admin,admin,"use core No.5,6 ( project CDMA 12 core )",Normal,Enable,-
+f-9,STM-4,--,Two-Fiber Bidirectional,KKN-011_HSPA,8-SL4D-2(SDH-2),KKN-013_HSPA,8-SL4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/20 05:17:22,admin,admin,"use core No.5,6 ( project CDMA 12 core ) ระยะ 12.5 Km",Normal,Enable,-
+f-10,STM-4,--,Two-Fiber Bidirectional,KKN-013_HSPA,8-SL4D-2(SDH-2),KKN-012_HSPA,8-SL4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/20 05:17:30,admin,admin,"use core No.9,10 ( project CDMA 12 core ) ระยะ 5.75 Km ใช้",Normal,Enable,-
+f-11,STM-4,--,Two-Fiber Bidirectional,KKN-012_HSPA,8-SL4D-2(SDH-2),KKN-048_HSPA,8-SL4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/20 05:17:37,admin,admin,"use core No4,6 ( project CDMA 12 core )",Normal,Enable,-
+24 Core,STM-64,--,Two-Fiber Bidirectional,RNC_TMV_CAT3Gs_FL.3,11-N1SL64-1(SDH-1),KKN-015_Ext.1_(3GsHSPA),8-N2SL64-1(SDH-1),5.0,3.0,Fiber,G.652,2011/06/20 09:38:16,admin,admin,"ชั้น5 Core 9,10 ( cable 48 C ชั้น5-ชั้น3 ) / ชั้น3 Core 7,8 ( cable สค1-สค.2 ) / core 7,8 ( cable เทศบาล-จิตรดา ) จิตรดา/ core  (4,6)( cable CDMA- BJ True ) 8.25 Km",Normal,Enable,-
+f-14,STM-64,--,Two-Fiber Bidirectional,KKN-015_Ext.1_(3GsHSPA),11-N2SL64-1(SDH-1),RNC_TMV_CAT3Gs_FL.3,8-N2SL64-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/20 09:38:25,admin,admin,"Use core No.91,92  ( ชั้น3 project สค.ขอนแก่น ใตัดิน 96 Core)  /  เชื่อมต่อ Drop-wire เข้า True-Building Core No.1,2   / ย้ายไป core 63,64 ( project 96 core )",Normal,Enable,-
+f-3,STM-4,--,Two-Fiber Bidirectional,KKN-015_Ext.1_(3GsHSPA),13-N1SLD4-1(SDH-1),KKN-048_HSPA,8-SL4D-2(SDH-2),1.0,0.0,Fiber,G.652,2011/06/21 08:14:58,admin,admin,"use core No4,6 ( project CDMA 12 core )",Normal,Enable,-
+f-14,STM-1,--,Two-Fiber Bidirectional,UDN-006_Ext..1,4-N1SL1-1(NE1825_UDN-006_Ext.1),UDN-006_Ext.1(HSPA),3-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/24 08:47:24,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,KKN1924_TMV,3-SL1D-1(SDH-1),KKN-004_GW_ID1418_No.1,12-SL1-1(TO KKN1924 True Move),1.0,0.0,Fiber,G.652,2011/06/27 09:06:15,admin,admin,use core No.41.42 (project Ason 48 core ) 7200 Meter,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,KKN1924_TMV,3-SL1D-2(SDH-2),KKN-028_HSPA,1-OI2S-1(TO KKN1924 True Move),1.0,0.0,Fiber,G.652,2011/06/27 09:06:22,admin,admin,"use core 41,42 ( project ason 48 core )",Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,KKN-007,12-SD1-1(KKN0056),KKN0056_TMV-cancel,3-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/28 06:56:09,admin,admin,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,KKN-015_Ext.1_(3GsHSPA),3-N1SLQ1-4(KKN-029),KKN-029_HSPA,1-OI2D-1(KKN015),1.0,0.0,Fiber,G.652,2011/06/28 08:03:24,admin,admin,"use core 47,48(71,72) project kk-banpai 48 core BJ xxxx",Normal,Enable,-
+f-4,STM-1,--,Two-Fiber Bidirectional,KKN-048,3-OI2D-1(DIR:KKN-047),KKN-047_HSPA,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/29 03:06:42,admin,admin,"use core No.1,2 ( project CDMA 12 core )",Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,NKI-006,1-OI2D-2(NKI-022),NKI-022,1-OI2D-1(NKI-006),1.0,0.0,Fiber,G.652,2011/06/29 03:18:51,admin,admin,"use core No.23,24 ason",Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,NKI-022,1-OI2D-2(NKI-004),NKI-004,1-OI2S-1(NKI-022),1.0,0.0,Fiber,G.652,2011/06/29 03:18:57,admin,admin,"use core No.23,24 ason",Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,KKN-013,3-OI2S-1(SDH-1),KKN-041_HSPA,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/29 07:11:20,admin,admin,"use core No.1,3 ( project CDMA 12 core )",Normal,Enable,-
+f-5,STM-4,--,Two-Fiber Bidirectional,UDN-010_HSPA(60),1-OI4D-2(SDH-2),UDN-012_HSPA,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/30 02:56:23,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,UDN-036_HSPA,1-OI2S-1(UDN-010),UDN-010_HSPA(60),2-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/30 04:01:10,admin,admin,-,Normal,Enable,-
+f-1,STM-4,--,Two-Fiber Bidirectional,UDN-039_HSPA(60),2-OI4-1(SDH-1),UDN-010_HSPA(60),1-OI4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/06/30 05:48:01,admin,admin,-,Normal,Enable,-
+f-2,STM-16,--,Two-Fiber Bidirectional,C-2-Ext.2-BFKT_(OSN3500),7-N2SL16-1(SDH-1),TRUE-MTG_FL.1_3G,6-S16-1(DIR:NCC_(B4-Fl.5)),1.0,0.0,Fiber,G.652,2011/07/08 11:44:23,admin,admin,-,Normal,Enable,-
+f-35,STM-4,--,Two-Fiber Bidirectional,UDN-030,1-OI4D-1(UDN-006),UDN-006_Ext..1,6-N1SL4-1(UDN-030),1.0,0.0,Fiber,G.652,2011/07/11 02:58:51,admin,admin,-,Normal,Enable,-
+f-13,STM-4,--,Two-Fiber Bidirectional,NMA-010_HSPA,11-SL4-1(SDH-1),NMA-050_HSPA,8-SL4D-2(SDH-2),1.0,0.0,Fiber,G.652,2011/07/11 04:02:31,admin,admin,-,Normal,Enable,-
+f-14,STM-4,--,Two-Fiber Bidirectional,NMA-050_HSPA,8-SL4D-1(SDH-1),NMA-049_HSPA,8-SL4D-2(SDH-2),1.0,0.0,Fiber,G.652,2011/07/11 04:02:54,admin,admin,-,Normal,Enable,-
+f-15,STM-4,--,Two-Fiber Bidirectional,NMA-049_HSPA,8-SL4D-1(SDH-1),NMA-051_HSPA,8-SL4D-2(SDH-2),1.0,0.0,Fiber,G.652,2011/07/11 04:03:08,admin,admin,-,Normal,Enable,-
+f-16,STM-4,--,Two-Fiber Bidirectional,NMA-051_HSPA,8-SL4D-1(SDH-1),NMA-064_HSPA,8-SL4D-2(SDH-2),1.0,0.0,Fiber,G.652,2011/07/11 04:03:14,admin,admin,-,Normal,Enable,-
+f-17,STM-4,--,Two-Fiber Bidirectional,NMA-064_HSPA,8-SL4D-1(SDH-1),NMA-052_HSPA,8-SL4D-2(SDH-2),1.0,0.0,Fiber,G.652,2011/07/11 04:03:23,admin,admin,-,Normal,Enable,-
+f-18,STM-4,--,Two-Fiber Bidirectional,NMA-052_HSPA,8-SL4D-1(SDH-1),NMA-065_HSPA,8-SL4D-2(SDH-2),1.0,0.0,Fiber,G.652,2011/07/11 04:03:31,admin,admin,-,Normal,Enable,-
+f-19,STM-4,--,Two-Fiber Bidirectional,NMA-065_HSPA,8-SL4D-1(SDH-1),NMA-010_HSPA,12-SL4-1(SDH-1),1.0,0.0,Fiber,G.652,2011/07/11 04:03:37,admin,admin,-,Normal,Enable,-
+f-38,STM-4,--,Two-Fiber Bidirectional,NLP-002,1-OI4D-1(UDN030),UDN-030,1-OI4D-2(NLP-002),1.0,0.0,Fiber,G.652,2011/07/11 04:23:25,admin,admin,-,Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,UBN-004,12-SD1-1(SDH-1),UBN-046,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/07/12 01:33:26,admin,admin,-,Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,UDN-008_HSPA,1-OI2D-1(UDN-006_Ext.1),UDN-006_Ext..1,3-N1SLQ1-1(UDN-008),1.0,0.0,Fiber,G.652,2011/07/15 03:23:43,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,UDN-004_HSPA,14-SL1-1(UDN-015),UDN-015_HSPA,1-OI2D-2(UDN-004),1.0,0.0,Fiber,G.652,2011/07/15 03:40:39,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,KKN-055_HSPA,3-SL1D-1(DIR:KKN015),KKN-015_Ext.1_(3GsHSPA),3-N1SLQ1-1(central),1.0,0.0,Fiber,G.652,2011/07/27 02:16:21,admin,admin,"use core No. 85,86 ( project duct-cable 96 core ) BJ cable-central core No.xxxxx ( cable Branch to central kk )",Normal,Enable,-
+Link_HSPA_Over DWDM Khonkaen-Udonthani Wavelength(193.10 THz),STM-16,--,Two-Fiber Bidirectional,KKN-015_Ext.1_(3GsHSPA),7-N1SL16-1(to KKKKNO1608-Slot1-TMX-Port2 (DWDM Huawei 193.10 THz)),UDN-006_Ext..1,12-N1SL16-1(UDUDNO1602-Slot1-TMX-Port2 (DWDM Huawei 193.10THz)),1.0,0.0,Fiber,G.652,2011/07/27 07:33:43,admin,admin,Via_DWDM,Normal,Enable,-
+Link_HSPA_DWDM,STM-16,--,Two-Fiber Bidirectional,225-NMA-017-EXT3,7-N1SL16-1(to NMNMAO1602-13-LWC1-Port1(193.40 THz)),KKN-015_Ext.1_(3GsHSPA),12-N1SL16-1(KKKKNO1608-1-TMX-Port1(193.10THz)),1.0,0.0,Fiber,G.652,2011/07/27 07:36:05,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,KKN-015_Ext.1_(3GsHSPA),3-N1SLQ1-3(KKN-038),KKN-038_HSPA,1-OI2D-1(KKN-015 Ext1),1.0,0.0,Fiber,G.652,2011/08/01 06:00:22,admin,admin,"use core No. 47,48 ( project kk-nonsaard-udon 48 core )",Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,KKN-038_HSPA,1-OI2D-2(KKN-0059),KKN0059,3-SL1D-1(KKN038),1.0,0.0,Fiber,G.652,2011/08/01 06:00:30,admin,admin,"use core No. 47,48 ( project kk-nonsaard-udon 48 core )",Normal,Enable,-
+f-14,STM-4,--,Two-Fiber Bidirectional,NMA-015_HSPA,8-SL4D-1(SDH-1),NMA-059_1416,8-SL4D-2(SDH-2),1.0,0.0,Fiber,G.652,2011/08/02 06:51:57,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,KSN-004,3-OI2D-1(KSN-020),KSN-020,1-OI2D-2(KSN-004),1.0,0.0,Fiber,G.652,2011/08/02 12:10:44,admin,admin,"use core no.1,2 ( Project CDMA 12 core )",Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,NMA-047,12-SD1-1(To-From NMA-073),NMA-073_outdoor,1-OI2D-1(To-From NMA-047),1.0,0.0,Fiber,G.652,2011/08/02 12:42:54,admin,admin,-,Normal,Enable,-
+f-2,STM-4,--,Two-Fiber Bidirectional,224-NMA-017-EXT2,7-N1SLD4-1(DIR:NMA053_HSPA)P1),NMA-053_HSPA,8-SL4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/02 13:17:38,admin,admin,-,Normal,Enable,-
+f-3,STM-4,--,Two-Fiber Bidirectional,NMA-053_HSPA,8-SL4D-2(SDH-2),NMA-009_HSPA,8-SL4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/02 13:17:49,admin,admin,-,Normal,Enable,-
+f-4,STM-4,--,Two-Fiber Bidirectional,NMA-009_HSPA,8-SL4D-2(SDH-2),NMA-012_HSPA,8-SL4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/02 13:18:02,admin,admin,-,Normal,Enable,-
+f-5,STM-4,--,Two-Fiber Bidirectional,NMA-012_HSPA,8-SL4D-2(SDH-2),NMA-061_HSPA,8-SL4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/02 13:18:09,admin,admin,-,Normal,Enable,-
+f-6,STM-4,--,Two-Fiber Bidirectional,NMA-061_HSPA,8-SL4D-2(SDH-2),NMA-059_1416,8-SL4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/02 13:19:59,admin,admin,-,Normal,Enable,-
+f-7,STM-4,--,Two-Fiber Bidirectional,NMA-015_HSPA,8-SL4D-2(SDH-2),224-NMA-017-EXT2,12-N1SLD4-1(DIR:NMA015_HSPA)P2),1.0,0.0,Fiber,G.652,2011/08/02 13:20:06,admin,admin,-,Normal,Enable,-
+f-8,STM-1,--,Two-Fiber Bidirectional,SRN-006,3-N1SL1-1(SDH-1),SRN-032,8-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/04 03:49:12,admin,admin,-,Critical,Enable,2013/06/08 00:59:24
+f-9,STM-1,--,Two-Fiber Bidirectional,224-NMA-017-EXT2,6-N1SLQ1-2(To NMA-025),NMA-025_HSPA,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/04 03:58:21,admin,admin,-,Normal,Enable,-
+f-11,STM-1,--,Two-Fiber Bidirectional,224-NMA-017-EXT2,6-N1SLQ1-3(To NMA-075),NMA-075_1416_outdoor,8-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/08 01:19:17,admin,admin,-,Normal,Enable,-
+f-12,STM-1,--,Two-Fiber Bidirectional,NMA-047,3-SL1-1(To TMV(NKR0035)),NKR0035_TMV,3-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/08 05:52:34,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,NKR0031_TMV,3-SL1D-1(SDH-1),NMA-004,14-SL1-1(DIR:NKR0031),1.0,0.0,Fiber,G.652,2011/08/10 08:32:56,admin,admin,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,NMA-004,13-SL1-1(DIR:NKR0076),NKR0076-TMV,3-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/10 08:43:29,admin,admin,-,Normal,Enable,-
+f-3,STM-4,--,Two-Fiber Bidirectional,UBN-011,14-SL4-1(SDH-1),UBR1057_TMV,8-SL4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/11 09:33:40,admin,admin,-,Normal,Enable,-
+f-4,STM-4,--,Two-Fiber Bidirectional,UBR1057_TMV,8-SL4D-2(SDH-2),UBR0717_TMV,8-SL4D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/11 09:33:53,admin,admin,-,Normal,Enable,-
+HSPA_Link_1,STM-4,--,Two-Fiber Bidirectional,225-NMA-017-EXT3,6-N1SLD4-1(DIR:224-Ext2-S7/P2),224-NMA-017-EXT2,7-N1SLD4-2(DIR:225-Ext3-S6/P1),1.0,0.0,Fiber,G.652,2011/08/15 02:05:07,admin,admin,STM-4,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,CPM-018,12-SD1-1(DIR:NMA-005),NMA-005_HSPA,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/15 05:23:35,admin,admin,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,NMA-005_HSPA,2-OI2S-1(SDH-1),NKR0029_TMV,3-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/15 05:23:42,admin,admin,-,Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,NMA-005_HSPA,1-OI2D-2(SDH-2),NMA-071,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/15 05:25:39,admin,admin,-,Critical,Enable,2013/07/04 15:14:22
+f-1,STM-1,--,Two-Fiber Bidirectional,NMA-046,12-SD1-1(SDH-1),NMA-072,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/16 01:15:48,admin,admin,-,Critical,Enable,2013/05/07 07:19:42
+f-3,STM-4,--,Two-Fiber Bidirectional,NMA-017,16-N1SLD4-1(DIR:225-Ext3-S6/P2),225-NMA-017-EXT3,6-N1SLD4-2(DIR:NMA-017-S16/P1),1.0,0.0,Fiber,G.652,2011/08/16 03:05:51,admin,admin,-,Normal,Enable,-
+f-4,STM-1,--,Two-Fiber Bidirectional,NMA-053_HSPA,3-SL1D-1(SDH-1),NKR1919_TMV,3-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/16 08:52:15,admin,admin,-,Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,NMA-040,12-SL1-1(SDH-1),NKR1605_TMV_(HSPA),3-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/17 08:10:38,admin,admin,-,Normal,Enable,-
+f-4,STM-1,--,Two-Fiber Bidirectional,NKR1605_TMV_(HSPA),3-SL1D-2(SDH-2),NKR1956_TMV(HSPA),3-SL1D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/17 10:00:31,admin,admin,-,Normal,Enable,-
+f-12,STM-1,--,Two-Fiber Bidirectional,NLP-002,2-OI2D-1(DIR:NLP0003TMV),NLP0003_TMV,3-SL1D-1(NLP-002),1.0,0.0,Fiber,G.652,2011/08/26 05:55:53,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,NMA-018,3-SD1-2(To-From NMA-070),NMA-070,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/08/26 08:42:18,admin,admin,-,Normal,Enable,-
+f-4,STM-16,--,Two-Fiber Bidirectional,TRUE-BRK_3Gs,5-S16-1(SDH-1),NON-002 (109-C-2-EXT1),13-N1SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2011/09/16 02:48:14,admin,admin,-,Normal,Enable,-
+f-2,STM-16,--,Two-Fiber Bidirectional,TRUE-BRK_3Gs,6-S16-1(SDH-1),TBF-PBI_3Gs,5-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2011/09/21 03:37:09,admin,admin,-,Normal,Enable,-
+f-3,STM-16,--,Two-Fiber Bidirectional,TBF-PBI_3Gs,6-S16-1(SDH-1),TRUE-MTG_FL.1_3G,5-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2011/09/21 03:37:16,admin,admin,-,Normal,Enable,-
+f-5,STM-1,--,Two-Fiber Bidirectional,MKM-019,1-OI2D-1(MKM008),MKM-008,12-SD1-2(MKM-019),1.0,0.0,Fiber,G.652,2011/09/27 06:31:54,admin,admin,-,Normal,Enable,-
+f-6,STM-1,--,Two-Fiber Bidirectional,MKM-019,1-OI2D-2(MKM026),MKM-026,1-OI2S-1(MKM019),1.0,0.0,Fiber,G.652,2011/09/27 07:48:49,admin,admin,-,Normal,Enable,-
+f-8,STM-1,--,Two-Fiber Bidirectional,C77_Hoh_Puk-Laksi,1-OI2D-2(DIR:Wireless Engineering (Laksi)),Wireless Engineering Laksi,8-SL1D-1(DIR:Hor_Pak_Laksi),1.0,0.0,Fiber,G.652,2011/09/28 01:47:04,admin,admin,-,Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,NPM-018,12-SD1-1(NPM026),NPM-026,1-OI2D-1(NPM018),1.0,0.0,Fiber,G.652,2011/10/05 06:58:41,admin,admin,-,Normal,Enable,-
+f-4,STM-4,--,Two-Fiber Bidirectional,NLP-002,1-OI4D-2(NLP003),NLP-003,1-OI4D-1(NLP002),1.0,0.0,Fiber,G.652,2011/10/06 08:46:35,admin,admin,-,Normal,Enable,-
+f-5,STM-1,--,Two-Fiber Bidirectional,KKN-023,1-OI2D-1(NLP003),NLP-003,2-OI2D-1(KKN023),1.0,0.0,Fiber,G.652,2011/10/06 08:49:28,admin,admin,-,Normal,Enable,-
+f-6,STM-1,--,Two-Fiber Bidirectional,NPM-002,12-SD1-1(NPM-025),NPM-025,1-OI2D-1(NPM002),1.0,0.0,Fiber,G.652,2011/10/07 06:43:00,admin,admin,-,Normal,Enable,-
+f-7,STM-1,--,Two-Fiber Bidirectional,KKN-009,1-OI2D-1(KKN023),KKN-023,1-OI2D-2(KKN009),1.0,0.0,Fiber,G.652,2011/10/07 07:47:35,admin,admin,-,Normal,Enable,-
+f-7,STM-1,--,Two-Fiber Bidirectional,SNK-006,12-SD1-1(SNK023),SNK-023,1-OI2D-1(SNK006),1.0,0.0,Fiber,G.652,2011/10/11 08:49:36,admin,admin,-,Normal,Enable,-
+f-10,STM-1,--,Two-Fiber Bidirectional,UBN-014,1-OI2D-1(SDH-1),UBN-047,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/10/11 10:03:10,admin,admin,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,SNK-022,1-OI2D-1(SNK-023),SNK-023,1-OI2D-2(SNK022),1.0,0.0,Fiber,G.652,2011/10/12 01:44:44,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,RET-001,12-SD1-1(RET-032),RET-032,1-OI2D-1(RET-001),1.0,0.0,Fiber,G.652,2011/10/17 02:22:11,admin,admin,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,SNK-010,6-SD1-1(SNK-028),SNK-028,1-OI2D-1(SNK010),1.0,0.0,Fiber,G.652,2011/10/18 10:51:03,admin,admin,-,Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,SNK-006,12-SD1-2(SNK027),SNK-027_outdoor,1-OI2D-1(SNK006),1.0,0.0,Fiber,G.652,2011/10/18 10:52:03,admin,admin,-,Normal,Enable,-
+f-4,STM-1,--,Two-Fiber Bidirectional,KKN-009,1-OI2D-2(KKN056),KKN-056,1-OI2D-1(KKN-009),1.0,0.0,Fiber,G.652,2011/10/18 10:57:03,admin,admin,"use core No. 1,2 ( project out-door expantion 24 core )",Critical,Enable,2013/07/22 17:52:09
+f-1,STM-1,--,Two-Fiber Bidirectional,AMR-006,1-OI2D-1(SDH-1),AMR-001,4-SL1-1(SDH-1),1.0,0.0,Fiber,G.652,2011/10/20 02:56:26,admin,admin,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,AMR-006,1-OI2D-2(SDH-2),UBN-044,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/10/20 02:58:13,admin,admin,-,Normal,Enable,-
+f-3,STM-1,--,Two-Fiber Bidirectional,UBN-044,1-OI2D-2(SDH-2),AMR-010,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/10/20 03:00:34,admin,admin,-,Critical,Enable,2013/07/12 18:59:50
+f-4,STM-1,--,Two-Fiber Bidirectional,KSN-020,1-OI2D-1(KSN-027),KSN-027,1-OI2D-2(KSN-027),1.0,0.0,Fiber,G.652,2011/10/20 03:10:58,admin,admin,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,KKN-CDMA ROOM,1-OI2S-1(SDH-1),KKN-015_Ext.1_(3GsHSPA),3-N1SLQ1-2(kkn-room),1.0,0.0,Fiber,G.652,2011/11/08 05:45:12,admin,admin,patch coard indoor CDMA-room,Normal,Enable,-
+f-4,STM-1,--,Two-Fiber Bidirectional,SNK-001,12-SD1-1(NPM-024),NPM-024,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2011/11/09 07:22:28,admin,admin,-,Normal,Enable,-
+f-6,STM-1,--,Two-Fiber Bidirectional,LEI-001,12-SD1-1(LEI023),LEI-023,1-OI2D-1(LEI001),1.0,0.0,Fiber,G.652,2011/11/14 01:50:57,admin,admin,-,Normal,Enable,-
+f-1,STM-1,--,Two-Fiber Bidirectional,MKM-026,2-OI2S-1(MKM-003),MKM-003,1-OI2S-1(MKM-026),1.0,0.0,Fiber,G.652,2011/11/16 03:08:37,admin,admin,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,MKM-003,2-OI2S-1(MKM-030),MKM-030,1-OI2D-1(MKM-003),1.0,0.0,Fiber,G.652,2011/11/16 03:08:42,admin,admin,"use core No.1,2 ( project outdoor-Expansion 12 core ) ระยะ 19 Km",Critical,Enable,2013/06/19 14:41:25
+f-70,STM-16,--,Two-Fiber Bidirectional,BRM-003_GW1412,9-S16-1(SDH-1),BRM-004,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/23 04:58:27,admin,admin,-,Normal,Enable,-
+f-69,STM-16,--,Two-Fiber Bidirectional,NMA-004,9-S16-1(SDH-1),BRM-003_GW1412,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/23 04:58:21,admin,admin,-,Normal,Enable,-
+f-68,STM-4,--,Two-Fiber Bidirectional,UDN-006,3-SL4-1(UDN012),UDN-012_HSPA,2-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/23 04:47:44,admin,admin,-,Normal,Enable,-
+f-67,STM-4,--,Two-Fiber Bidirectional,UDN-006,4-SL4-1(UDN035),UDN-035_HSPA,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/23 04:47:30,admin,admin,-,Normal,Enable,-
+f-65,STM-4,--,Two-Fiber Bidirectional,UDN-006,6-SL4-1(UDN011),UDN-011_HSPA,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/23 04:46:56,admin,admin,-,Normal,Enable,-
+f-64,STM-4,--,Two-Fiber Bidirectional,UDN-006,5-SL4-1(UDN009),UDN-009,2-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/23 04:46:36,admin,admin,-,Normal,Enable,-
+f-60,STM-4,--,Two-Fiber Bidirectional,KKN-014,2-OI4-1(SDH-1),KKN-046,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/23 04:35:34,admin,admin,"use core No.1,2 ( project CDMA 12 core )",Normal,Enable,-
+f-59,STM-4,--,Two-Fiber Bidirectional,KKN-043,2-OI4-1(SDH-1),KKN-014,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/23 04:35:26,admin,admin,"use core No.1,4 ( project CDMA 12 core )",Normal,Enable,-
+f-58,STM-4,--,Two-Fiber Bidirectional,KKN-011,2-OI4-1(SDH-1),KKN-043,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/23 04:35:08,admin,admin,"use core No.1,2 ( project CDMA 12 core )",Normal,Enable,-
+f-57,STM-4,--,Two-Fiber Bidirectional,KKN-013,2-OI4-1(SDH-1),KKN-011,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/23 04:35:01,admin,admin,"use core No.1,2 ( project CDMA 12 core ) ระยะ 12.5 Km",Normal,Enable,-
+f-56,STM-4,--,Two-Fiber Bidirectional,KKN-012,2-OI4-1(SDH-1),KKN-013,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/23 04:34:52,admin,admin,"use core No.1,2 ( project CDMA 12 core ) ซ่อม Riser 15 กค.2556",Normal,Enable,-
+f-55,STM-4,--,Two-Fiber Bidirectional,KKN-048,2-OI4-1(SDH-1),KKN-012,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/23 04:33:56,admin,admin,"use core No.1,2 ( project CDMA 12 core )",Normal,Enable,-
+f-54,STM-4,--,Two-Fiber Bidirectional,KKN-015,4-SL4-1(SDH-1),KKN-046,2-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/23 04:32:10,admin,admin,"use core NO.9,10 ( project CDMA 12 core )",Normal,Enable,-
+f-53,STM-4,--,Two-Fiber Bidirectional,KKN-015,3-SL4-1(SDH-1),KKN-048,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/23 04:29:25,admin,admin,"use core No.1,2 ( project CDMA 12 core )",Normal,Enable,-
+f-42,STM-4,--,Two-Fiber Bidirectional,BRK-002 (C-1-2)12floor,6-N1SLD4-1(SDH-1),BRK-003 (C-1)9floor,5-SL4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/17 09:15:42,cdma33,cdma33,-,Normal,Enable,-
+f-41,STM-16,--,Two-Fiber Bidirectional,BRK-002 (C-1-2)12floor,8-N1SL16-1(SDH-1),BRK-001 (C-1 BKK),7-N1SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/17 09:14:18,cdma33,cdma33,-,Normal,Enable,-
+f-42,STM-16,--,Two-Fiber Bidirectional,BRK-002 (C-1-2)12floor,11-N1SL16-1(SDH-1),BRK-001 (C-1 BKK),12-N1SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2009/09/17 09:14:18,cdma33,cdma33,-,Normal,Enable,-
+f-5,STM-4,--,Two-Fiber Bidirectional,1001-NMA-017-EXT5,5-N1SLQ4-4(SDH-4),199-NMA-017-EXT4,6-N1SLD4-2(SDH-2),1.0,0.0,Fiber,G.652,2009/05/26 14:04:39,JJJ,JJJ,-,Normal,Enable,-
+f-4,STM-4,--,Two-Fiber Bidirectional,1001-NMA-017-EXT5,5-N1SLQ4-3(SDH-3),199-NMA-017-EXT4,6-N1SLD4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/05/26 14:04:29,JJJ,JJJ,-,Normal,Enable,-
+f-23,STM-4,--,Two-Fiber Bidirectional,NMA-017,14-N1SLQ4-4(SDH-4),199-NMA-017-EXT4,8-N1SLD4-2(SDH-2),1.0,0.0,Fiber,G.652,2009/05/25 21:42:17,JJJ,JJJ,-,Normal,Enable,-
+f-22,STM-4,--,Two-Fiber Bidirectional,NMA-017,14-N1SLQ4-3(SDH-3),199-NMA-017-EXT4,8-N1SLD4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/05/25 21:42:11,JJJ,JJJ,-,Normal,Enable,-
+f-21,STM-4,--,Two-Fiber Bidirectional,NMA-017,14-N1SLQ4-2(SDH-2),225-NMA-017-EXT3,8-N1SLD4-2(SDH-2),1.0,0.0,Fiber,G.652,2009/05/25 21:42:03,JJJ,JJJ,-,Normal,Enable,-
+f-20,STM-4,--,Two-Fiber Bidirectional,NMA-017,14-N1SLQ4-1(SDH-1),225-NMA-017-EXT3,8-N1SLD4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/05/25 21:41:58,JJJ,JJJ,-,Normal,Enable,-
+f-19,STM-4,--,Two-Fiber Bidirectional,NMA-017,5-N1SLQ4-4(SDH-4),224-NMA-017-EXT2,8-N1SLD4-2(SDH-2),1.0,0.0,Fiber,G.652,2009/05/25 21:41:52,JJJ,JJJ,-,Normal,Enable,-
+f-18,STM-4,--,Two-Fiber Bidirectional,NMA-017,5-N1SLQ4-3(SDH-3),224-NMA-017-EXT2,8-N1SLD4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/05/25 21:41:46,JJJ,JJJ,-,Normal,Enable,-
+f-17,STM-4,--,Two-Fiber Bidirectional,NMA-017,5-N1SLQ4-2(SDH-2),223-NMA-017-EXT1,8-N1SLD4-2(SDH-2),1.0,0.0,Fiber,G.652,2009/05/25 21:41:38,JJJ,JJJ,-,Normal,Enable,-
+f-16,STM-4,--,Two-Fiber Bidirectional,NMA-017,5-N1SLQ4-1(SDH-1),223-NMA-017-EXT1,8-N1SLD4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/05/25 21:41:31,JJJ,JJJ,-,Normal,Enable,-
+f-14,STM-1,--,Two-Fiber Bidirectional,NMA-017,4-N1SLQ1-2(DWDM-Route-1(NMA-BRK)),NON-002 (109-C-2-EXT1),3-N1SLQ1-1(SDH-1),1.0,0.0,Fiber,G.652,2009/05/25 21:40:00,JJJ,JJJ,Protection SDH Noth,Normal,Enable,-
+f-11,STM-4,--,Two-Fiber Bidirectional,NMA-015,1-OI4-1(SDH-1),NMA-017,15-N1SLD4-2(SDH-2),1.0,0.0,Fiber,G.652,2009/05/25 21:37:17,JJJ,JJJ,-,Normal,Enable,-
+f-7,STM-16,--,Two-Fiber Bidirectional,NMA-017,6-N1SL16-1(SDH-1),NMA-004,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2009/05/25 21:37:10,cdma1234,cdma1234,-,Normal,Enable,-
+f-10,STM-4,--,Two-Fiber Bidirectional,NMA-048_HSPA,2-OI4-1(SDH-1),NMA-017,15-N1SLD4-1(SDH-1),1.0,0.0,Fiber,G.652,2009/05/25 21:36:45,JJJ,JJJ,-,Normal,Enable,-
+f-6,STM-16,--,Two-Fiber Bidirectional,1001-NMA-017-EXT5,7-N1SL16-1(DIR:NMA-047),NMA-047,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2009/05/25 21:35:22,cdma1234,cdma1234,-,Normal,Enable,-
+f-5,STM-64,--,Two-Fiber Bidirectional,1001-NMA-017-EXT5,11-N2SL64-1(To NMA-021(BPA_17)),NMA-021,8-N2SL64-1(To NMA-017-EXT5),1.0,0.0,Fiber,G.652,2009/05/25 21:34:44,cdma1234,cdma1234,-,Normal,Enable,-
+f-1,STM-16,--,Two-Fiber Bidirectional,NMA-017,12-N1SL16-1(SDH-1),NMA-018,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2009/05/25 21:32:50,JJJ,JJJ,-,Normal,Enable,-
+f-4,STM-64,--,Two-Fiber Bidirectional,NMA-017,8-N2SL64-1(SDH-1),NMA-020,8-N2SL64-1(SDH-1),1.0,0.0,Fiber,G.652,2009/05/25 21:32:47,cdma1234,cdma1234,-,Normal,Enable,-
+f-3,STM-64,--,Two-Fiber Bidirectional,NMA-017,11-N2SL64-1(SDH-1),1001-NMA-017-EXT5,8-N1SL64-1(SDH-1),1.0,0.0,Fiber,G.652,2009/05/25 21:31:42,cdma1234,cdma1234,-,Normal,Enable,-
+f-2,STM-16,--,Two-Fiber Bidirectional,NMA-017,13-N1SL16-1(SDH-1),NMA-046,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2009/05/25 21:31:17,cdma1234,cdma1234,-,Normal,Enable,-
+f-269,STM-1,--,Two-Fiber Bidirectional,BRM-017,2-OI2S-1(SDH-1),BRM-007,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2009/03/03 06:30:44,admin,admin,-,Normal,Enable,-
+f-255,STM-1,--,Two-Fiber Bidirectional,NMA-067_HSPA+MW IP,1-OI2S-1(SDH-1),NMA-023,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2008/12/19 05:45:11,admin,admin,-,Normal,Enable,-
+f-254,STM-1,--,Two-Fiber Bidirectional,NMA-014,2-OI2S-1(SDH-1),NMA-067_HSPA+MW IP,2-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2008/12/19 05:45:00,admin,admin,-,Normal,Enable,-
+f-253,STM-1,--,Two-Fiber Bidirectional,224-NMA-017-EXT2,6-N1SLQ1-1(SDH-1),NMA-014,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2008/12/19 05:43:42,admin,admin,-,Normal,Enable,-
+f-241,STM-1,--,Two-Fiber Bidirectional,TRUE_KKN,2-OI2S-1(AIS),AIS_KKN,10-SD1-2(TRUE),1.0,0.0,Fiber,G.652,2008/06/09 05:44:22,admin,admin,"use core No. 3,5-3,4    3,4-3,4     3,4-11,12   11,12-3,5   3,5-3,4 to AIS",Normal,Enable,-
+f-240,STM-1,--,Two-Fiber Bidirectional,AIS_KKN,10-SD1-1(KKN015),KKN-015,11-SD1-2(AIS),1.0,0.0,Fiber,G.652,2008/06/09 05:43:57,admin,admin,"use core No.3,4 ( project CDMA 12 core )",Normal,Enable,-
+f-2,STM-4,--,Two-Fiber Bidirectional,NKI-009,2-OI4-1(SDH-1),NKI-005,10-SL4-1(SDH-1),1.0,0.0,Fiber,G.652,2007/02/16 04:08:13,bkk001,bkk001,-,Normal,Enable,-
+f-1,STM-4,--,Two-Fiber Bidirectional,NKI-013,1-OI4-1(SDH-1),NKI-009,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2007/02/16 04:07:51,bkk001,bkk001,-,Normal,Enable,-
+MW,STM-1,--,Two-Fiber Bidirectional,SNK-018,1-OI2D-1(SNK008),SNK-008,1-OI2S-1(SNK018),1.0,0.0,Fiber,G.652,2006/11/10 12:48:59,hw_001,hw_001,-,Critical,Enable,2013/06/03 12:42:01
+MW,STM-1,--,Two-Fiber Bidirectional,SNK-018,1-OI2D-2(SNK026),SNK-026,2-OI2S-1(SNK018),1.0,0.0,Fiber,G.652,2006/11/10 12:48:45,hw_001,hw_001,-,Critical,Enable,2013/05/21 12:54:44
+f-10,STM-1,--,Two-Fiber Bidirectional,YST-014,1-OI2D-1(SDH-1),YST-003,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2006/11/06 05:54:40,mycom,mycom,-,Normal,Enable,-
+f-9,STM-1,--,Two-Fiber Bidirectional,YST-005,4-SL1-1(YST-014),YST-014,1-OI2D-2(SDH-2),1.0,0.0,Fiber,G.652,2006/11/06 05:54:31,mycom,mycom,-,Normal,Enable,-
+f-8,STM-1,--,Two-Fiber Bidirectional,NMA-020,3-N1SL1-1(SDH-1),BRM-025,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/11/02 09:35:28,hw_001,hw_001,-,Critical,Enable,2013/06/09 20:07:28
+f-12,STM-1,--,Two-Fiber Bidirectional,UBN-010,1-OI2D-2(SDH-2),UBN-012,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/11/01 07:49:24,mycom,mycom,-,Normal,Enable,-
+f-11,STM-1,--,Two-Fiber Bidirectional,UBN-033,1-OI2D-2(SDH-2),UBN-010,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/11/01 07:49:15,mycom,mycom,-,Normal,Enable,-
+f-10,STM-1,--,Two-Fiber Bidirectional,UBN-034,1-OI2D-2(SDH-2),UBN-033,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/11/01 07:49:05,mycom,mycom,-,Normal,Enable,-
+f-9,STM-1,--,Two-Fiber Bidirectional,UBN-011,3-SD1-2(SDH-2),UBN-034,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/11/01 07:48:58,mycom,mycom,-,Normal,Enable,-
+f-20,STM-1,--,Two-Fiber Bidirectional,UBN-038,1-OI2D-2(SDH-2),UBN-011,3-SD1-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/31 09:23:48,mycom,mycom,-,Normal,Enable,-
+f-19,STM-1,--,Two-Fiber Bidirectional,UBN-039,1-OI2D-2(SDH-2),UBN-038,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/31 09:23:43,mycom,mycom,-,Normal,Enable,-
+f-18,STM-1,--,Two-Fiber Bidirectional,UBN-012,1-OI2D-2(SDH-2),UBN-039,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/31 09:23:28,mycom,mycom,-,Normal,Enable,-
+f-7,STM-1,--,Two-Fiber Bidirectional,KSN-004,1-OI2S-1(KSN021),KSN-021,3-SD1-2(KSN004),1.0,0.0,Fiber,G.652,2006/10/22 06:39:42,relacom,relacom,-,Critical,Enable,2013/05/27 11:11:02
+f-20,STM-4,--,Two-Fiber Bidirectional,LEI-007,6-SL4-1(SDH-1),LEI-017,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/15 05:06:52,mycom,mycom,"Use core No.11,12 ( project CDMA )",Normal,Enable,-
+f-19,STM-1,--,Two-Fiber Bidirectional,LEI-007,4-SL1-1(SDH-1),LEI-020,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/15 05:06:39,mycom,mycom,"Use core No.9,10 ( kk-cm )",Normal,Enable,-
+f-18,STM-1,--,Two-Fiber Bidirectional,LEI-007,3-SL1-1(SDH-1),LEI-003,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/15 05:06:30,mycom,mycom,-,Normal,Enable,-
+f-17,STM-16,--,Two-Fiber Bidirectional,LEI-008,6-S16-1(SDH-1),LEI-007,5-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/15 05:05:31,mycom,mycom,"use core 7,8  ( project cat kk-cm )",Critical,Enable,2013/08/25 17:18:11
+f-16,STM-1,--,Two-Fiber Bidirectional,LEI-008,4-SL1-1(SDH-1),LEI-009_POI_3G_E1,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/15 03:31:29,mycom,mycom,-,Normal,Enable,-
+f-15,STM-1,--,Two-Fiber Bidirectional,LEI-001,4-SL1-1(LEI016),LEI-016,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/15 03:27:21,mycom,mycom,-,Normal,Enable,-
+f-14,STM-16,--,Two-Fiber Bidirectional,LEI-001,6-S16-1(SDH-1),LEI-008,5-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/15 03:18:38,mycom,mycom,"Use core No. 5,6 ( project KK-cm )",Normal,Enable,-
+f-13,STM-16,--,Two-Fiber Bidirectional,LEI-004_POI_HSPA_E1,6-S16-1(SDH-1),LEI-001,5-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/15 03:18:29,mycom,mycom,-,Normal,Enable,-
+f-12,STM-16,--,Two-Fiber Bidirectional,KKN-003_GW_1418_No.2,6-S16-1(LEI004),LEI-004_POI_HSPA_E1,5-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/15 02:32:01,mycom,mycom,-,Normal,Enable,-
+f-129,STM-1,--,Two-Fiber Bidirectional,NE265 NMA-035,1-OI2D-2(SDH-2),NMA-041,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/12 06:04:40,admin,admin,-,Normal,Enable,-
+f-126,STM-1,--,Two-Fiber Bidirectional,CPM-012,1-OI2D-2(SDH-2),CPM-015,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/12 02:36:54,admin,admin,-,Normal,Enable,-
+f-124,STM-1,--,Two-Fiber Bidirectional,UDN-019,1-OI2D-2(UDN-021),UDN-021,1-OI2D-1(UDN-019),1.0,0.0,Fiber,G.652,2006/10/11 04:42:01,admin,admin,-,Normal,Enable,-
+f-123,STM-1,--,Two-Fiber Bidirectional,UDN-027,1-OI2D-2(SDH-2),UDN-019,1-OI2D-1(UDN-027),1.0,0.0,Fiber,G.652,2006/10/11 04:41:53,admin,admin,-,Normal,Enable,-
+f-122,STM-1,--,Two-Fiber Bidirectional,NKI-012,1-OI2D-2(SDH-2),UDN-027,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/11 04:41:44,admin,admin,-,Normal,Enable,-
+f-109,STM-1,--,Two-Fiber Bidirectional,NMA-045_1416,1-OI2S-1(SDH-1),NMA-059,3-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/06 06:29:22,admin,admin,-,Normal,Enable,-
+f-108,STM-1,--,Two-Fiber Bidirectional,NMA-015,3-OI2S-1(SDH-1),NMA-066_HSPA,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/06 06:29:16,admin,admin,-,Normal,Enable,-
+f-107,STM-4,--,Two-Fiber Bidirectional,NMA-009,2-OI4-1(SDH-1),NMA-053,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/06 06:29:01,admin,admin,-,Normal,Enable,-
+f-106,STM-4,--,Two-Fiber Bidirectional,NMA-012,2-OI4-1(SDH-1),NMA-009,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/06 06:28:56,admin,admin,-,Normal,Enable,-
+f-105,STM-4,--,Two-Fiber Bidirectional,NMA-061,2-OI4-1(SDH-1),NMA-012,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/06 06:28:49,admin,admin,-,Normal,Enable,-
+f-104,STM-4,--,Two-Fiber Bidirectional,NMA-059,2-OI4-1(SDH-1),NMA-061,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/06 06:28:44,admin,admin,-,Normal,Enable,-
+f-103,STM-4,--,Two-Fiber Bidirectional,NMA-013_HSPA_E1,2-OI4-1(SDH-1),NMA-059,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/06 06:28:39,admin,admin,-,Normal,Enable,-
+f-102,STM-4,--,Two-Fiber Bidirectional,NMA-015,2-OI4-1(SDH-1),NMA-013_HSPA_E1,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/06 06:28:30,admin,admin,-,Normal,Enable,-
+f-100,STM-4,--,Two-Fiber Bidirectional,NMA-056_HSPA_E1_EoS,1-OI4-1(SDH-1),NMA-053,2-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/06 06:28:03,admin,admin,-,Normal,Enable,-
+f-99,STM-4,--,Two-Fiber Bidirectional,NMA-056_HSPA_E1_EoS,2-OI4-1(SDH-1),NMA-048_HSPA,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/10/06 05:48:42,admin,admin,-,Normal,Enable,-
+f-9,STM-1,--,Two-Fiber Bidirectional,AMR-001,3-SL1-1(SDH-1),AMR-008,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/29 02:40:31,mycom,mycom,-,Normal,Enable,-
+f-80,STM-1,--,Two-Fiber Bidirectional,LEI-013,1-OI2D-2(SDH-2),LEI-018,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/26 03:08:55,admin,admin,"use core No.3,4 ( project CDMA ) BJ 1,2 to nadong",Normal,Enable,-
+f-79,STM-1,--,Two-Fiber Bidirectional,NLP-005,1-OI2D-2(SDH-2),LEI-013,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/26 03:08:45,admin,admin,"use core No.1,2,( project cat CDMA )",Normal,Enable,-
+f-78,STM-1,--,Two-Fiber Bidirectional,LEI-011,1-OI2D-2(SDH-2),NLP-005,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/26 03:08:37,admin,admin,"use core No.1,2,( project cat CDMA )",Normal,Enable,-
+f-77,STM-1,--,Two-Fiber Bidirectional,LEI-006,1-OI2D-2(SDH-2),LEI-011,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/26 03:08:32,admin,admin,"Use core No 9,10 ( project kk-Cm ) Patch use core No. 1,2 ( project cat CDMA )",Normal,Enable,-
+f-76,STM-1,--,Two-Fiber Bidirectional,LEI-020,1-OI2D-2(SDH-2),LEI-006,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/26 03:08:26,admin,admin,"Use core No. 9,10 ( Project KK-cm )",Normal,Enable,-
+f-17,STM-4,--,Two-Fiber Bidirectional,NKI-020,1-OI4-1(SDH-1),NKI-013,2-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/25 20:25:36,admin,admin,-,Normal,Enable,-
+f-16,STM-4,--,Two-Fiber Bidirectional,NKI-016,1-OI4-1(SDH-1),NKI-020,2-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/25 20:25:25,admin,admin,-,Normal,Enable,-
+f-15,STM-4,--,Two-Fiber Bidirectional,UDN-009,1-OI4-1(SDH-1),NKI-016,2-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/25 20:25:14,admin,admin,-,Normal,Enable,-
+f-58,STM-1,--,Two-Fiber Bidirectional,MDH-006,1-OI2S-1(MDH-002),MDH-002,1-OI2D-2(MDH-006),1.0,0.0,Fiber,G.652,2006/09/19 06:21:13,admin,admin,-,Normal,Enable,-
+f-54,STM-16,--,Two-Fiber Bidirectional,SSK-003,9-S16-1(SDH-1),SSK-009,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/14 07:44:41,admin,admin,-,Normal,Enable,-
+f-55,STM-16,--,Two-Fiber Bidirectional,SSK-009,9-S16-1(SDH-1),SSK-001,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/14 07:44:41,admin,admin,-,Normal,Enable,-
+f-36,STM-4,--,Two-Fiber Bidirectional,UDN-035_HSPA,2-OI4-1(SDH-1),UDN-032_HSPA(60),1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/11 06:38:46,admin,admin,-,Normal,Enable,-
+f-37,STM-4,--,Two-Fiber Bidirectional,UDN-032_HSPA(60),2-OI4-1(SDH-1),UDN-016_HSPA,5-SL4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/11 06:38:46,admin,admin,-,Normal,Enable,-
+f-38,STM-4,--,Two-Fiber Bidirectional,UDN-016_HSPA,6-SL4-1(SDH-1),UDN-013_HSPA,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/11 06:38:46,admin,admin,-,Normal,Enable,-
+f-39,STM-4,--,Two-Fiber Bidirectional,UDN-013_HSPA,2-OI4-1(SDH-1),UDN-039_HSPA(60),1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/11 06:38:46,admin,admin,-,Normal,Enable,-
+f-24,STM-1,--,Two-Fiber Bidirectional,NMA-004,4-SL1-1(SDH-1),NE265 NMA-035,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/09/09 03:05:36,admin,admin,-,Normal,Enable,-
+f-11,STM-1,--,Two-Fiber Bidirectional,CPM-010,4-SL1-1(SDH-1),CPM-012,1-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/08/30 08:15:47,admin,admin,-,Normal,Enable,-
+f-30,STM-1,--,Two-Fiber Bidirectional,CPM-009,3-SL1-1(SDH-1),CPM-022,1-OI2D-1(to CPM-009),1.0,0.0,Fiber,G.652,2006/08/29 06:24:25,admin,admin,-,Normal,Enable,-
+f-49,STM-1,--,Two-Fiber Bidirectional,LEI-002,1-OI2S-1(SDH-1),LEI-018,2-OI2D-2(SDH-2),1.0,0.0,Fiber,G.652,2006/03/21 02:41:49,admin,admin,-,Normal,Enable,-
+f-48,STM-1,--,Two-Fiber Bidirectional,LEI-015,1-OI2S-1(SDH-1),LEI-018,2-OI2D-1(SDH-1),1.0,0.0,Fiber,G.652,2006/03/21 02:41:20,admin,admin,-,Critical,Enable,2013/07/04 10:52:36
+f-48,STM-1,--,Two-Fiber Bidirectional,CPM-001,2-OI2S-1(SDH-1),CPM-011,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2006/03/01 05:24:01,admin,admin,-,Normal,Enable,-
+f-2,STM-1,--,Two-Fiber Bidirectional,CPM-009,4-SL1-1(SDH-1),CPM-001,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2006/02/01 01:57:18,bangkok5,bangkok5,-,Normal,Enable,-
+f-19,STM-16,--,Two-Fiber Bidirectional,UBN-015,9-S16-1(SDH-1),UBN-008,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/16 02:58:40,bangkok2,bangkok2,-,Normal,Enable,-
+f-5,STM-4,--,Two-Fiber Bidirectional,UDN-005,2-OI4-1(SDH-1),NKI-005,9-SL4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/16 02:41:15,bangkok2,bangkok2,-,Normal,Enable,-
+f-4,STM-4,--,Two-Fiber Bidirectional,UDN-011_HSPA,2-OI4-1(SDH-1),UDN-005,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/16 02:41:15,bangkok2,bangkok2,-,Normal,Enable,-
+f-23,STM-16,--,Two-Fiber Bidirectional,NMA-010_HSPA,10-S16-1(SDH-1),SRI-001 (C-27)Saraburi,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/15 20:03:12,admin,admin,-,Normal,Enable,-
+f-4,STM-16,--,Two-Fiber Bidirectional,SSK-001,9-S16-1(SDH-1),UBN-004,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/12 08:32:15,admin,admin,-,Normal,Enable,-
+f-2,STM-16,--,Two-Fiber Bidirectional,SRN-005,9-S16-1(SDH-1),SSK-003,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/12 08:31:57,admin,admin,-,Normal,Enable,-
+f-1,STM-16,--,Two-Fiber Bidirectional,SRN-005,10-S16-1(SDH-1),BRM-004,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/12 08:05:30,admin,admin,-,Normal,Enable,-
+f-17,STM-1,--,Two-Fiber Bidirectional,LEI-018,1-OI2D-2(SDH-2),LEI-003,2-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/08 07:13:54,admin,admin,"use core No.1,2 ( project CDMA )",Normal,Enable,-
+f-11,STM-1,--,Two-Fiber Bidirectional,LEI-005,3-OI2S-1(SDH-1),LEI-012,1-OI2S-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/08 05:04:40,admin,admin,-,Normal,Enable,-
+f-10,STM-4,--,Two-Fiber Bidirectional,LEI-019,2-OI4-1(SDH-1),LEI-010,1-OI4-1(LEI-019),1.0,0.0,Fiber,G.652,2006/01/08 05:04:32,admin,admin,-,Normal,Enable,-
+f-9,STM-4,--,Two-Fiber Bidirectional,LEI-005,2-OI4-1(SDH-1),LEI-019,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/08 05:04:22,admin,admin,-,Normal,Enable,-
+f-8,STM-1,--,Two-Fiber Bidirectional,LEI-014,1-OI2S-1(SDH-1),LEI-010,3-OI2S-1(LEI-014),1.0,0.0,Fiber,G.652,2006/01/08 03:29:14,admin,admin,-,Normal,Enable,-
+f-5,STM-4,--,Two-Fiber Bidirectional,LEI-017,2-OI4-1(SDH-1),LEI-005,1-OI4-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/08 03:28:44,admin,admin,-,Normal,Enable,-
+f-17,STM-64,--,Two-Fiber Bidirectional,NMA-020,11-N2SL64-1(SDH-1),SRN-006,8-N2SL64-1(SDH-1),110.0,0.0,Fiber,G.652,2006/01/07 09:26:33,admin,admin,-,Normal,Enable,-
+f-16,STM-16,--,Two-Fiber Bidirectional,CPM-010,10-S16-1(SDH-1),CPM-018,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/05 19:14:12,admin,admin,-,Normal,Enable,-
+f-15,STM-16,--,Two-Fiber Bidirectional,CPM-009,10-S16-1(SDH-1),CPM-010,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/05 19:13:20,admin,admin,-,Normal,Enable,-
+f-14,STM-16,--,Two-Fiber Bidirectional,KKN-003_GW_1418_No.2,10-S16-1(CPM009),CPM-009,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/05 19:05:32,admin,admin,-,Normal,Enable,-
+f-23,STM-16,--,Two-Fiber Bidirectional,CPM-018,10-S16-1(SDH-1),NMA-046,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/05 03:58:31,admin,admin,-,Normal,Enable,-
+f-10,STM-16,--,Two-Fiber Bidirectional,KKN-015,10-S16-1(SDH-1),KKN-003_GW_1418_No.2,9-S16-1(KKN015),1.0,0.0,Fiber,G.652,2006/01/05 00:53:12,admin,admin,"use core No.47,48 ( project kk-chumpare 48 core )",Normal,Enable,-
+f-9,STM-16,--,Two-Fiber Bidirectional,KKN-004_GW_ID1418_No.1,10-S16-1(SDH-1),KKN-015,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/05 00:52:59,admin,admin,"use core No.3,4 ( project kk-korat 24 core ) change 11,12 ระยะ 46 Km      Core12ย้ายไป 9 change 11(35),12(36)",Normal,Enable,-
+f-8,STM-16,--,Two-Fiber Bidirectional,KKN-007,10-S16-1(SDH-1),KKN-004_GW_ID1418_No.1,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2006/01/05 00:52:22,admin,admin,"use core No.3,4 ( project kk-korat 24 core )",Normal,Enable,-
+f-27,STM-16,--,Two-Fiber Bidirectional,NMA-021,12-N1SL16-1(SDH-1),KKN-007,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/12/27 08:14:26,admin,admin,"use core No.3,4 ( project kk-korat 24 Core )",Normal,Enable,-
+f-1,STM-16,--,Two-Fiber Bidirectional,BRK-001 (C-1 BKK),13-N1SL16-1(SDH-1),C-2  Nonthaburi,6-N1SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/10/13 01:20:37,admin,admin,-,Normal,Enable,-
+f-23,STM-16,--,Two-Fiber Bidirectional,NPT-001 (C-12)Nakronprathom,10-S16-1(SDH-1),BRK-004 (C-14)Pasrijajareon,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/10/09 03:32:35,admin,admin,-,Normal,Enable,-
+f-22,STM-16,--,Two-Fiber Bidirectional,RBR-001 (C-15)Ratchaburi,10-S16-1(SDH-1),NPT-001 (C-12)Nakronprathom,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/10/09 03:32:23,admin,admin,-,Normal,Enable,-
+f-21,STM-16,--,Two-Fiber Bidirectional,PBI-001 (C-16)Petburi,10-S16-1(SDH-1),RBR-001 (C-15)Ratchaburi,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/10/09 03:32:02,admin,admin,-,Normal,Enable,-
+f-20,STM-16,--,Two-Fiber Bidirectional,BRK-004 (C-14)Pasrijajareon,10-S16-1(SDH-1),BRK-001 (C-1 BKK),6-N1SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/10/09 03:30:52,admin,admin,-,Normal,Enable,-
+f-18,STM-16,--,Two-Fiber Bidirectional,NMA-040,10-S16-1(SDH-1),NMA-047,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/10/09 03:25:11,admin,admin,-,Normal,Enable,-
+f-17,STM-16,--,Two-Fiber Bidirectional,PRI-001 (C-32 Krabinburi),10-S16-1(SDH-1),NMA-040,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/10/09 03:24:59,admin,admin,-,Normal,Enable,-
+f-16,STM-16,--,Two-Fiber Bidirectional,CCO-001 (C-33),10-S16-1(SDH-1),PRI-001 (C-32 Krabinburi),9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/10/09 03:24:44,admin,admin,-,Normal,Enable,-
+f-15,STM-16,--,Two-Fiber Bidirectional,BRK-005 (C-34)Meanburi,10-S16-1(DIR:CCO-001(C-33)),CCO-001 (C-33),9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/10/09 03:24:10,admin,admin,-,Normal,Enable,-
+f-14,STM-16,--,Two-Fiber Bidirectional,BRK-001 (C-1 BKK),11-N1SL16-1(SDH-1),BRK-005 (C-34)Meanburi,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/10/09 03:23:33,admin,admin,-,Normal,Enable,-
+f-9,STM-16,--,Two-Fiber Bidirectional,PKN-003 (C-22)Pranburi,9-S16-1(SDH-1),PKN-002 (C-21)Cha-um,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/09/26 06:28:12,admin,admin,-,Normal,Enable,-
+f-5,STM-16,--,Two-Fiber Bidirectional,NON-002 (109-C-2-EXT1),11-N1SL16-1(SDH-1),C-2  Nonthaburi,12-N1SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/09/25 01:25:20,admin,admin,-,Normal,Enable,-
+f-4,STM-16,--,Two-Fiber Bidirectional,NON-002 (109-C-2-EXT1),8-N1SL16-1(SDH-1),C-2  Nonthaburi,7-N1SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/09/25 01:25:09,admin,admin,-,Normal,Enable,-
+f-55,STM-16,--,Two-Fiber Bidirectional,C-4 Klogluang,9-S16-1(DIR:C-29),C-29,10-S16-1(DIR:C-4),1.0,0.0,Fiber,G.652,2005/09/02 09:10:23,admin,admin,-,Normal,Enable,-
+f-54,STM-16,--,Two-Fiber Bidirectional,C-4 Klogluang,10-S16-1(SDH-1),C-2  Nonthaburi,8-N1SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/09/02 09:10:00,admin,admin,-,Normal,Enable,-
+f-44,STM-16,--,Two-Fiber Bidirectional,PBI-001 (C-16)Petburi,6-S16-1(SDH-1),PKN-002 (C-21)Cha-um,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/09/01 10:39:09,admin,admin,-,Normal,Enable,-
+f-41,STM-16,--,Two-Fiber Bidirectional,PKN-005 (C-24)Bangsapan,6-S16-1(SDH-1),PKN-001 (C-20)Prajuabkirikun,5-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/09/01 08:43:59,admin,admin,-,Normal,Enable,-
+f-10,STM-16,--,Two-Fiber Bidirectional,PKN-004 (C-23)Tupsagae,10-S16-1(SDH-1),PKN-005 (C-24)Bangsapan,5-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/09/01 04:39:00,admin,admin,-,Normal,Enable,-
+f-9,STM-16,--,Two-Fiber Bidirectional,PKN-001 (C-20)Prajuabkirikun,6-S16-1(SDH-1),PKN-004 (C-23)Tupsagae,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/09/01 04:38:07,admin,admin,-,Normal,Enable,-
+f-7,STM-16,--,Two-Fiber Bidirectional,PKN-003 (C-22)Pranburi,5-S16-1(SDH-1),PKN-001 (C-20)Prajuabkirikun,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/09/01 04:36:08,admin,admin,-,Normal,Enable,-
+f-6,STM-16,--,Two-Fiber Bidirectional,PKN-003 (C-22)Pranburi,6-S16-1(SDH-1),PKN-001 (C-20)Prajuabkirikun,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/09/01 04:35:01,admin,admin,-,Normal,Enable,-
+f-5,STM-16,--,Two-Fiber Bidirectional,PBI-003 (C-19)Huahin,9-S16-1(SDH-1),PKN-003 (C-22)Pranburi,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/09/01 04:34:05,admin,admin,-,Normal,Enable,-
+f-4,STM-16,--,Two-Fiber Bidirectional,PBI-001 (C-16)Petburi,5-S16-1(SDH-1),PBI-003 (C-19)Huahin,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/09/01 04:30:50,admin,admin,-,Normal,Enable,-
+f-3,STM-16,--,Two-Fiber Bidirectional,PBI-001 (C-16)Petburi,9-S16-1(SDH-1),C-17(Chalee 1),10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/09/01 04:29:20,admin,admin,-,Normal,Enable,-
+f-56,STM-16,--,Two-Fiber Bidirectional,NMA-010_HSPA,9-S16-1(SDH-1),NMA-018,10-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/08/31 02:12:03,admin,admin,Fiber True 3G(29mar56),Normal,Enable,-
+f-56,STM-16,--,Two-Fiber Bidirectional,SKM-001 (C-18)Bangtorat,10-S16-1(SDH-1),C-17(Chalee 1),9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/08/30 10:40:27,admin,admin,-,Normal,Enable,-
+f-55,STM-16,--,Two-Fiber Bidirectional,C-2  Nonthaburi,13-N1SL16-1(SDH-1),SKM-001 (C-18)Bangtorat,9-S16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/08/30 10:39:22,admin,admin,-,Normal,Enable,-
+f-3,STM-16,--,Two-Fiber Bidirectional,BRK-001 (C-1 BKK),8-N1SL16-1(SDH-1),C-2  Nonthaburi,11-N1SL16-1(SDH-1),1.0,0.0,Fiber,G.652,2005/08/24 03:20:28,admin,admin,-,Normal,Enable,-

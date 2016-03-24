@@ -1,0 +1,261 @@
+#ifndef notifications_idl
+#define notifications_idl
+
+// ********************************
+// *                              *
+// * notifications.idl            *
+// *                              *
+// ********************************
+
+//Include list
+#include "globaldefs.idl"
+#include "CosNotification.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the notification portions
+   * of the NML-EML interface. See
+   * <a href=supportingDocumentation/notificationServiceUsage.html>Notification Service Usage</a>
+   * for details on how this interface uses the notification service.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module notifications
+{
+  /**
+   * <p>ObjectType is an attribute of all notifications.
+   * The enum avoids any uncertainty in the type of object and allows
+   * simple filtering.</p>
+   *
+   * <p>A notification must be reported against the correct object if it
+   * is modelled.</p> 
+   *
+   * <p>For alarms, the objectType OT_AID is used to represent the EMS 
+   * object types that are not modelled.  Other notifications types
+   * should not be reported against AIDs.</p>
+   **/
+   enum  ObjectType_T
+   {
+     OT_EMS,
+     OT_MANAGED_ELEMENT,
+     OT_MULTILAYER_SUBNETWORK,
+     OT_TOPOLOGICAL_LINK,
+     OT_SUBNETWORK_CONNECTION,
+     OT_PHYSICAL_TERMINATION_POINT,
+     OT_CONNECTION_TERMINATION_POINT,
+     OT_TERMINATION_POINT_POOL,
+     OT_EQUIPMENT_HOLDER,
+     OT_EQUIPMENT,
+     OT_PROTECTION_GROUP,
+     OT_TRAFFIC_DESCRIPTOR,	 	 	     
+	 OT_AID 	 
+   };
+
+   /**
+   * <p>The ObjectTypeQualifier_T is used to identify object types defined
+   * in v3.0 and beyond. It is needed because the ObjectType_T enum cannot be 
+   * extended for backward compatibility reasons. </p>
+   *
+   *<p>The valid value is as following:
+   *<br> "OT_VB"
+   *<br> "OT_VLAN"
+   *<br> "OT_ATM_PROTECTION_GROUP"
+   *<br> "OT_RPR_NODE"
+   *<br> "OT_ATM_SERVICE"
+   *<br> "OT_ETH_SERVICE" 
+   *<br> "OT_QOS_RULE"
+   *<br> "OT_FLOW"
+   *<br> "OT_WDM_PROTECTION_GROUP"
+   *<br> "OT_SNPP_LINK"	  
+   **/
+   typedef string ObjectTypeQualifier_T;
+
+
+  /**
+   * <p>The PerceivedSeverity_T values are consistent
+   * with ITU-T X.733 definitions.<p>
+   * 
+   **/
+   enum  PerceivedSeverity_T
+   {
+     PS_INDETERMINATE,
+     PS_CRITICAL,
+     PS_MAJOR,
+     PS_MINOR,
+     PS_WARNING,
+     PS_CLEARED
+   };
+
+
+  /**
+   * <p>List of PerceivedSeverity_T values.<p>
+   * 
+   **/
+   typedef sequence<PerceivedSeverity_T> PerceivedSeverityList_T;
+
+
+  /**
+   * <p>ServiceAffecting_T describes the impact of a fault on monitored entities</p>
+   * <br>SA_UNKNOWN: The EMS cannot determine if the condition 
+   *  affects service or not.<br>
+   * <br>SA_SERVICE_AFFECTING: The EMS determines the condition affects service.<br>
+   * <br>SA_NON_SERVICE_AFFECTING: The EMS determines the condition does not
+   *  affect service.<br>
+   **/
+   enum ServiceAffecting_T
+   {
+    SA_UNKNOWN,
+    SA_SERVICE_AFFECTING,
+    SA_NON_SERVICE_AFFECTING
+   };
+ 
+
+  /**
+   * <p>Set of probable causes.  
+   * See <a href=supportingDocumentation/notificationServiceUsage.html> Notification
+   * Service Usage</a> for a description of the probable cause strings.</p>
+   **/
+  typedef sequence<string> ProbableCauseList_T;
+
+
+  /**
+   * <p>The NameAndAnyValue_T structure is provided when an any value is needed.</p>
+   **/
+   struct NameAndAnyValue_T
+   {
+     string      name;
+     any         value;
+   };
+
+
+  /**
+   * <p>A list of (name=string, value=any) tuples. The OMG standard 
+   * NVList.  This is used for AttributeValueChange and StateChange notifications (see
+   * <a href=supportingDocumentation/notificationServiceUsage.html> Notification
+   * Service Usage</a>.</p>
+   **/
+   typedef sequence<NameAndAnyValue_T> NVList_T;
+
+
+  /**
+   * Describe transfer status type.  This is used for FTP notifications (see
+   * <a href=supportingDocumentation/notificationServiceUsage.html> Notification
+   * Service Usage</a>.</p>
+   */
+  enum FileTransferStatus_T
+  {
+    FT_IN_PROGRESS,
+    FT_FAILED,
+    FT_COMPLETED
+  };
+
+  
+  /**
+   * <p>Sequence of CosNotification::StructuredEvent</p>
+   **/
+  typedef sequence<CosNotification::StructuredEvent> EventList_T;
+
+
+  /**
+   * <p> Element of SpecificProblemList_T </p>
+   **/
+  typedef string SpecificProblem_T;
+
+
+  /**
+   * <p> The optional "X.733::SpecificProblems" parameter uses that type.</p>
+   *
+   * <P>When present in an alarm notification,
+   * it identifies further refinements to the probable cause of the alarm.
+   * This is consistent with the ITU-T X.733 definition. </p>
+   **/
+   
+typedef sequence <SpecificProblem_T> SpecificProblemList_T;
+
+
+  /**
+   * <p>List of notification IDs (field notificationId in the notifications).</p>
+   **/
+  typedef sequence<string> NotifIDList_T;
+
+
+  /** <p> Correlated notifications are identified by the object that emitted 
+   * the notification and the notification IDs.  Both are included in case 
+   * the Notification IDs are not unique across objects. </p>
+   *
+   * <p>source: Reference to object that emitted the correlated 
+   *  notification. If empty, the correlated notifications 
+   *  are from the same source as the notification containing 
+   *  this data structure.</p>
+   * <p>notifIDs: IDs of the correlated notifications. 
+   *  To use this structure, notification
+   *  identifiers must be chosen to be unique across all 
+   *  notifications from a particular managed object 
+   *  throughout the time that correlation is significant.</p>
+   */
+  struct CorrelatedNotifications_T
+  {
+    globaldefs::NamingAttributes_T source; 
+    NotifIDList_T                  notifIDs;
+  };
+
+
+  /**
+   * <p> The optional "X.733::CorrelatedNotifications" parameter uses this type.</p>
+   *
+   * <p>When present in an alarm notification, it contains a set of 
+   * notification identifiers and, if necessary, their associated 
+   * object names.  This set is defined to be the set of all notifications 
+   * to which this notification is considered to be correlated.
+   * This is consistent with the ITU-T X.733 definition.</p>
+   **/
+  typedef sequence<CorrelatedNotifications_T> CorrelatedNotificationList_T;
+
+
+  /**
+   * <p> Element of ProposedRepairActionList_T </p>
+   **/
+  typedef string ProposedRepairAction_T;
+
+
+  /**
+   * <p> The optional "X.733::ProposedRepairActions" parameter uses this type.</p>
+   *
+   * <p>When present in an alarm notification, it
+   * indicates if the cause is known and the system being managed 
+   * can suggest one or more solutions (such as switch in standby equipment, 
+   * retry, replace media).
+   * This is consistent with the ITU-T X.733 definition. </p>
+   **/
+   
+  typedef sequence<ProposedRepairAction_T> ProposedRepairActionList_T;
+
+
+  /**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   **/
+   interface EventIterator_I 
+    {
+      boolean  next_n(in unsigned long how_many,
+                      out EventList_T eventList)
+               raises (globaldefs::ProcessingFailureException);
+
+      unsigned long getLength()
+                    raises (globaldefs::ProcessingFailureException);
+
+      void destroy()
+           raises (globaldefs::ProcessingFailureException);
+    };
+
+
+};
+
+#endif

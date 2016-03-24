@@ -1,0 +1,918 @@
+#ifndef encapsulationLayerLink_idl
+#define encapsulationLayerLink_idl
+
+// *********************************
+// *                               *
+// * encapsulationLayerLink.idl    *
+// *                               *
+// *********************************
+
+//Include list
+#include "globaldefs.idl"
+#include "common.idl"
+#include "subnetworkConnection.idl"
+#include "topologicalLink.idl"
+#include "flowDomain.idl"
+#include "transmissionParameters.idl"
+
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <p> This module defines the encapsulation layer link (ELL). See the supporting
+   * documentation EllTypes.pdf for details of encapsulation layer link
+   * provisioning.</p>
+   * </p>
+   *
+   * <h5> Version 3.5 (DRAFT) </h5>
+   **/
+
+module encapsulationLayerLink
+{
+  /**
+   * <p> The link types of an encapsulation layer link: <br>
+   * LT_POINT_TO_POINT: the link is between exact two points <br>
+   * LT_MULTIPOINT: the link is between at least two points <br>
+   * </p>
+   **/
+   enum LinkType_T
+   {
+     LT_POINT_TO_POINT,
+     LT_POINT_TO_MULTIPOINT,
+     LT_MULTIPOINT
+   };
+
+  /**
+   * <p> The policy for creating server SNCs during the creation of an 
+   * encapsulation layer link: <br>
+   * BP_NONE: server SNCs are neither created nor configured<br>
+   * BP_AUTOMATIC: server SNCs are automatically created by the EMS
+   *  <br>
+   * BP_MANUAL: server SNCs to be created are specified by the NMS<br>
+   * BP_BY_CALL: bandwidth shall be created using an already existing Call.
+   * <br> </p>
+   **/
+   enum BandwidthProvisioningMode_T
+   {
+     BP_NONE,
+     BP_AUTOMATIC,
+     BP_MANUAL,
+     BP_BY_CALL
+   };
+ 
+  /**
+   * <p> An encapsulation layer link represents the bandwidth between two
+   * or more CPTPs where some CPTPs may be off-network. <br>
+   * The read/write attributes can be set by the NMS by either the common methods 
+   * of the common::Common_I interface or by the methods for provisioning of 
+   * encapsulation layer links of the EncapsulationLayerLinkMgr_I interface.
+   * </p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>The name of the encapsulation layer link
+   * which is assigned by the EMS upon creation. The EMS is responsible
+   * for guaranteeing the uniqueness of the name within the context
+   * of the EncapsulationLayerLinkMgr_I.<br>
+   *
+   * string <b>userLabel</b>:
+   * <br>The user label of the encapsulation layer link is NMS data
+   * (e.g. end-to-end service data). The EMS may choose to display the
+   * value of the attribute to the EMS user, but this is not a requirement.
+   * <br>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br>The name represents how the encapsulation layer link is referred to on 
+   * EMS displays. Its
+   * aim is to provide a "nomenclature bridge" to aid relating information
+   * presented on NMS displays to EMS displays (via GUI cut through).
+   * The native name is defaulted to a NULL string. However, this could
+   * be used by the EMS for its implementation dependent purpose.<br>
+   *
+   * string <b>owner</b>:
+   * <br>The owner is provisionable by the NMS.<br>
+   *
+   * LinkType_T <b>type</b>:
+   * <br>The type of the encapsulation layer link.<br>
+   *
+   * transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+   * <br> This attribute represents the connectionless client layer rate (e.g.,
+   * Ethernet, DVB) and the server layer rates (e.g., VC12) of the encapsulation
+   * layer link. A list of technology-specific transmission parameters is associated to
+   * every layer rate. Refer to the supporting documents LayerRates.pdf and
+   * LayeredParameters.pdf for details of the currently defined layer rates and
+   * transmission parameters. <br>
+   *
+   * transmissionParameters::LayerRate_T <b>rate</b>:
+   * <br> This attribute represents the layer rate of the encapsulation layer link.
+   * Refer to the supporting document LayerRates.pdf for the currently defined layer
+   * rates (e.g., Encapsulation, RPR).<br>
+   *
+   * string <b>networkAccessDomain</b>:
+   * <br> The Network Access Domain to which the encapsulation layer link is assigned
+   * to.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>endTPs</b>:
+   * <br> This attribute represents the list of CPTPs terminating the encapsulation
+   * layer link. In case the encapsulation layer link is of type point-to-point
+   * the list contains only two CPTPs (a-end and z-end). All CPTPs that are managed
+   * by different EMSes are off-network CPTPs which are addressed by remote
+   * addresses.<br> 
+   *
+   * globaldefs::NamingAttributesList_T <b>route</b>:
+   * <br>The list of server SNC names or topological link names providing the bandwidth
+   * for the encapsulation layer link.<br>
+   *
+   * boolean <b>segment</b>:
+   * <br> This attribute identifies if the EMS manages all end CPTPs of the
+   * encapsulation layer link (false) or only a subset (true).<br> 
+   *
+   * globaldefs::NamingAttributesList_T <b>routeGroups</b>:
+   * <br> the list of RouteGroups into which the SNCs are divided, 
+   * in case of diversity.
+   *<br> 
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>This attribute allows the communication from the EMS to the NMS of  
+   * additional information which is not explicitly modelled. This concerns
+   * in particular vendor specific parameters. <br>
+   * <br>
+   **/
+   struct EncapsulationLayerLink_T
+   {
+     globaldefs::NamingAttributes_T name;
+     string userLabel;
+     string nativeEMSName;
+     string owner;
+     LinkType_T type;
+     transmissionParameters::LayeredParameters_T transmissionParams;
+     transmissionParameters::LayerRate_T rate;
+     string networkAccessDomain;
+     globaldefs::NamingAttributesList_T endTPs;
+     globaldefs::NamingAttributesList_T route;
+     boolean segment;
+     globaldefs::NamingAttributesList_T routeGroups;
+     globaldefs::NVSList_T additionalInfo;
+   };
+
+  /**
+   * <p>Sequence of EncapsulationLayerLink_T objects.</p>
+   **/
+   typedef sequence<EncapsulationLayerLink_T> ELLinkList_T;
+
+  /**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   **/
+   interface ELLinkIterator_I
+   {
+      boolean next_n(in  unsigned long    how_many,
+                     out ELLinkList_T ellList)
+        raises (globaldefs::ProcessingFailureException);
+
+      unsigned long getLength()
+        raises (globaldefs::ProcessingFailureException);
+
+      void destroy()
+        raises (globaldefs::ProcessingFailureException);
+   };
+
+  /**
+   * <p>The read/write attributes required for the creation of an
+   * encapsulation layer link on the EMS are packed together in an
+   * ELLinkCreateData_T structure which the NMS will pass to the EMS at
+   * encapsulation layer link creation time.</p>
+   *
+   * string <b>userLabel</b>:
+   * <br>An userLabel may be specified by the NMS. May be empty.<br>
+   *
+   * boolean <b>forceUniqueness</b>:
+   * <br>Specifies whether uniqueness of the userLabel is required amongst the flow
+   * domain fragments of the EMS. In case of uniqueness, the operation will fail 
+   * if the userLabel is already in use.<br>
+   *
+   * string <b>owner</b>:
+   * <br>An owner may be specified by the NMS. May be empty.<br>
+   *
+   * string <b>networkAccessDomain</b>:
+   * <br> The Network Access Domain to which the encapsulation layer link shall
+   * be assigned to.<br>
+   *
+   * transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+   * <br> This attribute represents the connectionless client layer rate (e.g.,
+   * Ethernet, DVB) and the server layer rates (e.g., VC12) of the encapsulation
+   * layer link. A list of technology-specific transmission parameters is associated to
+   * every layer rate. Refer to the supporting documents LayerRates.pdf and
+   * LayeredParameters.pdf for details of the currently defined layer rates and
+   * transmission parameters. <br>
+   *
+   * transmissionParameters::LayerRate_T <b>rate</b>:
+   * <br> This attribute represents the layer rate of the encapsulation layer link.
+   * Refer to the supporting document LayerRates.pdf for the currently defined layer
+   * rates (e.g., Encapsulation, RPR).<br>
+   *
+   * LinkType_T <b>type</b>:
+   * <br>The type of the encapsulation layer link.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>endTPs</b>:
+   * <br>This attribute represents the list of CPTPs terminating the encapsulation
+   * layer link. In case the encapsulation layer link is of type point-to-point
+   * the list contains only two CPTPs (a-end and z-end). All CPTPs that are managed
+   * by different EMSes are off-network CPTPs which are addressed by remote
+   * addresses.<br> 
+   *
+   * boolean <b>segment</b>:
+   * <br> This attribute identifies if the EMS manages all end CPTPs of the
+   * encapsulation layer link (false) or only a subset (true).<br> 
+   *
+   * BandwidthProvisioningMode_T <b>provisioningMode</b>:
+   * <br> Indicates if bandwidth for the new ELL shall not be created by this request
+   * or shall be created automatically by the EMS or shall be created with NMS provided
+   * SNC parameters. See the supporting documentation EllTypes.pdf for the corresponding 
+   * configurations and parameters.<br>
+   *
+   * SNCCreateDataList_T <b>sncList</b>:
+   * <br> The server SNCs to be created to provide bandwidth to the encapsulation
+   * layer link. If no bandwidth provisioning or automatic bandwidth provisioning is
+   * specified, this parameter is ignored.<br>
+   *
+   * globaldefs::NamingAttributes_T <b>callName</b>: 
+   * <br> The call name to be provided by the NMS.
+   * <br> This parameter identifies the name of the existing Call 
+   * that shall provide the bandwidth of the new ELL.
+   * In case no bandwidth provisioning or automatic bandwidth provisioning 
+   * or manual bandwidth provisioning is used, this parameter is ignored.
+   * <br> 
+   *
+   * globaldefs::NVSList_T <b>additionalCreationInfo</b>:
+   * <br>Additional creation information may be specified by the NMS.<br>
+   *<br>
+   **/
+   struct ELLinkCreateData_T
+   {
+     string userLabel;
+     boolean forceUniqueness;
+     string owner;
+     string networkAccessDomain;
+     transmissionParameters::LayeredParameters_T transmissionParams;
+     transmissionParameters::LayerRate_T rate;
+     LinkType_T type;
+     globaldefs::NamingAttributesList_T endTPs;
+     boolean segment;
+     BandwidthProvisioningMode_T provisioningMode;
+     subnetworkConnection::SNCCreateDataList_T sncList;
+     globaldefs::NamingAttributes_T callName;
+     globaldefs::NVSList_T additionalCreationInfo;
+   };
+
+  /**
+   * <p>The read/write attributes required for the modification of a
+   * encapsulation layer link on the EMS are packed together in an
+   * ELLinkModifyData structure which the NMS will pass to the EMS in a request
+   * to modify an existing encapsulation layer link.</p>
+   *
+   * string <b>userLabel</b>:
+   * <br>An userLabel may be specified by the NMS. May be empty.<br>
+   *
+   * boolean <b>forceUniqueness</b>:
+   * <br>Specifies whether uniqueness of the userLabel is required amongst the
+   * flow domain fragments of the EMS. In case of uniqueness, the operation will 
+   * fail if the userLabel is already in use.<br>
+   *
+   * string <b>owner</b>:
+   * <br>An owner may be specified by the NMS. May be empty.<br>
+   *
+   * string <b>networkAccessDomain</b>:
+   * <br> The Network Access Domain to which the encapsulation layer link shall
+   * be assigned to.<br>
+   *
+   * transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+   * <br> This attribute represents the connectionless client layer rate (e.g.,
+   * Ethernet, DVB) and the server layer rates (e.g., VC12) of the encapsulation
+   * layer link. A list of technology-specific transmission parameters is associated to
+   * every layer rate. As an input only the list of parameters to be changed,
+   * removed, or added shall be provided. If an entry is to be removed, "-" shall be
+   * specified as a value. Refer to the supporting documents LayerRates.pdf and
+   * LayeredParameters.pdf for details of the currently defined layer rates and
+   * transmission parameters. <br>
+   *
+   * globaldefs::NVSList_T <b>additionalModificationInfo</b>:
+   * <br>Additional modification information may be specified by the NMS.<br>
+   *<br>
+   **/
+   struct ELLinkModifyData_T
+   {
+     string userLabel;
+     boolean forceUniqueness;
+     string owner;
+     string networkAccessDomain;
+     transmissionParameters::LayeredParameters_T transmissionParams;
+     globaldefs::NVSList_T additionalModificationInfo;
+   };
+   
+  /**
+   * <p>The EncapsulationLayerLinkMgr_I is used to gain access to encapsulation layer links
+   * and their operations.</p>
+   *
+   * <p>A handle to an instance of this interface is gained via the
+   * emsSession::EmsSession_I::getManager() operation.</p>
+   **/
+  interface EncapsulationLayerLinkMgr_I : common::Common_I
+  {
+  /**
+   * <p>This method allows an NMS to request a list of the encapsulation layer links
+   * that exist in the EMS.</p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. </p>
+   *
+   * unsigned long <b>how_many</b>:
+   * <br>Maximum number of encapsulation layer links to return in the first batch.<br>
+   *
+   * ELLinkList_T <b>ells</b>:
+   * <br>First batch of encapsulation layer links.<br>
+   *
+   * ELLinkIterator_I <b>ellIt</b>:
+   * <br>Iterator to retrieve the remaining encapsulation layer links.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+   *  that the EMS can support has been reached<br>
+   * <br>
+   **/
+   void getAllELLinks(
+         in unsigned long how_many,
+         out ELLinkList_T ells,
+         out ELLinkIterator_I ellIt)
+	  raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This operation has exactly the same behaviour as getAllELLinks(), but
+   * instead of returning the entire object structures, this operation returns 
+   * their names.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. </p>
+   *
+   * unsigned long <b>how_many</b>:
+   * <br>Maximum number of encapsulation layer link names to return in the first
+   * batch.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>nameList</b>:
+   * <br>First batch of encapsulation layer link names.<br>
+   *
+   * globaldefs::NamingAttributesIterator_I <b>nameIt</b>: 
+   * <br>Iterator to retrieve the remaining encapsulation layer link names.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * As for getAllELLinks().
+   * <br>
+   **/	
+   void getAllELLinkNames(
+         in unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+	  raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This operation returns the encapsulation layer link associated to 
+   * a given server layer termination point. </p>
+   *
+   * globaldefs::NamingAttributes_T <b>tpName</b>:
+   * <br>The name of the TP.<br>
+   *
+   * EncapsulationLayerLink_T <b>ell</b>:
+   * <br>The encapsulation layer link that is associated with the specified TP, if
+   * any. <br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tpName does not reference a 
+   *  termination point object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tpName references a 
+   *  termination point object that does not exist<br>
+   * <br>
+   **/
+   void getELLinkWithTP(
+         in globaldefs::NamingAttributes_T tpName,
+         out EncapsulationLayerLink_T ell)
+      raises(globaldefs::ProcessingFailureException);
+
+   /**
+   * <p>This operation returns the encapsulation layer link that terminates in a given 
+   * termination point. </p>
+   *
+   * globaldefs::NamingAttributes_T <b>tpName</b>:
+   * <br>The name of the TP.<br>
+   *
+   * EncapsulationLayerLink_T <b>ell</b>:
+   * <br>The encapsulation layer link that terminates at the specified TP, if
+   * any. <br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tpName does not reference a 
+   *  termination point object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tpName references a 
+   *  termination point object that does not exist<br>
+   * <br>
+   **/
+   void getConnectingELL(
+         in globaldefs::NamingAttributes_T tpName,
+         out EncapsulationLayerLink_T ell)
+      raises(globaldefs::ProcessingFailureException);
+
+ /**
+   * <p>This operation returns the encapsulation layer link associated to a server
+   * subnetwork connection or topological link. </p>
+   *
+   * globaldefs::NamingAttributes_T <b>sncOrTlName</b>:
+   * <br>The name of the SNC or TL.<br>
+   *
+   * EncapsulationLayerLink_T <b>ell</b>:
+   * <br>The encapsulation layer link that is associated with the specified SNC or TL,
+   * if any. <br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when sncOrTlName does not reference a 
+   *  SNC or TL object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when sncOrTlName references an 
+   *  SNC or TL object that does not exist<br>
+   * <br>
+   **/
+   void getELLinkWithSncOrTl(
+         in globaldefs::NamingAttributes_T sncOrTlName,
+         out EncapsulationLayerLink_T ell)
+      raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This method allows an NMS to request a list of the encapsulation layer links
+   * that terminate in a specified ME or FD.</p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. </p>
+   *
+   * globaldefs::NamingAttributes_T <b>meOrFdName</b>:
+   * <br>The name of the ME or FD.<br>
+   *
+   * unsigned long <b>how_many</b>:
+   * <br>Maximum number of encapsulation layer links to return in the first batch.<br>
+   *
+   * ELLinkList_T <b>ells</b>:
+   * <br>First batch of encapsulation layer links.<br>
+   *
+   * ELLinkIterator_I <b>ellIt</b>:
+   * <br>Iterator to retrieve the remaining encapsulation layer links.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when meOrFdName does not reference a 
+   *  ME or FD object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when meOrFdName references an object that does not
+   *  exist<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+   *  that the EMS can support has been reached<br>
+   * <br>
+   **/
+   void getAllELLinksWithMeOrFd(
+         in globaldefs::NamingAttributes_T meOrFdName,
+         in unsigned long how_many,
+         out ELLinkList_T ells,
+         out ELLinkIterator_I ellIt)
+	  raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service returns an encapsulation layer link given an encapsulation layer
+   * link name.</p>
+   * 
+   * globaldefs::NamingAttributes_T <b>ellName</b>:
+   * <br>Name of the encapsulation layer link to retrieve.<br>
+   *
+   * EncapsulationLayerLink_T <b>ell</b>:
+   * <br>Encapsulation Layer Link structure returned.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when ellName does not reference an 
+   *  encapsulation layer link object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when ellName references a 
+   *  encapsulation layer link object that does not exist<br>
+   * <br>
+   **/
+   void getELLink(
+         in globaldefs::NamingAttributes_T ellName,
+         out EncapsulationLayerLink_T ell)
+      raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service returns all server layer subnetwork connections and topological
+   * links of an encapsulation layer link.</p>
+   * 
+   * globaldefs::NamingAttributes_T <b>ellName</b>:
+   * <br>Name of the encapsulation layer link to retrieve.<br>
+   *
+   * subnetworkConnection::SubnetworkConnectionList_T <b>sncList</b>:
+   * <br>Subnetwork connection structures returned.<br>
+   *
+   * topologicalLink::TopologicalLinkList_T <b>tlList</b>:
+   * <br>Topological link structures returned.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when ellName does not reference an 
+   *  encapsulation layer link object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when ellName references a 
+   *  encapsulation layer link object that does not exist<br>
+   * <br>
+   **/
+   void getServerSNCsAndTLs(
+         in globaldefs::NamingAttributes_T ellName,
+         out subnetworkConnection::SubnetworkConnectionList_T sncList,
+         out topologicalLink::TopologicalLinkList_T tlList)
+      raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service returns the transmission parameters of an encapsulation layer link.
+   * A set of groups of transmission parameters to be returned may be specified.</p>
+   * 
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>Name of the encapsulation layer link for
+   * which the transmission parameters shall be retrieved.<br>
+   *
+   * flowDomain::ParameterGroupsList_T <b>filter</b>:
+   * <br>This filter allows to specify a set of parameter groups. Only transmission
+   * parameters that belong to one of the groups specified are returned. See the
+   * supporting document LayeredParameters.pdf for a set of available transmission
+   * parameters and their groupings. If an empty list is specified, all transmission
+   * parameters are returned.<br>
+   *
+   * transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+   * <br>A list or requested transmission parameters. <br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when name does not reference a 
+   *   valid object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when name references an 
+   *  object that does not exist<br>
+   * <br>
+   **/
+   void getTransmissionParams(
+         in globaldefs::NamingAttributes_T name,
+         in flowDomain::ParameterGroupsList_T filter,
+         out transmissionParameters::LayeredParameterList_T transmissionParams)
+      raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>The NMS invokes this service to create an encapsulation layer link in the    
+   * EMS.</p>
+   *
+   * ELLinkCreateData_T <b>createData</b>:
+   * <br>Structure describing the encapsulation layer link structure to be created.
+   * Setting of connectionless parameters is best effort (except where 
+   * specified otherwise for a particular parameter).<br>
+   *
+   * EncapsulationLayerLink_T <b>theELL</b>:
+   * <br>The new created encapsulation layer link. <br>
+   *
+   * string <b>errorReason</b>:
+   * <br>In case a "best effort" parameter could not be set an indication of the 
+   * fault reason is provided by the EMS.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. field of createData is invalid).<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable 
+   *  to execute the request because in case of automatic bandwidth provisioning at
+   *  least one of the end CPTPs is not in the EMS domain or if server SNCs already
+   *  exist and do not meet the bandwidth requirements (if any) specified in the 
+   *  creation request or if the requested server layer rate is not supported or at
+   *  least one of the parameters although valid cannot be set and that parameter is
+   *  identified as "not best effort". <br>
+   * EXCPT_ENTITY_NOT_FOUND - At least one of the end CPTPs does not exist.<br>
+   * EXCPT_CAPACITY_EXCEEDED - The number of server layer CTPs requested for a VCAT
+   *  supported encapsulation layer link is more than is available.
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is 
+   *  not met<br>
+   * EXCPT_OBJECT_IN_USE - Raised if a specified end CPTP is already in use by 
+   *  an existing encapsulation layer link.
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost a the managed element
+   *  involved in this operation.<br>
+   * <br>
+   **/
+   void createELLink(
+         in ELLinkCreateData_T createData,
+         out EncapsulationLayerLink_T theELL,
+         out string errorReason)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**   
+   * <p>The NMS invokes this service to activate an encapsulation layer link in the    
+   * EMS.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>ellName</b>:
+   * <br>The name of the ELLink.<br>
+   *
+   * EncapsulationLayerLink_T <b>theELL</b>:
+   * <br>The new activated encapsulation layer link. <br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. field of createData is invalid).<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable 
+   *  to execute the request because in case of automatic bandwidth provisioning at
+   *  least one of the end CPTPs is not in the EMS domain or if server SNCs already
+   *  exist and do not meet the bandwidth requirements (if any) specified in the 
+   *  creation request or if the requested server layer rate is not supported or at
+   *  least one of the parameters although valid cannot be set and that parameter is
+   *  identified as "not best effort". <br>
+   * EXCPT_ENTITY_NOT_FOUND - At least one of the end CPTPs does not exist.<br>
+   * EXCPT_CAPACITY_EXCEEDED - The number of server layer CTPs requested for a VCAT
+   *  supported encapsulation layer link is more than is available.
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is 
+   *  not met<br>
+   * EXCPT_OBJECT_IN_USE - Raised if a specified end CPTP is already in use by 
+   *  an existing encapsulation layer link.
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost a the managed element
+   *  involved in this operation.<br>
+   *
+   **/
+   void activateELLink(
+         in globaldefs::NamingAttributes_T ellName,
+         out EncapsulationLayerLink_T theELL,
+         out string errorReason)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**   
+   * <p>The NMS invokes this service to deactivate an encapsulation layer link in the    
+   * EMS.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>ellName</b>:
+   * <br>The name of the ELLink.<br>
+   *
+   * EncapsulationLayerLink_T <b>theELL</b>:
+   * <br>The new deactivated encapsulation layer link. <br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. field of createData is invalid).<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable 
+   *  to execute the request because in case of automatic bandwidth provisioning at
+   *  least one of the end CPTPs is not in the EMS domain or if server SNCs already
+   *  exist and do not meet the bandwidth requirements (if any) specified in the 
+   *  creation request or if the requested server layer rate is not supported or at
+   *  least one of the parameters although valid cannot be set and that parameter is
+   *  identified as "not best effort". <br>
+   * EXCPT_ENTITY_NOT_FOUND - At least one of the end CPTPs does not exist.<br>
+   * EXCPT_CAPACITY_EXCEEDED - The number of server layer CTPs requested for a VCAT
+   *  supported encapsulation layer link is more than is available.
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is 
+   *  not met<br>
+   * EXCPT_OBJECT_IN_USE - Raised if a specified end CPTP is already in use by 
+   *  an existing encapsulation layer link.
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost a the managed element
+   *  involved in this operation.<br>
+   *
+   **/
+   void deactivateELLink(
+         in globaldefs::NamingAttributes_T ellName,
+         out EncapsulationLayerLink_T theELL,
+         out string errorReason)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   *<p>This service allows an NMS to request the deletion of an encapsulation layer
+   * link from the EMS.</p>
+   *
+   * <br>NamingAttributes_T <b>ellName</b>:
+   * <br>The name of the encapsulation layer link to be deleted.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactical 
+   *  incorrect (e.g. ellName does not refer to an encapsulation layer link object)<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when ellName references an object that does 
+   *  not exist<br>
+   * EXCPT_ACCESS_DENIED - Raised if the EMS does not allow the NMS to delete the
+   *  flow domain fragment, e.g. if the flow domain fragment is fixed <br>
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost a the managed element
+   *  involved in this operation.<br>
+   * EXCPT_OBJECT_IN_USE - The ELL is being used by a connectionless service and the EMS 
+   *  is capable of detecting it.<br>
+   * <br>
+   **/
+   void deleteELLink(
+         in globaldefs::NamingAttributes_T ellName)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service allows the NMS to request from the EMS to modify an 
+   * encapsulation layer link. Modification of bandwidth is not supported by this 
+   * operation</p>
+   *
+   * globaldefs::NamingAttributes_T <b>ellName</b>:
+   * <br>The name of the encapsulation layer link to modify.<br>
+   *
+   * ELLinkModifyData_T <b>ellModifyData</b>:
+   * <br>Structure describing how the encapsulation layer link should be modified.
+   * Modification of connectionless parameters is best effort (except where 
+   * specified otherwise for a particular parameter).<br>
+   *
+   * EncapsulationLayerLink_T <b>newELL</b>:
+   * <br>The modified encapsulation layer link.<br>
+   *
+   * string <b>errorReason</b>:
+   * <br>In case a "best effort" parameter could not be set an indication of the 
+   * fault reason is provided by the EMS.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect (e.g. field of ellModifyData is invalid).<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when ellName references an object that does 
+   *  not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable 
+   *  to execute the request because at least one of the parameters although 
+   *  valid cannot be set and that parameter is identified as 
+   *  "not best effort". <br>
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is 
+   *  not met<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost a the managed element
+   *  involved in this operation.<br>
+   * <br>
+   **/
+   void modifyELLink(
+         in globaldefs::NamingAttributes_T ellName,
+         in ELLinkModifyData_T ellModifyData,
+         out EncapsulationLayerLink_T newELL,
+         out string errorReason)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service allows the NMS to request from the EMS to add bandwidth to an
+   * existing encapsulation layer link</p>
+   *
+   * globaldefs::NamingAttributes_T <b>ellName</b>:
+   * <br>The name of the encapsulation layer link to modify.<br>
+   *
+   * boolean <b>automatic</b>:
+   * <br>This Boolean parameter indicates if the NMS does not provide detailed 
+   * parameters for the additional SNCs (i.e., parameter additionalSNCs is ignored).
+   * Automatic SNC creation is only allowed if both CPTPs are within the same EMS
+   * domain. If automatic SNC creation is required, the NMS has to provide either the
+   * number of additional SNCs if VCAT is already established or the SNC related layered
+   * transmission parameters.<br>
+   *
+   * SNCCreateDataList_T  <b>additionalSNCs</b>:
+   * <br>This parameter list (one list item per SNC to be added; in case of many
+   * subnetworks one list item per SNC per subnetwork) provides the SNC creation data.
+   * In case no automatic SNC creation is used, this parameter is ignored.<br>
+   *
+   * short <b>numberOfSNCs</b>:
+   * <br>If automatic SNC creation is used and VCAT is already established this
+   * parameter indicates the additional number of SNCs; otherwise this parameter is
+   * ignored.<br>
+   *
+   * transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+   * <br>If automatic SNC creation is used and no SNC is providing bandwidth for the
+   * ELL, this parameter shall indicate the layer rate, whether VCAT has to be used,
+   * whether LCAS has to be enabled, the number of SNCs (more than one only if VCAT is
+   * used). Refer to the supporting documents LayerRates.pdf, LayeredParameters.pdf and
+   * EllTypes.pdf for details.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalModificationInfo</b>:
+   * <br>Additional modification information may be specified by the NMS.<br>
+   *
+   * EncapsulationLayerLink_T <b>newELL</b>:
+   * <br>The modified encapsulation layer link.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect.<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when ellName references an object that does 
+   *  not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable 
+   *  to execute the request because at least one of the specified end CPTPs is not in
+   *  the EMS domain or if an SNC already exist and no bandwidth increase is possible
+   *  (non-VCAT).<br>
+   * EXCPT_CAPACITY_EXCEEDED - The number of server layer SNCs requested for the VCAT
+   *  exceeds the maximum provisionable SNCs.<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost a the managed element
+   *  involved in this operation.<br>
+   * <br>
+   **/
+   void increaseBandwidthOfELLink(
+         in globaldefs::NamingAttributes_T ellName,
+         in boolean automatic,
+         in subnetworkConnection::SNCCreateDataList_T additionalSNCs,
+         in short numberOfSNCs,
+         in transmissionParameters::LayeredParameterList_T transmissionParams,
+         in globaldefs::NVSList_T additionalModificationInfo,
+         out EncapsulationLayerLink_T newELL)
+        raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This service allows the NMS to request from the EMS to delete bandwidth from an
+   * existing encapsulation layer link</p>
+   *
+   * globaldefs::NamingAttributes_T <b>ellName</b>:
+   * <br>The name of the encapsulation layer link to modify.<br>
+   *
+   * globaldefs::NamingAttributesList_T <b>sncNames</b>:
+   * <br>The names of the SNCs tha shall removed from providing bandwidth for the
+   * ELL. If no specific SNCs are to be removed, this parameter shall be empty and
+   * parameter numberOfSNCs to be removed shall be used to identify the number of SNCs
+   * (the EMS will choose the specific SNCs).<br>
+   *
+   * short <b>numberOfSNCs</b>:
+   * <br> If parameter SNCs to be removed is empty, this parameter shall indicate the
+   * number of SNCs to be removed; otherwise this parameter is ignored.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalModificationInfo</b>:
+   * <br>Additional modification information may be specified by the NMS.<br>
+   *
+   * EncapsulationLayerLink_T <b>newELL</b>:
+   * <br>The modified encapsulation layer link.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect or both parameters sncNames and numberOfSNCs are specified.<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when ellName or sncNames reference an object that
+   *  does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable 
+   *  to execute the request because the server layer SNC(s) to be deleted do(es) not
+   *  support the provided ELL or the number of SNCs to be deleted exceeds the number of
+   *  SNCs supporting the ELL..<br>
+   * EXCPT_CAPACITY_EXCEEDED - The number of server layer SNCs requested for the VCAT
+   *  exceeds the maximum provisionable SNCs.<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost a the managed element
+   *  involved in this operation.<br>
+   * <br>
+   **/
+   void decreaseBandwidthOfELLink(
+         in globaldefs::NamingAttributes_T ellName,
+         in globaldefs::NamingAttributesList_T sncNames,
+         in short numberOfSNCs,
+         in globaldefs::NVSList_T additionalModificationInfo,
+         out EncapsulationLayerLink_T newELL)
+        raises (globaldefs::ProcessingFailureException);
+   
+  /**   
+   * <p>The NMS invokes this service to set the LCAS state of an encapsulation layer link in the   
+   * EMS.</p>
+   *   
+   * globaldefs::NamingAttributes_T <b>ellName</b>:
+   * <br>The name of the encapsulation layer link to set LCAS State.<br>
+   *
+   * boolean <b>enableState</b>:
+   * <br>LCAS State enabling flag of the encapsulation layer link.<br>
+   *
+   * <b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+   *  failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is syntactically 
+   *  incorrect or both parameters sncNames and numberOfSNCs are specified.<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when ellName or sncNames reference an object that
+   *  does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable 
+   *  to execute the request because the server layer SNC(s) to be deleted do(es) not
+   *  support the provided ELL or the number of SNCs to be deleted exceeds the number of
+   *  SNCs supporting the ELL..<br>
+   * EXCPT_CAPACITY_EXCEEDED - The number of server layer SNCs requested for the VCAT
+   *  exceeds the maximum provisionable SNCs.<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communcation is lost a the managed element
+   *  involved in this operation.<br>
+   * <br>
+   **/
+   void setELLinkLCASState (
+         in globaldefs::NamingAttributes_T ellName,
+         in boolean enableState )
+        raises (globaldefs::ProcessingFailureException);
+  };
+};
+#endif
+
+
+
+

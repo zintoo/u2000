@@ -1,0 +1,145 @@
+#ifndef topologyManagement_idl
+#define topologyManagement_idl
+
+#include "globaldefs.idl"
+#include "common.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+/** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the topo structure
+   * of the NML-EML interface. </p>
+   *
+   * This module is defined by Huawei Technologies Co., LTD. All rights reserved!
+   * <h5> Version 2.1. </h5>
+   **/
+
+module TopoManagementManager
+{
+	/**
+	* <p>Type of topology nodes, including NE node and topology subnet node</p>	
+	**/
+	enum NodeType_T
+	{
+		NODETYPE_ME ,		
+		NODETYPE_TOPO_SN 	
+	};
+
+	/**
+	* <p>Topology node coordinate information</p>
+	*
+	* long <b>xPos</b>:
+	* <br>X-axis
+	*
+	* long <b>yPos</b>:
+	* <br>Y-axis
+	**/
+	struct Position_T
+	{
+	        long xPos ;	
+		long yPos ;
+	};
+	
+	/**
+	* <p>Definition of Object Information Structure for Topology Node</p>
+	*
+	* globaldefs::NamingAttributes_T <b>name</b>:
+	* <br>Topology Node Object Name	
+	*
+	* string <b>nativeEMSName</b>:
+	* <br>Topology Node Local Name	
+	*
+	* NodeType_T <b>nodeType</b>:
+	* <br>Topology Node Type
+	*
+	* Position_T <b>position</b>:
+	* <br>Topology Node Coordinate Information
+	*
+	* globaldefs::NamingAttributes_T <b>parent</b>:
+	* <br>Parent Topology Node Name
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+	* <br>Additional information.
+	**/
+	struct Node_T
+	{
+		globaldefs::NamingAttributes_T name;
+		string nativeEMSName;
+		NodeType_T nodeType;
+		Position_T position;
+		globaldefs::NamingAttributes_T parent;
+		globaldefs::NVSList_T additionalInfo;
+	};
+	
+	/**
+	* <p> Sequence of Node_T. </p>
+	**/
+	typedef sequence<Node_T> NodeList_T;
+	
+	/**
+   	* <p>In order to allow the NMS to deal with a large number of objects,
+   	* iterators are used.</p>
+   	* 
+   	* <p>See <a href=supportingDocumentation/iterators.html>iterator
+   	* overview</a> for information on how iterators are used in this
+   	* interface.</p>
+   	**/
+  	interface NodeIterator_I
+	{
+		boolean  next_n(in unsigned long how_many,
+		        out NodeList_T 	nodeList)
+		raises (globaldefs::ProcessingFailureException);
+	
+	    	unsigned long getLength()
+			raises (globaldefs::ProcessingFailureException);
+	
+	   	void   destroy()
+			raises (globaldefs::ProcessingFailureException);
+	};	
+	
+	/**
+   	* <p>The TopoMgr_I is used as a handle to gain access to the
+   	* view functionalities of the NML-EML interface. In this
+   	* release, only retrieval functionalities of the view is supported.</p>
+   	*
+   	* <p>A handle to an instance of this interface is gained via the
+   	* <a href=_emsSession.EmsSession_I.html#emsSession::EmsSession_I::getManager>
+   	* getManager</a> operation in Manager.</p>
+   	**/	
+	interface TopoMgr_I: common::Common_I
+	{
+	  /**
+	   * <p>Query view information of a topology subnet</p>
+	   *
+           * <br> unsigned long how_many: Maximum number of nodes to report in the first batch.
+	   * <br> NodeList_T nodeList: First batch of nodes.
+	   * <br> NodeIterator_I NodeIt:Iterator to retrieve the remaining nodes.
+	   * <br> globaldefs::ProcessingFailureException<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+	   **/	
+		void getTopoSubnetworkViewInfo( in unsigned long how_many,
+			out NodeList_T nodeList,
+			out NodeIterator_I NodeIt )
+ 		raises(globaldefs::ProcessingFailureException);
+ 		
+	  /**
+	   * <p>Query view information of a protection subnet</p>
+	   *
+           * <br> unsigned long how_many: Maximum number of nodes to report in the first batch.
+	   * <br> NodeList_T nodeList: First batch of nodes.
+	   * <br> NodeIterator_I NodeIt:Iterator to retrieve the remaining nodes.
+	   * <br> globaldefs::ProcessingFailureException<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+	   **/	 		
+ 		void getProtectSubnetworkViewInfo( in unsigned long how_many,
+			out NodeList_T nodeList,
+			out NodeIterator_I NodeIt)
+		raises(globaldefs::ProcessingFailureException);
+	};
+};
+
+#endif

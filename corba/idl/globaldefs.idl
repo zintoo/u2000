@@ -1,0 +1,247 @@
+#ifndef globaldefs_idl
+#define globaldefs_idl
+
+// ********************************
+// *                              *
+// * globaldefs.idl               *
+// *                              *
+// ********************************
+
+//Include list
+
+#pragma prefix "mtnm.tmforum.org"
+
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p> This module defines common types used by
+   * other modules of the EML-NML interface.
+   * It is intended as a common repository for definitions 
+   * that need to be exported across modules. </p>
+   * </p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+
+module globaldefs
+
+{
+  /**
+   * <p>The NameAndStringValue_T structure is provided here as a replacement of the
+   * NVList defined by OMG. In consideration for performance and the cost
+   * associated with the marshaling of the any type, it is decided to
+   * use the type string for the value field instead of the any type.</p>
+   **/
+   struct NameAndStringValue_T
+   {
+    string      name;
+    string      value;
+   };
+
+
+  /**
+   * <p>A list of (name=string, value=string) tuples.
+   * The transmission parameters of a TerminationPoint for example
+   * use this structure. A standardized naming scheme is adopted
+   * between the NMS and the EMS to identify the name and the value
+   * field.</p>
+   **/
+   typedef sequence<NameAndStringValue_T> NVSList_T;
+
+
+  /**
+   * <p>The NamingAttributes_T structure is used as a naming scheme between the
+   * NMS and EMS interface. 
+   * NamingAttributes_T is used to define identifiers for managed entities that 
+   * are not instantiated as first class CORBA objects and thus do not have 
+   * object identifiers. 
+   * The NamingAttributes represent "the hierarchical name structure" of an 
+   * object.
+   * The structure of the name is hierarchical and reflects the containment
+   * relationship between objects in a simple way.</p>
+   *
+   * <p>See <a href=supportingDocumentation/objectNaming.html>
+   * Object Naming</a> for further detail.</p>
+   **/
+   typedef NVSList_T NamingAttributes_T;
+  
+
+  /**
+   * <p>A list of NamingAttributes_T. It is a list of lists.</p>
+   **/
+   typedef sequence<NamingAttributes_T> NamingAttributesList_T;
+
+
+
+  /**
+   * <p>Time_T is represented by a string holding a time string as defined
+   * in ITU-T Rec. X.208 "SPECIFICATION OF ABSTRACT SYNTAX NOTATION ONE (ASN.1)".</p>
+   *
+   * <p>The format is "yyyyMMddhhmmss.s[Z|{+|-}HHMm]" where:<br>
+   *       yyyy        "0000".."9999" year<br>
+   *       MM          "01".."12"     month<br>
+   *       dd          "01".."31"     day<br>
+   *       hh          "00".."23"     hour<br>
+   *       mm          "00".."59"     minute<br>
+   *       ss          "00".."59"     second<br>
+   *       .s          ".0"..".9"     tenth of second (set to ".0" if EMS or ME
+   *                                  cannot support this granularity)<br>
+   *       Z           "Z"            indicates UTC (rather than local time)<br>
+   *       {+|-}       "+" or "-"     delta from UTC
+   *       HH          "00".."23"     time zone difference in hours<br>
+   *       Mm          "00".."59"     time zone difference in minutes</p>
+   *                                                                      
+   * <p>"19851106210627.3Z" would be 6 minutes, 27.3 seconds after
+   * 9 p.m. on November 6th, 1985 indicating UTC time.  "19851106210627.3" would be
+   * local time.  "19851106210627.3+0500" would be local time specifying a +5 hour time
+   * difference from UTC.  "19851106210627.3-0530" would be local time specifying
+   * a -5.5 hour difference from UTC.</p>
+   **/
+  typedef string Time_T;
+
+
+  /**
+   * <p>Direction of a subnetwork connection, cross-connects, or topological link:
+   * <br>CD_UNI: UNIdirectional, i.e. source TP to sink TP. 
+   * Note: creation of unidirectional connections is supported even when CTPs are 
+   * modelled as bidirectional.<br>
+   * <br>CD_BI: BIdirectional, i.e. bidirectional TP to bidirectional TP, 
+   * a.k.a. two-way.<br>
+   * For a detailed description of the use of this attribute see 
+   * <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.
+   * </p>
+   **/
+  enum ConnectionDirection_T
+  {
+    CD_UNI,
+    CD_BI   
+  };
+
+
+  /**
+   * <p> Exception Definitions </p>
+   * <p>As per CORBA policies agreement, only one exception object is defined
+   * to capture all of the possible exceptions
+   * defined in the ProcessingFailureException.
+   * <ul>
+   * <li> EXCPT_NOT_IMPLEMENTED, <p> If some IDL operations are optional 
+   * or not implemented in this release, then this enum may be used
+   * for this purpose.  If the operation itself is not supported, then
+   * errorReason shall be an empty string.  
+   * If this exception is raised because of the values
+   * of specific parameters, then the names of these parameters shall be
+   * supplied in errorReason (separated by commas), unless otherwise
+   * specified in the operation description.</p></li>
+   * <li> EXCPT_INTERNAL_ERROR, <p> To indicate an EMS internal error.
+   * Applies to all methods. </p></li>
+   * <li> EXCPT_INVALID_INPUT, 
+   * <p> If the format of a parameter is incorrect, e.g. if a TP name which is a  
+   * 3 level namingAttribute is passed as a single level name, then this type  
+   * will be used.  Also if a parameter is out of range, this type will be used.  
+   * The reason field will be filled with the parameter that was incorrect 
+   * </p></li>
+   * <li> EXCPT_OBJECT_IN_USE, <p> To indicate an object already in use.</p> </li>
+   * <li> EXCPT_TP_INVALID_ENDPOINT, <p> To indicate that the specified TP does not exist 
+   * or cannot be created (e.g., attempt to create a VPL TP using an out of range VPI value). 
+   * Note that if the TP is valid but is already terminated & mapped or cross-connected 
+   * then EXCPT_OBJECT_IN_USE must be returned. </p> </li>
+   * <li> EXCPT_ENTITY_NOT_FOUND, 
+   * <p> In general, if the NMS supplies an object name as a parameter to
+   * an operation and the EMS can not find the object with the given name then 
+   *  an exception of this type is returned. The reason field in the 
+   * exception will be filled with the name that was passed in as 
+   * parameter.</p></li>
+   * <li> EXCPT_TIMESLOT_IN_USE, <p> To indicate a timeslot already in use
+   * when creating or activating an SNC. </p>  </li> 
+   * <li> EXCPT_PROTECTION_EFFORT_NOT_MET, <p> If the NMS requests an SNC 
+   * with a protection effort that cannot be met by the EMS. </p> </li>
+   * <li> EXCPT_NOT_IN_VALID_STATE, <p> Used if the client tries to delete 
+   * an active SNC for example. </p></li>
+   * <li> EXCPT_UNABLE_TO_COMPLY, <p> The value EXCPT_UNABLE_TO_COMPLY value is   
+   * used as a generic
+   * value when a server cannot respond to the request. </p> </li>
+   * <li> EXCPT_NE_COMM_LOSS, <p> The value EXCPT_NE_COMM_LOSS value is   
+   * used as a generic value when a server cannot communicate with the NE and that prevents
+   * the successful completion of the operation.  All operations
+   * that involve communication with the NE may throw this particular 
+   * exception type.</p> </li>
+   * <li> EXCPT_CAPACITY_EXCEEDED <p>Raised when an operation will result in
+   * resources being created or activated beyond the capacity supported by the NE/EMS.</p></li> 
+   * <li> EXCPT_ACCESS_DENIED <p> Raised when an operation results in a
+   * security violation. </p></li>
+   * <li> EXCPT_TOO_MANY_OPEN_ITERATORS <p>Raised when an EMS exceeds its internal limit
+   * of the number of iterators it can support.</p></li> 
+   * <li> EXCPT_UNSUPPORTED_ROUTING_CONSTRAINTS <p>Raised when an EMS does not support the
+   * routing constraints specified as input.</p></li> 
+   * <li> EXCPT_USERLABEL_IN_USE <p>Raised when the userLabel uniqueness constraint
+   *  can not be met.</p></li> 
+   * </ul>
+   * </p>
+   **/
+  enum ExceptionType_T
+  {
+    EXCPT_NOT_IMPLEMENTED,
+    EXCPT_INTERNAL_ERROR,
+    EXCPT_INVALID_INPUT,
+    EXCPT_OBJECT_IN_USE,
+    EXCPT_TP_INVALID_ENDPOINT,
+    EXCPT_ENTITY_NOT_FOUND,
+    EXCPT_TIMESLOT_IN_USE,
+    EXCPT_PROTECTION_EFFORT_NOT_MET,
+    EXCPT_NOT_IN_VALID_STATE,
+    EXCPT_UNABLE_TO_COMPLY,
+    EXCPT_NE_COMM_LOSS,
+    EXCPT_CAPACITY_EXCEEDED,
+    EXCPT_ACCESS_DENIED,
+    EXCPT_TOO_MANY_OPEN_ITERATORS,
+    EXCPT_UNSUPPORTED_ROUTING_CONSTRAINTS,
+    EXCPT_USERLABEL_IN_USE
+};	
+    
+  /**
+   * <p> A coarse grain approach is adopted for capturing exceptions
+   * as well. This has the advantage of making the catching of exceptions
+   * fairly generic. Since CORBA does not allow as in the Java language
+   * to subclass exceptions, it is recommended to reduce the number 
+   * of exceptions a client may catch. On the down side, a client may 
+   * need to write explicit code when an exception is thrown by the
+   * server (i.e. a client may have a switch statement on the
+   * ExceptionType.</p>
+   * <i>ExceptionType</i> See 
+   * <a href=_globaldefs.html#globaldefs::ExceptionType> ExceptionType </a> <br>
+   * <i> errorReason </i> A string indicating further details about the exception.
+   * It is a free format string filled by the EMS Server. <br>
+   **/
+  exception  ProcessingFailureException
+  {
+      ExceptionType_T exceptionType; 
+      string errorReason;
+  };
+
+
+  /**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   **/
+
+   interface NamingAttributesIterator_I 
+   {
+       boolean  next_n(in unsigned long            how_many,
+                       out NamingAttributesList_T  nameList)
+                raises (globaldefs::ProcessingFailureException);
+
+       unsigned long getLength()
+                raises (globaldefs::ProcessingFailureException);
+
+       void     destroy()
+		 raises (globaldefs::ProcessingFailureException);
+   };
+
+
+};
+#endif

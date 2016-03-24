@@ -1,0 +1,23 @@
+CosNotification.StructuredEvent(header=
+CosNotification.EventHeader(fixed_header=CosNotification.FixedEventHeader(event_type=CosNotification.EventType(domain_name='tmf_mtnm', type_name='NT_ALARM'), event_name=''), variable_header=[]), 
+filterable_data=[CosNotification.Property(name='notificationId', value=CORBA.Any(CORBA.TC_string, '')), CosNotification.Property(name='objectName', value=CORBA.Any(orb.create_sequence_tc(bound=0, element_type=CORBA.TypeCode("IDL:mtnm.tmforum.org/globaldefs/NameAndStringValue_T:1.0")), [globaldefs.NameAndStringValue_T(name='EMS', value='Huawei/U2000'), globaldefs.NameAndStringValue_T(name='ManagedElement', value='3146840'), globaldefs.NameAndStringValue_T(name='IPCrossConnection', value='TUNNEL=1|1|10.52.6.9|10.52.0.1|30609||3')]
+)), 
+CosNotification.Property(name='nativeEMSName', value=CORBA.Any(CORBA.TC_string, 'Huawei/U2000;CMI6509-PTN3900-2-1;TUNNEL=1|1|10.52.6.9|10.52.0.1|30609||3')), 
+CosNotification.Property(name='nativeProbableCause', value=CORBA.Any(CORBA.TC_string, 'MPLS_TUNNEL_LOCV')), 
+CosNotification.Property(name='objectType', value=CORBA.Any(CORBA.TypeCode("IDL:mtnm.tmforum.org/notifications/ObjectType_T:1.0"), OT_AID)), 
+CosNotification.Property(name='emsTime', value=CORBA.Any(CORBA.TC_string, '20130107042749.0Z')), 
+CosNotification.Property(name='neTime', value=CORBA.Any(CORBA.TC_string, '20130107042747.0Z')), 
+CosNotification.Property(name='isClearable', value=CORBA.Any(CORBA.TC_boolean, True)), 
+CosNotification.Property(name='layerRate', value=CORBA.Any(CORBA.TC_short, 8010)), 
+CosNotification.Property(name='probableCause', value=CORBA.Any(CORBA.TC_string, 'UNIDENTIFIED')), 
+CosNotification.Property(name='probableCauseQualifier', value=CORBA.Any(CORBA.TC_string, '1-12814')), 
+CosNotification.Property(name='perceivedSeverity', value=CORBA.Any(CORBA.TypeCode("IDL:mtnm.tmforum.org/notifications/PerceivedSeverity_T:1.0"), PS_CRITICAL)), 
+CosNotification.Property(name='serviceAffecting', value=CORBA.Any(CORBA.TypeCode("IDL:mtnm.tmforum.org/notifications/ServiceAffecting_T:1.0"), SA_SERVICE_AFFECTING)), 
+CosNotification.Property(name='affectedTPList', value=CORBA.Any(orb.create_sequence_tc(bound=0, element_type=CORBA.TypeCode("IDL:mtnm.tmforum.org/globaldefs/NamingAttributes_T:1.0")), [])), 
+CosNotification.Property(name='additionalText', value=CORBA.Any(CORBA.TC_string, 'Huawei/U2000;3146840;TUNNEL=1|1|10.52.6.9|10.52.0.1|30609||3')), 
+CosNotification.Property(name='additionalInfo', value=CORBA.Any(orb.create_sequence_tc(bound=0, element_type=CORBA.TypeCode("IDL:mtnm.tmforum.org/globaldefs/NameAndStringValue_T:1.0")), [globaldefs.NameAndStringValue_T(name='Direction', value='NA'), globaldefs.NameAndStringValue_T(name='Location', value='NA'), globaldefs.NameAndStringValue_T(name='AlarmSerialNo', value='56433821'), globaldefs.NameAndStringValue_T(name='AlarmReason', value='Tunnel loss of connectivity verification'), globaldefs.NameAndStringValue_T(name='ProductName', value='OptiX PTN 3900-8'), globaldefs.NameAndStringValue_T(name='EquipmentName', value=''), globaldefs.NameAndStringValue_T(name='AffirmState', value='FALSE'), globaldefs.NameAndStringValue_T(name='DetailInfo', value='\nAlarm Parameter II(hex) 0x05'), globaldefs.NameAndStringValue_T(name='HandlingSuggestion', value='\\1. The physical link fails.\\2. The network is severely congested.\\3. The opposite equipmentis faulty.'), globaldefs.NameAndStringValue_T(name='LocationInfo', value='TUNNEL:(30609,10.52.6.9,10.52.0.1)')])), 
+CosNotification.Property(name='X.733::EventType', value=CORBA.Any(CORBA.TC_string, 'communicationsAlarm')), 
+CosNotification.Property(name='objectTypeQualifier', value=CORBA.Any(CORBA.TC_string, 'NT_TrafficTrunk')), 
+CosNotification.Property(name='rcaiIndicator', value=CORBA.Any(CORBA.TC_boolean, False)), 
+CosNotification.Property(name='X.733::CorrelatedNotifications', value=CORBA.Any(orb.create_sequence_tc(bound=0, element_type=CORBA.TypeCode("IDL:mtnm.tmforum.org/notifications/CorrelatedNotifications_T:1.0")), [notifications.CorrelatedNotifications_T(source=[], notifIDs=[])]))], remainder_of_body=CORBA.Any(CORBA.TC_null, None)
+)

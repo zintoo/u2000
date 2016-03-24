@@ -1,0 +1,126 @@
+#ifndef emsSession_idl
+#define emsSession_idl
+
+// ********************************
+// *                              *
+// * emsSession.idl               *
+// *                              *
+// ********************************
+
+
+//Include list
+#include "CosNotifyChannelAdmin.idl"
+#include "common.idl"
+#include "session.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the emsSession interface
+   * of the NML-EML interface.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   *
+   * <p>The emsSession module provides a means for the client to interrogate the EMS
+   * to determine which manager interfaces it supports.  
+   * The NMS can then retrieve an instance of the manager interface objects it requires.
+   * This is achieved using generic IDL so that new manager interfaces can be easily added.</p>
+   **/
+
+
+module emsSession
+{
+    /** 
+     * <p>A handle to an instance of this interface is gained via the
+     * <a href=_emsSessionFactory.EmsSessionFactory_I.html#emsSessionFactory::EmsSessionFactory_I::getEmsSession>
+     * getemsSession</a> operation in EmsSessionFactory_I.</p>
+     */
+  interface EmsSession_I : session::Session_I
+  {
+
+  /** Sequence of manager names
+   **/
+  typedef sequence<string> managerNames_T;
+
+
+  /**
+   * <p>This allows an NMS to request the manager interfaces that the EMS implements</p>
+   * <br> supportedManagerList: list of manager names supported
+   *  in the form <i>managerName</i>
+   *  where <i>managerName</i> is one of the following defined manager strings
+   * <ol>
+   * <li> "EMS" (mandatory)
+   * <li> "ManagedElement" (mandatory)
+   * <li> "MultiLayerSubnetwork" (mandatory)
+   * <li> "TrafficDescriptor"
+   * <li> "PerformanceManagement"
+   * <li> "Protection"
+   * <li> "EquipmentInventory"
+   * <li> "Maintenance"
+   * <li> "GuiCutThrough" (mandatory)
+   * <li> "CORBA_MSTP_INV" (defined by Huawei)
+   * <li> "CORBA_MSTP_PRO" (defined by Huawei)
+   * <li> "CORBA_MSTP_SVC" (defined by Huawei)
+   * <li> "CORBA_MSTP_TD"  (defined by Huawei)
+   * <li> "ControlPlane"   (defined by Huawei)
+   * <li> "TopoManagement" (defined by Huawei) 
+   * <li> "ELLManagement"
+   * <li> "FlowdomainManagement"
+   * </ol>
+   * Additional managerName strings can be defined without changing this IDL.
+   * <br> globaldefs::ProcessingFailureException<br> 
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_ACCESS_DENIED  - Raised in case of security violation<br>
+   **/
+   void getSupportedManagers(out managerNames_T supportedManagerList)
+         raises(globaldefs::ProcessingFailureException);
+
+     
+  /**
+   * <p>This allows an NMS to gain access to the specified manager interface.</p>
+   *
+   * <br> managerName: The class or type of manager object that the client wants
+   * (see getSupportedManagers).
+   * <br> managerInterface: The actual object returned will implement the 
+   * specified manager interface.  However it is returned as a 
+   * Common_I object so that this operation can be generic.  The client should 
+   * narrow the returned object to the correct object type.
+   * 
+   * <p>Attempting to gain access to the following manager interfaces
+   * may <u>not</u> raise EXCPT_NOT_IMPLEMENTED:<br>
+   * EMS<br>
+   * ManagedElement<br>
+   * MultiLayerSubnetwork<br>
+   * GuiCutThrough</p>
+   *
+   * <br> globaldefs::ProcessingFailureException<br> 
+   * EXCPT_NOT_IMPLEMENTED - Raised if the EMS does not support the manager<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_ACCESS_DENIED  - Raised in case of security violation<br>
+   **/
+   void getManager(
+            in string managerName,
+            out common::Common_I managerInterface)
+        raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This allows an NMS to gain access to the event channel to receive notifications.</p>
+   *
+   * <br> EventChannel eventChannel: The event channel to be used by the NMS.
+   * 
+   * <br> globaldefs::ProcessingFailureException<br> 
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_ACCESS_DENIED  - Raised in case of security violation<br>
+   **/
+   void getEventChannel(out CosNotifyChannelAdmin::EventChannel eventChannel)
+        raises(globaldefs::ProcessingFailureException);
+
+    };
+
+};
+
+#endif
+

@@ -1,0 +1,379 @@
+#ifndef terminationPoint_idl
+#define terminationPoint_idl
+
+// ********************************
+// *                              *
+// * terminationPoint.idl         *
+// *                              *
+// ********************************
+
+//Include list
+#include "globaldefs.idl"
+#include "transmissionParameters.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the terminationPoint structure
+   * of the NML-EML interface.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module terminationPoint
+{
+  /**
+   * <p>Direction for a TerminationPoint:</p>
+   * <br>D_NA = used when the directionality specification is not necessary.<br>
+   * D_BIDIRECTIONAL = source and sink (transmit and receive).<br>
+   * D_SOURCE = source (transmit).<br>
+   * D_SINK = sink (receive).<br> 
+   * <br>
+   *
+   * <p>The directionality of PTPs is defined from an external point of view,
+   * while the directionality of CTPs is defined from an internal point of view.
+   * Consequently, sink PTPs generate source CTPs, and sink CTPs form source PTPs.
+   * Refer to <a href=supportingDocumentation/snctypes.pdf>SNC Types</a>.</p>
+   *
+   * <p>Note that ATM termination points (LR_ATM_NI, LR_ATM_VP and LR_ATM_VC) are 
+   * always bi-directional even though the traffic may be asymmetric (and eventually
+   * null in one of the two directions).</p>
+   **/
+   enum Directionality_T
+   {
+     D_NA,
+     D_BIDIRECTIONAL,
+     D_SOURCE,
+     D_SINK
+   };
+
+
+ /**
+   * <p>A CTP may be involved in zero, one, or many connections. The value
+   * TPConnectionState indicates the degree to which a CTP is used.
+   * The values TPCS_SOURCE_CONNECTED and TPCS_SINK_CONNECTED reflect the 
+   * presence of a one way connection. The value TPCS_BI_CONNECTED means
+   * that the TP is both sink and source connected.</p>
+   *
+   * <p>If an EMS cannot report whether the source of the TP is connected
+   * or the sink is connected, TPCS_BI_CONNECTED may be reported by that
+   * EMS.</p>
+   *
+   * <p>The value TPCS_NA is used for PTPs and TPPools.</p>
+   **/
+   enum TPConnectionState_T
+   {
+     TPCS_NA,
+     TPCS_SOURCE_CONNECTED,
+     TPCS_SINK_CONNECTED,
+     TPCS_BI_CONNECTED,
+     TPCS_NOT_CONNECTED
+   };
+
+
+  /**
+   * <p>As the interface is coarse grained, TPs are modeled as pure data objects
+   * and do not appear as first class CORBA objects at the 
+   * interface between the NMS and EMS.</p>
+   *
+   * <p>The PTP or Physical Termination Point represents a single port of an
+   * NE. The PTP is an aggregate of G.805 TTPs and G.805 CTPs.
+   * The PTP has been added for performance and interface simplification.</p>
+   *
+   * <p>A CTP in this model may correspond directly to a single G.805 CTP or may
+   * represent an aggregate of a G.805 TTPs and G.805 CTPs.</p>
+   *
+   * <p>A TPPool is a set of Termination Points (either CTPs and/or PTPs). This type has 
+   * been initially introduced to support the concept of administrative partitioning
+   * of an ATM Network Interface (a VP TPPool is defined as a set of VP CTPs).</p>
+   **/
+   enum TPType_T
+   {
+     TPT_PTP,
+     TPT_CTP,
+     TPT_TPPool
+   };
+
+
+  /**
+   * <p>TerminationMode has the following values: </p>
+   * <br>TM_TERMINATED_AND_AVAILABLE_FOR_MAPPING indicates that the G.805 CTP 
+   * is attached to the
+   * corresponding G.805 TTP within the CTP aggregate 
+   * and is providing client layer capacity (e.g. STS1
+   * terminated and mapped to VT1.5 i.e. channelized).<br> 
+   * TM_NEITHER_TERMINATED_NOR_AVAILABLE_FOR_MAPPING indicates that the CTP is available for
+   * connectivity (e.g. STS1 not terminated and not mapped to VT1.5 
+   * i.e. not channelized).<br>
+   * TM_NA is used for PTPs and also used for CTPs where an SNC (or crossconnect) can be used
+   * to connect the G.805 TTP of the CTP to the connection point of another CTP.<br>
+   * <br>
+   *
+   * <p>For more discussion on terminationMode see
+   * <a href=supportingDocumentation/layers.pdf>layering</a>.</p>
+   *
+   * <p>For ATM SNCs, the Terminated and Mapped parameter of a VP or VC CTP is used to
+   * model a VPC or a VCC terminating within the Managed Element (i.e.
+   * internal VP or VC Trails). Such a terminated ATM connection is used as a
+   * trail acting as a server for upper layer protocols (e.g., VCCs in case of a VPC TP,
+   * Frame Relay in case of a VCC TP). In the two switching layer ATM model,
+   * the VP layer acts as the infrastructure on which VC Connections 
+   * (either PVC, SPVC or SVC) are routed and switched. This capability allows the 
+   * operator to build a logical partitioning (VP overlay) of the physical ATM 
+   * network by configuring VPCs (or VP "tunnels") which are terminated inside the 
+   * subnetwork. Such overlay VP network allows operators to aggregate and segregate 
+   * VCs according to their traffic management policy. In addition, the use of an 
+   * intra-subnetwork VPC may provide for enhanced protection of the VC traffic by 
+   * using 1+1 VP protection (VP protection is not supported in this release
+   * of the EMS-NMS interface). In order to be able to make routing decisions at 
+   * VC level (e.g., explicit route constraint), the NMS needs to know the VP topology
+   * available from the ATM network.</p>
+   *
+   * <p>Note that requesting the operator to explicitly set up an overlay VP network
+   * as a pre-requisite for passing any VC traffic may be cumbersome and in some case
+   * results in a sub-optimal use of the ATM links. For that reason, most ATM NEs provide
+   * for an alternative which allows for each ATM NE to act as a VC switch without having
+   * to explicitly configure VPs (i.e., each ATM link acts as an internal VP link between
+   * two adjacent nodes).</p>
+   **/
+   enum TerminationMode_T
+   {
+     TM_NA,
+     TM_NEITHER_TERMINATED_NOR_AVAILABLE_FOR_MAPPING,
+     TM_TERMINATED_AND_AVAILABLE_FOR_MAPPING
+   };
+
+
+  /**
+   * <p>tpProtectionAssociation expresses constraints on PTPs and CTPs for PSR connection
+   * management.</p>
+   *
+   * <p>In a multi-layer subnetwork, say 'a', 'b', 'c' are edge points.
+   * Suppose, for example, a three-ended connection is sought from 'a' to 'b', 
+   * where 'b' is one of the endpoints.
+   * If 'c' is the constrained choice for 'b' as the other end of the three-ended connection,
+   * then 'b' and 'c' are said to be
+   * associated by a protectionAssociation. 
+   * The tpProtectionAssociation is set to TPPA_PSR_RELATED in 'b' and 'c', and 
+   * getAssociatedTP(b) returns c and getAssociatedTP(c) returns b.</p>
+   *
+   * <p>In all other cases, tpProtectionAssociation is set to TPPA_NA.</p>
+   *
+   * <p>The <a href=_multiLayerSubnetwork.MultiLayerSubnetworkMgr_I.html#multiLayerSubnetwork::MultiLayerSubnetworkMgr_I::getAssociatedTP>getAssociatedTPs</a>
+   * service must be used to obtain the related TP.</p>  
+   **/
+   enum TPProtectionAssociation_T
+   {
+     TPPA_NA,
+     TPPA_PSR_RELATED
+   };
+
+
+  /**
+   * <p>A TP is modeled as a data structure to avoid a great number of
+   * CORBA objects across the EMS/NMS interface. Internally in the EMS,
+   * these data structures can map to any desired architecture.   </p>
+   *
+   * <p>This is an
+   * abstract class that encapsulates the data and behavior that is common
+   * to the different types of end points. For instance, a TP may be
+   * Sink (Receive), Source (Transmit) or Bi-directional (Transmit and
+   * Receive), has a LayerRate, a name and a userLabel. Each TP has an
+   * associated set of attributes that represent transmission parameters.
+   * For a PTP the transmission parameters are at various LayerRates (that
+   * are aggregated to form the PTP); for a CTP the parameters may
+   * only be for a single LayerRate. </p>
+   *
+   * <p>Termination points in this model are either bidirectional or unidirectional. Whereas
+   * bidirectional SNCs can be supported by bidirectional endpoint
+   * TPs only, unidirectional SNCs can be supported by both, bidirectional and unidirectional
+   * endpoint TPs where the TPConnectionState indicates the 
+   * TP is either source connected (a_end of an SNC) or a sink connected (z_end of an SNC).
+   * In either case, the intermediate CTPs used by the SNC may be unidirectional or
+   * bidirectional.
+   * The location of free unidirectional resources may 
+   * be determined by testing for source or sink connected termination points. Termination points
+   * that are bidirectional cannot be assumed to be 
+   * associated with bidirectional SNCs except by checking the connection direction on the SNC(s)
+   * using the Termination point.</p> 
+   * 
+   * <p>For details on how TPs should be modelled see
+   * <a href=supportingDocumentation/layers.pdf>layering</a>.</p>
+   *
+   * <p>The naming for TPs is deterministic, see
+   * <a href=supportingDocumentation/objectNaming.html>Object Naming</a>.
+   *
+   * <p>A CTP is a (Subnetwork) Connection Termination Point. A CTP is a 
+   * potential end point of a subnetwork connection.
+   * If a CTP is part of an active subnetwork connection, then 
+   * the CTP entity must exist on an NE (in terms of TL1 the termination is 
+   * entered), otherwise the model does not specify if the CTP exists on the NE 
+   * or not. </p>
+   *
+   * <p>A PTP (Physical) Topological Link Termination Point) is an end-point of a 
+   * Physical Link. Examples of PTPs are T1 ports, T3 ports, OC-N optical 
+   * ports, etc. PTPs have a containment relation with CTPs. </p>
+   *
+   * <p>A TPPool is a TP Pool Termination Point. It is used to logically group CTPs for 
+   * administrative purposes. An example is the partitioning of VP CTPs for
+   * bandwidth management. </p>
+   *
+   * <p>PTPs forming an APS pair are related. </p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>The name represents the name of the
+   * Termination Point which is assigned by the EMS upon creation.
+   * The EMS is responsible for guaranteeing the uniqueness of the name
+   * within the context of the ManagedElement
+   * The naming for CTPs and PTPs is deterministic, see
+   * <a href=supportingDocumentation/objectNaming.html>Object Naming</a>
+   * for further detail.
+   * It is a readonly attribute.<br>
+   *
+   * string <b>userLabel</b>:
+   * <br>The user label of the TP is set with NMS data (typically the 
+   * end to end trail data). This can be set via the setUserLabel operation.  The user label may
+   * be cleared when the TP is deleted or when the model does not specify
+   * if the CTP exists (see above). The EMS
+   * is expected to place this data in the PM Data file 
+   * transfers if the EMS supports the Performance Manager services.
+   * It is a read-write attribute.<br>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br>The name represents how the TP is refered to on EMS displays. Its
+   * aim is to provide a "nomenclature bridge" the aid relating information
+   * presented on NMS displays to EMS displays (via GUI cut through).
+   * It is never set to NULL string.<br>
+   *
+   * string <b>owner</b>:
+   * <br>The owner attribute of the TerminationPoint indicates the ownership 
+   * of the TP so that adminstrativeState can be managed. Since the
+   * administrative state is not used, there is no use for this now.
+   * The owner is provisionable by the NMS. This attribute can be set
+   * by NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setOwner>setOwner</a>.  The
+   * owner may be cleared when the TP is deleted or when the model does not specify
+   * if the CTP exists (see above). 
+   * It is a read/write attribute.<br>
+   *
+   * globaldefs::NamingAttributes_T <b>ingressTrafficDescriptorName</b>:
+   * <br>A connection termination point may have an optional reference to an ingress (incoming)
+   * Traffic Descriptor. The Traffic Descriptor name will be empty
+   * if there is no associated Traffic Descriptor.<br>
+   *
+   * globaldefs::NamingAttributes_T <b>egressTrafficDescriptorName</b>:
+   * <br>A connection termination point may have an optional reference to an egress (outgoing)
+   * Traffic Descriptor. The Traffic Descriptor name will be empty
+   * if there is no associated Traffic Descriptor.<br>
+   *
+   * TPType_T <b>type</b>:
+   * <br>Because the TerminationPoint can either be a PTP, CTP or TPPool
+   * it is necessary to identify its type.
+   * It is a readonly attribute.<br>
+   *
+   * TPConnectionState_T <b>connectionState</b>:
+   * <br>This attribute is only applicable to CTPs.
+   * If the source is connected to one entity and the sink is
+   * connected to another entity then the value of this attribute
+   * is TPCS_BI_CONNECTED.
+   * This is a readonly attribute.<br>
+   *
+   * TerminationMode_T <b>tpMappingMode</b>:
+   * <br>Within the definition, the CTP can act as an 
+   * aggregate of a CTP and
+   * an associated TTP at the same LayerRate within the 
+   * aggregate of the same PTP.
+   *
+   * The TerminationMode attribute indicates and controls the connection of
+   * the named CTP at a specified LayerRate to the dedicated TTP at the same 
+   * LayerRate within the same PTP.
+   *
+   * The TerminationMode is used, for example, to control the Termination and
+   * mapping to VT1.5 of an STS1 Trail within an OC3 port. This capability
+   * could potentially be used to terminate an STS1 backbone Trail within 
+   * a lower order mux that has the capability to alternatively 
+   * cross-connect the STS1 unterminated. The same capability is used in SDH
+   * and is potentially applicable to any LayerRate.<br>
+   *
+   * Directionality_T <b>direction</b>:
+   * <br>The direction of the termination point. 
+   * It is a readonly attribute.<br>
+   *
+   * transmissionParameters::LayeredParameterList_T	<b>transmissionParams</b>:
+   * <br>A list of transmission parameters which can be set and/or
+   * retrieved on the TP at a specified layer.
+   * This attribute must contain the complete set of layer rates represented by
+   * a PTP or CTP - even if they have no parameters associated with them.
+   * This attribute can be set by an NMS through the 
+   * <a href=_managedElementManager.ManagedElementMgr_I.html#managedElementManager::ManagedElementMgr_I::setTPData>setTPData</a>
+   * operation and also during SNC creation.
+   * The values for the name field and the value fields of the NVSList_T
+   * are defined in <a href=supportingDocumentation/layeredParameters.html>Layered
+   * Parameters</a>.<br>
+   *
+   * TPProtectionAssociation_T <b>tpProtectionAssociation</b>:
+   * <br>The associated TP indication. The NMS is responsible to invoke
+   * the <a name=multiLayerSubnetwork.html#multiLayerSubnetworkMgr_I::MultiLayerSubnetworkMgr_I::getAssociatedTP>getAssociatedTP</a>
+   * service to obtain the related TP if any.<br>
+   *
+   * boolean <b>edgePoint</b>:
+   * <br>Indicates if the TP is an edge point of at least one subnetwork,
+   * i.e. if it is an end
+   * point of a potential inter-subnetwork topological link.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>This attribute allows the communication from the EMS to the NMS of additional 
+   * information which isn't explicitly modelled.  For example, a parameter "TPPoolUse"
+   * could be included for TP pools to indicate their uses.
+   * This may be an empty list.
+   * It is a readonly attribute.<br>
+   * <br>
+   **/
+   struct TerminationPoint_T
+   {
+   globaldefs::NamingAttributes_T name;
+   string userLabel;
+   string nativeEMSName;
+   string owner;
+   globaldefs::NamingAttributes_T ingressTrafficDescriptorName;
+   globaldefs::NamingAttributes_T egressTrafficDescriptorName;
+   TPType_T type;
+   TPConnectionState_T connectionState;
+   TerminationMode_T tpMappingMode;
+   Directionality_T direction;
+   transmissionParameters::LayeredParameterList_T transmissionParams;
+   TPProtectionAssociation_T tpProtectionAssociation;
+   boolean edgePoint;
+   globaldefs::NVSList_T additionalInfo;
+  };
+
+  /**
+   * <p>Sequence of TerminationPoint_T.</p>
+   **/
+  typedef sequence<TerminationPoint_T> TerminationPointList_T;
+
+
+  /**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   **/
+   interface TerminationPointIterator_I
+    {
+	boolean  next_n(in unsigned long 		how_many,
+		        out TerminationPointList_T 	tpList)
+	         raises (globaldefs::ProcessingFailureException);
+
+       unsigned long getLength()
+	         raises (globaldefs::ProcessingFailureException);
+
+   	void	 destroy()
+	         raises (globaldefs::ProcessingFailureException);
+    };
+};
+#endif
+

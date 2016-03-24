@@ -1,0 +1,587 @@
+#ifndef __HUAWEI_MSTP_SERVICE_MGR_IDL__
+#define __HUAWEI_MSTP_SERVICE_MGR_IDL__
+
+// ********************************
+// *                              *
+// * HW_mstpServiceMgr.idl        *
+// *                              *
+// ********************************
+
+#include "HW_mstpProtectionMgr.idl"
+
+#pragma prefix "mtnm.huawei.com"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the MSTP service descripton structure
+   * of the NML-EML interface.
+   * It also contains the definition of the MSTP service manager.</p>
+   * 
+   * This module is defined by Huawei Technologies Co., LTD. All rights reserved!
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module HW_mstpService
+{
+
+	/**
+	* <p>Type definition of ethernet service, the valid value can be EPL/EVPL/EPLn/EVPLn.</p>
+	**/
+	enum HW_EthServiceType_T
+	{
+		HW_EST_NA,
+		HW_EST_EPL,			
+		HW_EST_EVPL,				
+		HW_EST_EPLAN,		
+		HW_EST_EVPLAN		
+	};
+
+	/**
+	* <p>Sequence of HW_EthServiceType_T.</p>
+	**/
+	typedef sequence<HW_EthServiceType_T> HW_EthServiceTypeList_T;
+
+	/**
+	* <p>Data structure definition of the endpoint of an ethernet service, used to describe the parameter information of the source or sink of an ethernet service.</p>
+	*
+	* globaldefs::NamingAttributes_T <b>name</b>:
+	* <br>The name of the endpoint of one ethernet service.<br>
+	*
+	* unsigned short <b>vlanID</b>:
+	* <br>VLAN ID number.<br>
+	*
+	* unsigned long <b>tunnel</b>:
+	* <br>Tunnel label of service, used for label switching.<br>
+	*
+	* unsigned long <b>vc</b>:
+	* <br>VC label of service, used for label switching.<br>
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br> 	
+	**/
+	struct HW_EthServiceTP_T
+	{
+		globaldefs::NamingAttributes_T name;		
+		unsigned short vlanID;
+		unsigned long tunnel;
+		unsigned long vc;			
+		globaldefs::NVSList_T additionalInfo;					
+	};
+	
+	/**
+	* <p>Sequence of HW_EthServiceTP_T.</p>
+	**/
+	typedef sequence<HW_EthServiceTP_T> HW_EthServiceTPList_T;
+	
+	/**
+	* <p>The structure describes the parameter information required for creation of an ethernet service</p>
+	*
+	* HW_EthServiceType_T <b>serviceType</b>:
+	* <br>Service type of the ethernet service will be created.<br>
+	*
+	* globaldefs::ConnectionDirection_T <b>direction</b>:
+	* <br>Direction of the ethernet service will be created, default value is bi-directional.<br>
+	*
+	* HW_EthServiceTP_T <b>aEndPoint</b>:
+	* <br>The parameter information of the source endpoint of the ethernet service will be created.<br>
+	*
+	* HW_EthServiceTP_T <b>zEndPoint</b>:
+	* <br>The parameter information of the sink endpoint of the ethernet service will be created.<br>
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br> 	
+	**/
+	struct HW_EthServiceCreateData_T
+	{
+		HW_EthServiceType_T serviceType;		
+		globaldefs::ConnectionDirection_T direction;
+		HW_EthServiceTP_T aEndPoint;				
+		HW_EthServiceTP_T zEndPoint;				
+		globaldefs::NVSList_T additionalInfo;					
+	};
+
+	/**
+	* <p>Sequence of HW_EthServiceCreateData_T.</p>
+	**/
+	typedef sequence<HW_EthServiceCreateData_T> HW_EthServiceCreateDataList_T;
+
+	/**
+	* <p>The structure describes the ethernet ATM EPL/EVPL/Transit/EPLan/EVPLan Service.</p>
+	* 
+	* <p>The name of ethernet service must be unique within the EMS management domain. The naming rule is as following:
+	* <br> 1. name="EMS";value="CompanyName/EMSname" <br>
+    	* <br> 2. name="ManagedElement";value="ManagedElementName" <br>   
+    	* <br> 3. name="EthService";value="EthServiceName" <br>
+	*
+	* The naming rule of EthServiceName is as following:
+	* <br>"/shelfID/slotID/serviceid"</p>
+	*
+	* globaldefs::NamingAttributes_T <b>name</b>
+	* <br>The name represents the name of the ethernet service which is assigned by EMS upon creation. The EMS is responsible for guaranteeing the uniqueness of the name.<br><br>
+	*
+	* string <b>nativeEMSName</b>:
+	* <br>The name represents how the ATM service is referred to on EMS displays.
+	*
+	* string <b>userLabel</b>:
+	* <br>The user label of the ATM service is NMS data. 
+	*
+	* string <b>owner</b>:
+	* <br>The owner of the ethernet service. The owner is provisionable by the NMS.
+	*
+	* HW_EthServiceType_T <b>serviceType</b>
+	* <br>Service type of the ethernet service.<br>
+	*
+	* globaldefs::ConnectionDirection_T <b>direction</b>
+	* <br>Direction of the ethernet service.<br>
+	*
+	* boolean <b>activeState</b>
+	* <br>Indicate whether the ethernet service has been activated.<br>
+	*
+	* HW_EthServiceTP_T <b>aEndPoint</b>
+	* <br>The parameter information of the source endpoint of the ethernet service<br>
+	* 
+	* HW_EthServiceTP_T <b>zEndPoint</b>
+	* <br>The parameter information of the sink endpoint of the ethernet service<br>
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br>	
+	**/ 
+	struct HW_EthService_T
+	{
+		globaldefs::NamingAttributes_T name;
+		string  userLabel;
+		string	nativeEMSName;					
+		string  owner;
+		HW_EthServiceType_T serviceType;				
+		globaldefs::ConnectionDirection_T direction;	
+		boolean	activeState;
+		HW_EthServiceTP_T aEndPoint;	
+		HW_EthServiceTP_T zEndPoint;	
+		globaldefs::NVSList_T additionalInfo;		
+	};
+
+	/**
+	* <p>Sequence of HW_EthService_T.</p>
+	**/
+	typedef sequence<HW_EthService_T> HW_EthServiceList_T;
+
+	/**
+	* <p>ATM spreading type definition. The spreading type can be p2p, p2mproot or p2mpleaf.</p>
+	**/	
+	enum HW_AtmServiceSpreadType_T
+	{
+		HW_ASST_NA,
+		HW_ASST_P2P,
+		HW_ASST_P2MPROOT,
+		HW_ASST_P2MPLEAF
+	};
+
+	/**
+	* <p>Type definition of ATM service, the service type can be NA, PVP or PVC.</p>
+	**/	
+	enum HW_AtmServiceType_T
+	{
+		HW_AST_NA,
+		HW_AST_PVP,
+		HW_AST_PVC
+	};
+
+	/**
+	* <p>Sequence of HW_AtmServiceType_T.</p>
+	**/
+	typedef sequence<HW_AtmServiceType_T> HW_AtmServiceTypeList_T;
+
+	/**
+	* <p>Type definition of protection role, the service protection role can be NA, working or protecting.</p>
+	**/	
+	enum HW_AtmProtectRole_T
+	{
+		HW_APR_NA,
+		HW_APR_WORKING,		
+		HW_APR_PROTECTING	
+	};
+
+	/**
+	* <p>Data structure definition of the endpoint of an ATM service, used to describe the parameter information of the source or sink of an ATM service.</p>
+	*
+	* <p>The source or sink TP of an ATM service, may be ATM VP CTP or ATM VC CTP. About the naming rule of the CTP, please refer to
+	* <a href=supportingDocumentation/objectNaming.html>Object Naming</a></p>
+	*
+	* globaldefs::NamingAttributes_T <b>name</b>
+	* <br>The name of the source or sink TP of an ATM service. It may be VP CTP or VC CTP.<br>
+	*
+	* globaldefs::NamingAttributes_T <b>trafficDescriptorName</b>
+	* <br>The name of traffic description. About the naming rule of the traffic description, please refer to
+	* <a href=supportingDocumentation/objectNaming.html>Object Naming</a>, It's read-only attribute.<br>
+	*
+	* boolean <b>bPC</b>
+	* <br>Indicate enabling the traffic control or not.<br>
+	*	
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br>	
+	**/
+	struct HW_AtmServiceTP_T
+	{
+		globaldefs::NamingAttributes_T name;
+		globaldefs::NamingAttributes_T trafficDescriptorName;
+		boolean bPC;		
+		globaldefs::NVSList_T additionalInfo;					
+	};
+
+	/**
+	* <p>Sequence of HW_AtmServiceTP_T.</p>
+	**/
+	typedef sequence<HW_AtmServiceTP_T> HW_AtmServiceTPList_T;
+
+	/**
+	* <p>The structure describes the parameter information required for creation of an ATM service</p>
+	*
+	* HW_mstpProtection::HW_AtmProtectType_T <b>protectType</b>:
+	* <br>Protection type of ATM service. the valid value maybe unprotected, 1+1 or 1:1.<br>
+	*
+	* HW_AtmServiceType_T <b>serviceType</b>:
+	* <br>Service type of ATM service. the valid value maybe PVP or PVC.<br>
+	*
+	* HW_AtmServiceSpreadType_T <b>spreadType</b>:
+	* <br>Spreading type of ATM service.<br>
+	* 
+	* HW_AtmProtectRole_T <b>protectRole</b>:
+	* <br>Protection role of the ATM service, which is to indicate the service is working service or protecting service.<br>
+	*
+	* HW_AtmServiceTP_T <b>aEndPoint</b>:
+	* <br>The parameter information of the A End TP of the ATM service, including name of the tp, traffic discription, UPC/NPC setting and so on.<br>
+	*
+	* HW_AtmServiceTP_T <b>zEndPoint</b>:
+	* <br>The parameter information of the Z End TP of the ATM service, including name of the tp, traffic discription, UPC/NPC setting and so on.<br>
+	* 
+	* boolean <b>active</b>:
+	* <br>Indicate whether the ATM service will be activated immediately.<br>
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br>	
+	**/
+	struct HW_AtmServiceCreateData_T
+	{	
+		HW_mstpProtection::HW_AtmProtectType_T protectType;	
+		HW_AtmServiceType_T serviceType;					
+		HW_AtmServiceSpreadType_T spreadType;				
+		HW_AtmProtectRole_T protectRole;					
+		HW_AtmServiceTP_T aEndPoint;						
+		HW_AtmServiceTP_T zEndPoint;						
+		boolean	active;										
+		globaldefs::NVSList_T additionalInfo;					
+	};
+
+	/**
+	* <p>The structure describes the ATM VP/VC Service.</p>
+	* 
+	* <p>The name of ATM service must be unique within the EMS management domain. The naming rule is as following:
+	* <br> 1. name="EMS";value="CompanyName/EMSname" <br>
+    	* <br> 2. name="ManagedElement";value="ManagedElementName" <br>   
+    	* <br> 3. name="AtmService";value="AtmServiceID" <br></p>
+	*
+	* globaldefs::NamingAttributes_T <b>name</b>:
+	* <br>The name represents the name of the ATM service which is assigned by EMS upon creation. The EMS is responsible for guaranteeing the uniqueness of the name.<br>
+	*
+	* string <b>nativeEMSName</b>:
+	* <br>The name represents how the ATM service is referred to on EMS displays.
+	*
+	* string <b>userLabel</b>:
+	* <br>The user label of the ATM service is NMS data. 
+	*
+	* string <b>owner</b>:
+	* <br>The owner is provisionable by the NMS.
+	*
+	* HW_mstpProtection::HW_AtmProtectType_T <b>protectType</b>:
+	* <br>Protection type of ATM service. the valid value maybe unprotected, 1+1 or 1:1.<br>
+	*
+	* HW_AtmServiceType_T <b>serviceType</b>:
+	* <br>Service type of ATM service. the valid value maybe PVP or PVC.<br>
+	*
+	* HW_AtmServiceSpreadType_T <b>spreadType</b>:
+	* <br>Spreading type of ATM service.<br>
+	* 
+	* HW_AtmProtectRole_T <b>protectRole</b>:
+	* <br>Protection role of the ATM service, which is to indicate the service is working service or protecting service.<br>
+	* 
+	* boolean <b>activeState</b>:
+	* <br>Indicate whether the ATM service has been activated.<br>
+	*
+	* HW_AtmServiceTP_T <b>aEndPoint</b>:
+	* <br>The parameter information of the A End TP of the ATM service, including name of the tp, traffic discription, UPC/NPC setting and so on.<br>
+	*
+	* HW_AtmServiceTP_T <b>zEndPoint</b>:
+	* <br>The parameter information of the Z End TP of the ATM service, including name of the tp, traffic discription, UPC/NPC setting and so on.<br>
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 				
+	* <br>
+	**/ 
+	struct HW_AtmService_T
+	{
+		globaldefs::NamingAttributes_T name;
+		string  userLabel;
+		string	nativeEMSName;					
+		string  owner;
+		HW_mstpProtection::HW_AtmProtectType_T protectType;	
+		HW_AtmServiceType_T serviceType;					
+		HW_AtmServiceSpreadType_T spreadType;				
+		HW_AtmProtectRole_T protectRole;					
+		boolean	activeState;							
+		HW_AtmServiceTP_T aEndPoint;					
+		HW_AtmServiceTP_T zEndPoint;					
+		globaldefs::NVSList_T additionalInfo;		
+	};
+
+	/**
+	* <p>Sequence of HW_AtmService_T.</p>
+	**/
+	typedef sequence<HW_AtmService_T> HW_AtmServiceList_T;
+ 
+
+   	/**
+   	* <p>In order to allow the NMS to deal with a large number of objects,
+   	* iterators are used.</p>
+   	* <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   	* for information on how iterators are used in this interface.</p>
+   	**/
+	interface HW_EthServiceIterator_I
+	{
+		boolean next_n( in unsigned long how_many,
+						out HW_EthServiceList_T serviceList )
+						raises (globaldefs::ProcessingFailureException );
+
+		unsigned long getLength() raises( globaldefs::ProcessingFailureException );
+
+		void destroy() raises( globaldefs::ProcessingFailureException );
+	};
+	
+	/**
+   	* <p>In order to allow the NMS to deal with a large number of objects,
+   	* iterators are used.</p>
+   	* <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   	* for information on how iterators are used in this interface.</p>
+   	**/
+	interface HW_AtmServiceIterator_I
+	{
+		boolean next_n( in unsigned long how_many,
+						out HW_AtmServiceList_T serviceList )
+						raises (globaldefs::ProcessingFailureException );
+
+		unsigned long getLength() raises( globaldefs::ProcessingFailureException );
+
+		void destroy() raises( globaldefs::ProcessingFailureException );
+	};
+
+  	/**
+   	* <p>The HW_mstpServiceMgr_I is used as a handle to gain access to the
+   	* mstp service management functionalities of the NML-EML interface, including
+   	* ethernet service management and atm service management functionalities. </p>
+   	*
+   	* <p>A handle to an instance of this interface is gained via the
+   	* <a href=_emsSession.EmsSession_I.html#emsSession::EmsSession_I::getManager>
+   	* getManager</a> operation in Manager.</p>
+   	**/	
+	interface HW_MSTPServiceMgr_I : common::Common_I
+	{
+	  /**
+	   * <p>Create ethernet service, including EPL/EVPL/Transit/EPLAN/EVPLAN ethernet service types.</p>
+	   *
+	   * <br>HW_EthServiceCreateData_T <b>createData</b>: structure describing the ethernet service will be created.	   
+	   * <br>HW_EthService_T <b>ethService</b>: the newly created ethernet service.
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when createData is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+	   void createEthService( in HW_EthServiceCreateData_T createData,
+					out HW_EthServiceList_T ethServiceList )
+					raises( globaldefs::ProcessingFailureException );
+
+	   /**
+	   * <p>Delete ethernet service.</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>serviceName</b>: name of the ethernet service to be deleted.
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when serviceName is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+	   void deleteEthService( in globaldefs::NamingAttributes_T serviceName )
+					raises( globaldefs::ProcessingFailureException );
+
+
+	   /**
+	   * <p>Retrieve all of the ethernet service of specific managedelement.</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>meName</b>: name of managedelement.
+	   * <br>HW_EthServiceTypeList_T <b>typeList</b>: Ethernet service type list. If the parameter is null, it means to query all service types.
+	   * <br>unsigned long <b>how_many</b>: Maximum number of ethernet service to report in the first batch.
+	   * <br>HW_EthServiceList_T <b>serviceList</b>: First batch of the ethernet service.
+	   * <br>HW_EthServiceIterator_I <b>serviceIt</b>: Iterator to retrieve the remaining ethernet service.
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	   *  that the EMS can support has been reached<br>
+	   * <br>
+	   **/
+	   void getAllEthService( in globaldefs::NamingAttributes_T meName,
+					in HW_EthServiceTypeList_T typeList,
+					in unsigned long how_many,
+					out HW_EthServiceList_T serviceList, 
+					out HW_EthServiceIterator_I serviceIt )
+					raises( globaldefs::ProcessingFailureException );
+
+	   /**
+	   * <p>Retrieve the specific ethernet service.</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>serviceName</b>: the name of ethernet service to retrieve.
+	   * <br>HW_EthService_T <b>ethService</b>: the ethernet service structure retrieved.
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when serviceName is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+	   void getEthService( in globaldefs::NamingAttributes_T serviceName, 
+					out HW_EthService_T ethService )
+					raises( globaldefs::ProcessingFailureException );
+
+
+	   /**
+	   * <p>Create ATM service. The ATM service mentioned here include two types: ATM VPC(VP crosss connection) and ATM VCC(cross connection).</p>
+	   *
+	   * <br>HW_AtmServiceCreateData_T <b>createData</b>: structure discribing the ATM service will be created.
+	   * <br>HW_AtmService_T <b>atmService</b>: the newly created ATM service.
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when any input parameter is invalid.<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+	   void createAtmService( in HW_AtmServiceCreateData_T createData,
+					out HW_AtmService_T atmService )
+					raises( globaldefs::ProcessingFailureException );
+
+
+	   /**
+	   * <p>Delete the specific ATM service.</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>serviceName</b>: Name of ATM service to delete.	   
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when meName does not reference a managedElement object<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when meName references object which does not exist<br>	   
+	   * <br>
+	   **/
+	   void deleteAtmService( in globaldefs::NamingAttributes_T serviceName )
+					raises( globaldefs::ProcessingFailureException );
+
+
+	   /**
+	   * <p>Retrieve all of the ATM service of specific managedelement.</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>meName</b>: name of managedelement.
+	   * <br>HW_AtmServiceTypeList_T <b>typeList</b>: Atm service type list. If the parameter is null, it means to query all service types.
+	   * <br>unsigned long <b>how_many</b>: Maximum number of ATM service to report in the first batch. 
+	   * <br>HW_AtmServiceList_T <b>serviceList</b>: First batch of ATM service.
+	   * <br>HW_AtmServiceIterator_I <b>serviceIt</b>: Iterator to retrieve the remaining ATM service. 
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	   *  that the EMS can support has been reached<br>
+	   * <br>
+	   **/
+	   void getAllAtmService( in globaldefs::NamingAttributes_T meName,
+					in HW_AtmServiceTypeList_T typeList,
+					in unsigned long how_many,
+					out HW_AtmServiceList_T serviceList, 
+					out HW_AtmServiceIterator_I serviceIt )
+					raises( globaldefs::ProcessingFailureException );
+
+
+	   /**
+	   * <p>Retrieve the specific ATM Service.</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>serviceName</b>: ATM service name.	   
+	   * <br>HW_AtmService_T <b>atmService</b>: Detail information of the specific ATM service.
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+	   void getAtmService( in globaldefs::NamingAttributes_T serviceName, 
+					out HW_AtmService_T atmService )
+					raises( globaldefs::ProcessingFailureException );
+
+
+	   /**
+	   * <p>Activate ATM Service.</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>serviceName</b>: ATM service name.
+	   * <br>HW_AtmService_T <b>atmService</b>: the ATM service after activated.
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+	   void activateAtmService( in globaldefs::NamingAttributes_T serviceName,
+					out HW_AtmService_T atmService )
+					raises( globaldefs::ProcessingFailureException );
+
+
+	   /**
+	   * <p>Deactivate ATM Service.</p>
+	   *
+	   * <br>globaldefs::NamingAttributes_T <b>serviceName</b>: ATM service name.
+	   * <br>HW_AtmService_T <b>atmService</b>: the ATM service after deactivated.
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object which does not exist<br>	   
+	   * <br>
+	   **/
+	   void deactivateAtmService( in globaldefs::NamingAttributes_T serviceName,
+						out HW_AtmService_T atmService )
+						raises( globaldefs::ProcessingFailureException );
+	};
+};
+
+#endif /*__HUAWEI_MSTP_SERVICE_MGR_IDL__*/

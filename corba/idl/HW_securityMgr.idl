@@ -1,0 +1,53 @@
+#ifndef __HW_SECURITYMGR_IDL__
+#define __HW_SECURITYMGR_IDL__
+
+// ********************************
+// *                              *
+// * HW_securityMgr.idl           *
+// *                              *
+// ********************************
+
+//Include list
+#include "globaldefs.idl"
+#include "common.idl"
+
+#pragma prefix "mtnm.huawei.com"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the security description structure
+   * of the NML-EML interface.
+   * It also contains the definition of the security manager.</p>
+   * 
+   * This module is defined by Huawei Technologies Co., LTD. All rights reserved!
+   * <h5> Version 2.1. </h5>
+   **/
+   
+   
+module HW_securityMgr
+{
+	interface HW_securityMgr_I : common::Common_I
+	{
+	   /**
+	   * <p>Modify the specified user password</p>
+	   *
+	   * <br>string<b>userName</b>: the user name of who's password to be modified.
+	   * <br>string<b>oldPassword</b>: the password of the user before modified.
+	   * <br>string<b>newPassword</b>: the password after the operation excuted succeed.
+	   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	   * EXCPT_INVALID_INPUT - Raised when userName or password is invalid<br>
+	   * <br>
+	   **/
+
+
+		void modifyPassword(
+			in string userName,
+			in string oldPassword,
+			in string newPassword)
+			raises(globaldefs::ProcessingFailureException);
+	};
+};
+
+#endif //__HW_SECURITYMGR_IDL__

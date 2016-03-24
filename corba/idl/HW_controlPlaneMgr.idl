@@ -1,0 +1,294 @@
+#ifndef __HW_CONTROLPLANEMGR_IDL__
+#define __HW_CONTROLPLANEMGR_IDL__
+
+
+// ********************************
+// *                              *
+// * HW_controlPlaneMgr.idl      *
+// *                              *
+// ********************************
+
+#include "globaldefs.idl"
+#include "terminationPoint.idl"
+#include "common.idl"
+
+#pragma prefix "mtnm.huawei.com"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the control plane management 
+   * of the NML-EML interface.
+   * It also contains the definition of the ASON control plane manager.</p>
+   * 
+   * This module is defined by Huawei Technologies Co., LTD. All rights reserved!
+   * <h5> Version 2.1. </h5>
+   **/
+
+module HW_controlPlane
+{
+	
+    	/**
+    	* <p>Protection type of the SNPPLink</p>
+    	*
+    	* The value can be:<br>
+    	* <br>
+    	* PROTECTED: protected<br>
+    	* UNPROTECTED: unprotected<br>
+    	* PREEMPTIBLE: preemptible<br>
+    	* <br>
+    	**/    
+    	typedef string HW_LinkProtectType_T;	
+	
+	/**
+	* <p>Capacity Structure of the SNPPLink</p>
+	**/    
+	struct HW_Capacity_T
+	{
+		transmissionParameters::LayerRate_T unit;   
+		unsigned long Bandwidth;                    
+		globaldefs::NVSList_T additionalInfo;		
+	};
+
+	/**
+	* <p>Sequence of HW_Capacity_T.</p>
+	**/    
+	typedef sequence<HW_Capacity_T> HW_LinkCapacity_T;
+
+	/**
+	* <p>Shared risk link group ID.</p>
+    	* <p>Supported values: 0 - 65535 </p>
+    	* <p>If the value is 0, it means the object does not belong to any shared risk group.</p>
+	**/    
+	typedef unsigned long HW_SRLGID_T;
+
+	/**
+	* <p>Sequence of HW_SRLGID_T.</p>
+	**/    
+	typedef sequence<HW_SRLGID_T> HW_SRLGIDList_T;
+
+	/**
+	* <p>Status of the SNPPLink.</p>
+    	*
+    	* The value can be:<br>
+    	* <br>
+    	* DISCONNECTED: disconnected<br>
+    	* CONNECTED: connected<br>
+    	* <br>
+	**/    
+	typedef string HW_LinkState;
+
+	/**
+	* <p>Data structure of the SNPPLink</p>
+	*
+    	* globaldefs::NamingAttributes_T <b>name</b>:
+    	* <br>The name of the SNPPLink. It is the unique identifier of the object.<br>
+    	* string <b>userLabel</b>:
+    	* <br>User label of the SNPPLink.<br>
+    	* string <b>nativeEMSName</b>:
+    	* <br>The local name of the SNPPLink.<br>
+    	* string <b>owner</b>:
+    	* <br>The owner of the SNPPLink.<br>
+    	* globaldefs::NamingAttributes_T <b>aEndSnppName</b>:
+    	* <br>The name of the source TP of the SNPPLink.<br>
+    	* globaldefs::NamingAttributes_T <b>zEndSnppName</b>:
+    	* <br>The name of the sink TP of the SNPPLink.<br>
+    	* globaldefs::ConnectionDirection_T <b>direction</b>:
+    	* <br>The directionality of the SNPPLink. It is bidirectional by default.<br>
+		* transmissionParameters::LayerRateList_T <b>rateList</b>:
+		* <br>The cross-connection rate list supported by the SNPPLink.<br>
+		* unsigned short  <b>cost</b>:
+		* <br>The weight of the SNPPLink.<br>
+    	* HW_LinkProtectType_T  <b>protectType</b>:
+    	* <br>The protection type of the SNPPLink.<br>
+    	* HW_LinkCapacity_T  <b>linkCapacity</b>:
+    	* <br>The bandwidth capacity of the SNPPLink.<br>
+    	* HW_LinkState  <b>linkState</b>£º
+    	* <br>The connection status of the SNPPLink.<br>
+    	* HW_SRLGIDList_T <b>srlgIDList</b>:
+    	* <br>The shared risk link group ID list the SNPPLink belongs to.<br>
+    	* globaldefs::NVSList_T <b>additionalInfo</b>:
+    	* <br>Additional information of the SNPPLink.<br>
+    	*
+	* <br> 
+	**/
+	struct HW_SnppLink_T
+	{
+		globaldefs::NamingAttributes_T name;
+		string userLabel;
+		string nativeEMSName;
+		string owner;
+		globaldefs::NamingAttributes_T aEndSnppName; 
+		globaldefs::NamingAttributes_T zEndSnppName; 
+		globaldefs::ConnectionDirection_T direction;        
+		transmissionParameters::LayerRateList_T rateList;   
+		unsigned short cost;                                
+		HW_LinkProtectType_T protectType;	                
+		HW_LinkCapacity_T linkCapacity;
+        	HW_LinkState linkState;             
+		HW_SRLGIDList_T srlgIDList;                                
+		globaldefs::NVSList_T additionalInfo;
+	};
+
+	/**
+	* <p>Sequence of HW_SnppLink_T.</p>
+	**/    
+    	typedef sequence<HW_SnppLink_T> HW_SnppLinkList_T;
+
+	/**
+   	* <p>In order to allow the NMS to deal with a large number of objects,
+   	* iterators are used.</p>
+   	* <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   	* for information on how iterators are used in this interface.</p>
+   	**/
+	interface HW_SnppLinkIterator_I
+    	{
+		boolean next_n(in unsigned long how_many, out HW_SnppLinkList_T snppLinkList)
+			raises (globaldefs::ProcessingFailureException);
+
+        	unsigned long getLength()
+			raises (globaldefs::ProcessingFailureException);
+   	
+		void destroy()
+			raises (globaldefs::ProcessingFailureException);
+    	};
+
+  	/**
+   	* <p>The HW_controlPlaneMgr_I is used as a handle to gain access to the
+   	* control plane management functionalities of the NML-EML interface, including
+   	* ASON control plane management functionalities. </p>
+   	*
+   	* <p>A handle to an instance of this interface is gained via the
+   	* <a href=_emsSession.EmsSession_I.html#emsSession::EmsSession_I::getManager>
+   	* getManager</a> operation in Manager.</p>
+   	**/
+
+	interface HW_controlPlaneMgr_I : common::Common_I 
+	{
+		/**
+		* <p>Query the name of all routing areas</p>
+		*
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	* failure<br>
+	    	* <br>
+		**/
+		void getAllRoutingAreaNames( out globaldefs::NamingAttributesList_T nameList )
+					raises(globaldefs::ProcessingFailureException);		
+		
+		/**
+		* <p>Query the name of all routing nodes in the specified routing area</p>
+		*
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when routingAreaName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>	    
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllRoutingNodeNames( in globaldefs::NamingAttributes_T routingAreaName,
+						in unsigned long how_many,
+						out globaldefs::NamingAttributesList_T nodeNameList,
+						out globaldefs::NamingAttributesIterator_I nodeIt )
+						raises(globaldefs::ProcessingFailureException);
+		
+		/**
+		* <p>Query all SNPPLinks in the specified routing area</p>
+		*
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when routingAreaName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>	    
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllSnppLinks( in globaldefs::NamingAttributes_T routingAreaName,
+					in unsigned long how_many,
+					out HW_SnppLinkList_T snppLinkList,
+					out HW_SnppLinkIterator_I snppLinkIt ) 
+					raises(globaldefs::ProcessingFailureException);
+		
+		/**
+		* <p>Query the name of all SNPPs in the specified routing node</p>
+		*
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when routingNodeName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>	    
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllSnppNames( in globaldefs::NamingAttributes_T routingNodeName,						
+					in unsigned long how_many,
+					out globaldefs::NamingAttributesList_T nameList,
+					out globaldefs::NamingAttributesIterator_I nameIt) 
+					raises(globaldefs::ProcessingFailureException);
+		
+		/**
+		* <p>Query the name of all SNPs in the specified SNPP</p>
+		*
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when snppName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>	    
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllContainedSnpNames( in globaldefs::NamingAttributes_T snppName,
+						in unsigned long how_many,
+						out globaldefs::NamingAttributesList_T nameList, 
+						out globaldefs::NamingAttributesIterator_I nameIt) 
+						raises(globaldefs::ProcessingFailureException );
+								
+		/**
+		* <p>Set a shared risk link group for the SNPPLink</p>
+        	*
+        	* HW_SRLGID_T <b>srlgID</b>:
+        	* <br>The ID of the shared risk link group<br>
+        	*
+        	* boolean <b>addOrRemove</b>:
+        	* <br>This parameter determines to bind or debind the specified shared risk link group."true" means to bind; "fasle" to debind.<br>
+        	*
+        	* globaldefs::NamingAttributesList_T <b>snppLinkNameList</b>
+        	* <br>The naming list of the shared risk link group. In binding, the output is the names of all snppLinks belonging to that group.<br>
+        	*
+        	* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+        	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+        	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+        	*  failure<br>
+        	* EXCPT_INVALID_INPUT - Raised when srlgID is invalid<br>
+        	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references object that 
+        	*  does not exist<br>	            	
+        	* <br>
+        	**/
+		void setSRLG( in HW_SRLGID_T srlgID, in boolean addOrRemove,
+				inout globaldefs::NamingAttributesList_T snppLinkNameList ) 
+				raises(globaldefs::ProcessingFailureException);			
+	};
+};
+
+#endif	//__HW_CONTROLPLANEMGR_IDL__
+
+
+
+
+
+
+

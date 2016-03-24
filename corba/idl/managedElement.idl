@@ -1,0 +1,163 @@
+#ifndef managedElement_idl
+#define managedElement_idl
+
+// ********************************
+// *                              *
+// * managedElement.idl           *
+// *                              *
+// ********************************
+
+//Include list
+#include "transmissionParameters.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the managedElement structure
+   * of the NML-EML interface.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module managedElement
+{
+
+  /** 
+   * <p>This state reflects a communication state between the EMS and its 
+   * ManagedElement.</p>
+   * <p>The NMS user will have to go to the EMS to determine the
+   * exact reasons as to why the ManagedElement is unavailable.</p>
+   **/
+  enum CommunicationState_T
+  {
+    CS_AVAILABLE,
+    CS_UNAVAILABLE
+  };
+
+
+  /**
+   * <p>The managedElement represents an abstraction of a set of co-located physical
+   * resources managed as a single entity by an EMS.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>The name represents the name of the
+   * Managed Element which is assigned by the EMS upon creation.
+   * The EMS is responsible for guaranteeing the uniqueness of the name.
+   * It is a readonly attribute.<br>
+   *
+   * string <b>userLabel</b>:
+   * <br>The userLabel is a friendly name that the operator wants to place
+   * for the managedElement. Typical expectations of the operator is that the same
+   * name is seen on all operation systems. This is set by the NMS and could be
+   * displayed on the EMS (and/or the network element) based on each systems'
+   * capabilities. THIS IS NOT A MANDATORY EXPECTATION, but is left to the
+   * implementation of the EMS/ManagedElement. This is one way of implementing
+   * certain acronyms/naming convention that the operator may want to impose
+   * on all the systems. This attribute can be set
+   * by NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setUserLabel>setUserLabel</a>. 
+   * It is a read/write attribute.<br>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br>The name represents how the managedElement is referred to on EMS displays. Its
+   * aim is to provide a "nomenclature bridge" to aid relating information
+   * presented on NMS displays to EMS displays (via GUI cut through).
+   * This is never set to a null string.<br>
+   *
+   * string <b>owner</b>
+   * <br>The owner is provisionable by the NMS. This attribute can be set
+   * by NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setOwner>setOwner</a>. 
+   * It is a read/write attribute.<br>
+   *
+   * string <b>location</b>:
+   * <br>The location is the geographical location of the Managed Element.
+   * This is a free format string and can be an empty string.
+   * The attribute has no impact on the operation of the system.
+   * It is a readonly attribute.<br>
+   *
+   * string <b>version</b>:
+   * <br>The active software version of the ManagedElement.
+   * This attribute is defined as a free format string
+   * with no semantics to allow for different vendor implementation.
+   * It is a readonly attribute.<br>
+   *
+   * string <b>productName</b>:
+   * <br>The productName identifies the managed element product/type name. 
+   * This attribute is defined
+   * as a non-empty free format string with no semantics to allow for different
+   * vendor implementation.
+   * It is a readonly attribute.<br>
+   *
+   * CommunicationState_T <b>communicationState</b>:
+   * <br>The communicationState of the ManagedElement describes the viability of EMS-ME
+   * messaging.
+   * It is a readonly attribute.<br>
+   *
+   * boolean <b>emsInSyncState</b>:
+   * <br>Indicates if the EMS is able to keep the current EMS data synchronized with the
+   * current NE data and generate all appropriate notifications.  The EMS sets this attribute
+   * to false to indicate that it requires resynchronization with NE data and that it is
+   * not able to generate the appropriate notifications (such as OCs/ODs/AVCs) while doing so. 
+   * The EMS sets this attribute back to true when the resynchronization is completed and
+   * when notifications can start being generated as appropriate.<br>
+   *
+   * transmissionParameters::LayerRateList_T <b>supportedRates</b>
+   * <br>This attribute is a list (possibly empty) of potential Cross 
+   * Connection Rates at which it is possible to have cross-connections within the managed element.
+   * It is a readonly attribute.  <br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>
+   * <br>This attribute allows the communication from the EMS to the NMS of additional 
+   * information which is not explicitly modelled.
+   * This may be an empty list.
+   * It is a readonly attribute.<br>
+   **/
+  struct ManagedElement_T
+   {
+   globaldefs::NamingAttributes_T name;
+   string userLabel;
+   string nativeEMSName;
+   string owner;
+   string location;
+   string version;
+   string productName;
+   CommunicationState_T communicationState;
+   boolean emsInSyncState;
+   transmissionParameters::LayerRateList_T supportedRates;
+   globaldefs::NVSList_T additionalInfo;
+  };
+
+
+  /**
+   * <p>Sequence of ManagedElement_T.</p>
+   **/
+   typedef sequence<ManagedElement_T> ManagedElementList_T;
+
+
+  /**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   **/
+
+  interface ManagedElementIterator_I 
+    {
+	boolean  next_n(in unsigned long 		how_many,
+		        out ManagedElementList_T 	meList)
+	         raises (globaldefs::ProcessingFailureException);
+
+        unsigned long getLength()
+	         raises (globaldefs::ProcessingFailureException);
+
+   	void	 destroy()
+	         raises (globaldefs::ProcessingFailureException);
+    };
+ 
+};
+#endif
+

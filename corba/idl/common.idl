@@ -1,0 +1,180 @@
+#ifndef common_idl
+#define common_idl
+
+// ********************************
+// *                              *
+// * common.idl                   *
+// *                              *
+// ********************************
+
+//Include list
+#include "globaldefs.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the common interface
+   * of the NML-EML interface.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module common
+{
+  /**
+   * A Capability_T value is used to identify a functionality supported by the EMS across 
+   * the NML-EML interface. It is a name value pair, in which  the name represents the 
+   * feature/capability name and the value represents the support or non-support of the specified 
+   * feature/capability. 
+   * <p>
+   * The EMS capabilities for this Release include individual IDL
+   * operation
+   * support.  The feature/capability name part is used to identify an IDL operation
+   * using the
+   * following convention: 
+   * "<i>module_name</i>::<i>interface_name</i>::<i>operation_name</i>".
+   * Two other capabilities called "Supports_CC_sharing" and "Supports_pending" defined for
+   * MultiLayerSubnetworkMgr_I indicates the EMS'
+   * SNC management mode of operation.  See
+   * <a href=supportingDocumentation/modesOfOperation.html>SNC Management Modes of Operation</a>
+   * for details.
+   * </p>
+   *
+   * <p>The currently defined values are as follows: <br>
+   * <ul>
+   * <li> "Supported": The specified feature/capability is fully or partially supported
+   *  across the NML-EML interface; an operation may be partially supported if not all 
+   *  values of the parameters are supported.</li>
+   * <li> "Unsupported": The specified feature/capability is not supported at all across
+   *  the NML-EML interface.</li>
+   * </ul></p>
+   *
+   * <p> Other capabilities may be added with the approval of the Specification 
+   ** Authority, or through bilateral agreements. </p>
+   **/
+  typedef globaldefs::NameAndStringValue_T Capability_T;
+
+  /**
+   * Set of Capability_T.  Used to represent the full set of capabilities of a manager.
+   * Any capability that is not listed is considered unsupported.
+   */
+  typedef sequence<Capability_T> CapabilityList_T;
+
+  /**
+   * <p>The interface Common_I is a set of services and utilities 
+   * that is inherited by every manager interface.<p>
+   **/
+
+   interface Common_I 
+   {
+  /**
+   * <p>The nativeEMSName is owned by the EMS.  It represents how an EMS user addresses an object
+   * on the EMS GUI.  The EMS may or may not support changing this value.</p>
+   *
+   * <p>When an object is created by the EMS, the EMS selects the nativeEMSName for the object.</p>
+   *
+   * <p>When an object is created by an NMS, the NMS specifies the userLabel for the object.  
+   * If the EMS supports setting of nativeEMSNames, the nativeEMSName should be set to the same
+   * value as the userLabel.  If the EMS does not support setting of nativeEMSNames, or if the
+   * nativeEMSName has constraints that the
+   * userLabel does not satisfy, the EMS selects the nativeEMSName for the object.</p>
+   *
+   * <p>After an object has been created, the nativeEMSName may be changed by the NMS, if the
+   * EMS supports this functionality, using the setNativeEMSName operation.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T objectName
+   * <br> string nativeEMSName
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - If EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when objectName is incorrectly formed<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when objectName references object which does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the nativeEMSName can not be set for the specified
+   *  object<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost
+   * <br>
+   **/
+   void setNativeEMSName(
+         in globaldefs::NamingAttributes_T objectName, 
+         in string nativeEMSName)
+         raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>The userLabel is owned by the NMSes.  It is a string assigned by an NMS to an object.
+   * The difference between the userLabel and the NamingAttributes name
+   * is that the userLabel is an attribute of the objects that 
+   * may be "set" by the NMS through well defined interfaces (setUserLabel).</p>
+   *
+   * <p>When an object is created by an NMS, the NMS specifies the userLabel for the object.</p>
+   *
+   * <p>When an object is created by the EMS, the EMS sets the userLabel to the nativeEMSName.</p>
+   *
+   * <p>Once an object is created, the userLabel may only be changed by an NMS through the 
+   * setUserLabel operation.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T objectName: Name of the object for which to change the
+   *  userLabel.
+   * <br> string userLabel: New user label to assign to the object
+   * <br> boolean enforceUniqueness: Specifies whether or not userLabel should be checked for
+   *  uniqueness amongst objects of the same class within the EMS.  If true, then the operation
+   *  will fail if userLabel is already in use.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - If EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when objectName is incorrectly formed<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when objectName references object which does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the userLabel can not be set for the specified object<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_USERLABEL_IN_USE - Raised when the userLabel uniqueness constraint is not met<br>
+   * <br>
+   **/
+   void setUserLabel (
+         in globaldefs::NamingAttributes_T objectName, 
+         in string userLabel,
+         in boolean enforceUniqueness)
+         raises(globaldefs::ProcessingFailureException);
+
+
+  /** 
+   * <p>This service sets the owner attribute of the specified object.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T objectName
+   * <br> string owner
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - If EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when objectName is incorrectly formed<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when objectName references an object
+   *  that does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the owner can not be set for the specified object<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void setOwner(
+         in globaldefs::NamingAttributes_T objectName, 
+         in string owner) 	
+         raises (globaldefs::ProcessingFailureException);
+
+
+  /** 
+   * <p>This service retrieves the capabilities of the manager.
+   * All non-specified capabilities are assumed to be unsupported.</p>
+   *
+   * <br> CapabilityList_T capabilities
+   * <br> globaldefs::ProcessingFailureException:<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure.
+   * <br>
+   **/
+   void getCapabilities(
+         out CapabilityList_T capabilities)
+         raises (globaldefs::ProcessingFailureException);
+
+   };
+};
+  
+#endif
+

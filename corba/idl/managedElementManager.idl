@@ -1,0 +1,973 @@
+#ifndef managedElementManager_idl
+#define managedElementManager_idl
+
+// ********************************
+// *                              *
+// * managedElementManager.idl    *
+// *                              *
+// ********************************
+
+//Include list
+#include "globaldefs.idl"
+#include "common.idl"
+#include "managedElement.idl"
+#include "transmissionParameters.idl"
+#include "terminationPoint.idl"
+#include "notifications.idl"
+#include "subnetworkConnection.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the managed element manager
+   * of the NML-EML interface.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module managedElementManager
+{
+ 
+
+  /**
+   * <p>The managedElementManager is used to gain access to operations
+   * which deal with managed elements and termination points.</p>
+   *
+   * <p>A handle to an instance of this interface is gained via the
+   * <a href=_emsSession.EmsSession_I.html#emsSession::EmsSession_I::getManager>
+   * getManager</a> operation in Manager.</p>
+   **/
+
+  interface ManagedElementMgr_I : common::Common_I
+    {
+
+  /**
+   * <p>This allows an NMS to request details of all of the Managed Elements that
+   * are under the control of this ManagedElementMgr_I.</p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br>  unsigned long how_many: Maximum number of MEs to report in the first batch.
+   * <br>  ManagedElementList_T meList: First batch of MEs.
+   * <br>  managedElement::ManagedElementIterator_I meIt: Iterator to retrieve the remaining MEs.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.<br>
+   **/
+      void getAllManagedElements(
+            in unsigned long how_many,
+            out managedElement::ManagedElementList_T meList,
+            out managedElement::ManagedElementIterator_I meIt) 
+               raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This operation has exactly the same behaviour as 
+   * <a href=_managedElementManager.ManagedElementMgr_I.html#managedElementManager::ManagedElementMgr_I::getAllManagedElements>getAllManagedElements</a>, but
+   * instead of returning the entire object structures, this operation returns their names.</p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br>  unsigned long how_many: Maximum number of ME names to return in the first batch.
+   * <br>  globaldefs::NamingAttributesList_T nameList: First batch of ME names.
+   * <br>  globaldefs::NamingAttributesListIterator_I nameIt: Iterator to retrieve remaining
+   * ME names.
+   * <br> globaldefs::ProcessingFailureException
+   * As for <a href=_managedElementManager.ManagedElementMgr_I.html#managedElementManager::ManagedElementMgr_I::getAllManagedElements>getAllManagedElements</a>
+   **/
+   void getAllManagedElementNames(
+         in unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+         raises(globaldefs::ProcessingFailureException);
+
+  /** 
+   * <p>This service returns the list of subnetwork names that the  
+   * Managed Element supplied as an input parameter belongs to.<p>
+   * <br> globaldefs::NamingAttributes managedElementName: The name of the managed element
+   * for which to retrieve the containing subnetwork names. 
+   * <br> globaldefs::NamingAttributesList_T subnetNames: The names of the subnetworks
+   * this NE belongs to.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when managedElementName does not reference a managed
+   *  element object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when managedElementName references an ME object
+   *  that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void getContainingSubnetworkNames(
+         in globaldefs::NamingAttributes_T managedElementName,
+         out globaldefs::NamingAttributesList_T subnetNames)
+         raises (globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This allows an NMS to request all of the PTPs on the specified  
+   * Managed Element, that contain one or more of the NMS-specified PTP layer rates, 
+   * and that are capable of supporting one or more of the NMS-specified
+   * connection layer rates.
+   * If there are no PTPs that match the layer constraints, an empty 
+   * list is returned. A PTP will be returned regardless
+   * of connectivity to other managed elements and regardless of position
+   * in the subnetwork (both edgepoints of the subnetwork and the PTPs
+   * that are internal to the subnetwork are reported).</p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> globaldefs::NamingAttributes_T managedElementName: The name of the 
+   * Managed Element for which to retrieve PTPs.
+   * <br> transmissionParameters::LayerRateList_T tpLayerRateList: List of PTP layer rates
+   * for which the PTPs are to be fetched. A PTP must contain at least one of the
+   * layer rates specified to be reported.  If the list is empty then all PTPs (of all rates)
+   * are returned.
+   * <br> transmissionParameters::LayerRateList_T connectionLayerRateList: List of connection 
+   * layer rates for which the PTPs are to be fetched. A PTP must support connections for at 
+   * least one of the
+   * layer rates specified to be reported.  If the list is empty then all PTPs (for all 
+   * connection rates) are returned.
+   * <br>  unsigned long how_many: Maximum number of PTPs to report in the first batch.
+   * <br>  terminationPoint::TerminationPointList_T tpList: First batch of PTPs.
+   * <br>  terminationPoint::TerminationPointIterator_I tpIt: Iterator to retrieve remaining PTPs.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when managedElementName does not reference a managed element
+   *  object, or tpLayerRateList or connectionLayerRateList contain undefined rates<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when managedElementName references an ME object 
+   *  that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+   void getAllPTPs(
+         in globaldefs::NamingAttributes_T managedElementName,
+         in transmissionParameters::LayerRateList_T tpLayerRateList,
+         in transmissionParameters::LayerRateList_T connectionLayerRateList,
+         in unsigned long how_many,
+         out terminationPoint::TerminationPointList_T tpList,
+         out terminationPoint::TerminationPointIterator_I tpIt) 
+         raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This operation has exactly the same behaviour as 
+   * <a href=_managedElementManager.ManagedElementMgr_I.html#managedElementManager::ManagedElementMgr_I::getAllPTPs>getAllPTPs</a>, but
+   * instead of returning the entire object structures, this operation returns their names.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T managedElementName: The name of the 
+   * Managed Element.
+   * <br> transmissionParameters::LayerRateList_T tpLayerRateList: List of PTP layer rates
+   *  for which the PTPs are to be fetched. A PTP must contain at least one of the
+   *  layer rates specified to be reported.  If the list is empty then PTPs of all rates
+   *  are returned.
+   * <br> transmissionParameters::LayerRateList_T connectionLayerRateList: List of connection 
+   *  layer rates for which the PTPs are to be fetched. A PTP must support connections for at 
+   *  least one of the
+   *  layer rates specified to be reported.  If the list is empty then PTPs for all 
+   *  connection rates are returned.
+   * <br> in unsigned long how_many: Maximum number of PTPs to return in the first batch.
+   * <br> globaldefs::NamingAttributesList_T nameList: First batch of PTPs.
+   * <br> globaldefs::NamingAttributesIterator_I nameIt: Iterator to retrieve the remaining PTPs.
+   * <br> globaldefs::ProcessingFailureException: 
+   * As for <a href=_managedElementManager.ManagedElementMgr_I.html#managedElementManager::ManagedElementMgr_I::getAllPTPs>getAllPTPs</a>.
+   **/
+   void getAllPTPNames(
+         in globaldefs::NamingAttributes_T managedElementName, 
+         in transmissionParameters::LayerRateList_T tpLayerRateList,
+         in transmissionParameters::LayerRateList_T connectionLayerRateList,
+         in unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+         raises(globaldefs::ProcessingFailureException);
+
+
+  /** 
+   * <p>This service returns the termination point structure for the given TP name. 
+   * The termination point structure contains transmission
+   * parameters.  The transmission parameters returned will be the parameters
+   * in place on the actual termination point on the NE.  If there are no
+   * transmission parameters or the TP does not actually exist on the NE,
+   * then transmissionParams will be empty. The field transmissionParams
+   * will also be empty for "potential" ATM VP/VC CTPs.</p>
+   * <br> globaldefs::NamingAttributes tpName: Name of the TP to retrieve.
+   * <br> terminationPoint::TerminationPoint_T tp: The retrieved TP.
+   * <br> globaldefs::ProcessingFailureException:<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tpName does not reference a termination point object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tpName references a TP object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void getTP(
+         in globaldefs::NamingAttributes_T tpName,
+         out terminationPoint::TerminationPoint_T tp) 
+         raises (globaldefs::ProcessingFailureException);
+
+
+  /** 
+   * <p>This service returns the Managed Element for the given managed element name.</p>
+   * <br> globaldefs::NamingAttributes managedElementName: Name of the ME to retrieve.
+   * <br> managedElement::ManagedElement_T me: The retrieved ME.
+   * <br> globaldefs::ProcessingFailureException:<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when managedElementName does not reference a
+   *  managed element object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when managedElementName references an ME object
+   *  that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to the managed element is lost<br>
+   * <br>
+   **/
+   void getManagedElement(
+         in globaldefs::NamingAttributes_T managedElementName,
+         out managedElement::ManagedElement_T me) 
+         raises (globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This allows an NMS to request all of the CTPs that it is potentially capable of 
+   * supporting in all possible mapping configurations, at the specified rates 
+   * and that are contained by the
+   * specified termination point.</p>
+   *
+   * <p>This service returns all potential contained CTPs for a given TP. The TP may be
+   * a PTP or a CTP. If the layerRateList is empty then 
+   * contained CTPs at all flexible and/or static LayerRates are 
+   * returned.</p>
+   *
+   * <p>For an OC3 PTP that has the potential of mapping to 
+   * VT1.5 the response would contain 3 STS1 CTPs and 84 VT1.5 CTPs;
+   * on a T1 PTP, the contained TPs would be one T1 CTP; for
+   * an STS1 CTP the response would contain 28 VT1.5 CTPs.  
+   * In the case where an OC3 PTP supports mapping 
+   * to T1s and VT1.5,
+   * then the contained list for the OC3 PTP
+   * could be 1 STS3c, 3 STS1, 84 VT1.5 and 84 T1 CTPs;  
+   * if a VT1.5 CTP is provided, 1 T1 CTP is returned;
+   * if a T1 CTP is provided, the result is an empty list.</p>
+   *
+   * <p>Whenever a protection group is involved, the behaviour of
+   * this service is described below:</p>
+   *
+   * <TABLE BORDER=2 COLS=2 WIDTH="80%">
+   * <TR>
+   * <TD>Scenario</TD><TD>Query On Worker TPs </TD><TD>Query On Protection TPs</TD>
+   * </TR>
+   * <TR>
+   * <TD>Before the Protection Group is created</TD>
+   * <TD>returns list of all CTPs </TD>
+   * <TD>returns list of all CTPs</TD>
+   * </TR>
+   * <TR>
+   * <TD>After ProtectionGroup is created, if extra (preemptible/non-pre-emptible) traffic is allowed.</TD>
+   * <TD>returns list of all CTPs </TD>
+   * <TD>returns list of all CTPs</TD>
+   *</TR>
+   * <TR>
+   * <TD>After ProtectionGroup is created, if extra (preemptible/non-pre-emptible) traffic is not allowed </TD>
+   * <TD>returns list of CTPs that allow protected traffic</TD>
+   * <TD>returns an empty list (regardless of the switch status)</TD>
+   * </TR>
+   * </TABLE>
+   * 
+   * <p>In case the protection group is created after a query is made, 
+   * no object delete notification is 
+   * made, the NMS is expected to query the ports in the protection group 
+   * to find the list of contained CTPs.</p>
+   *
+   * <p>When an NMS is interacting with an EMS that supports ATM, this operation
+   * needs to be used with caution. The reason for this is that, in ATM, there
+   * can be a prohibitively large number of potential VP and VC CTPs returned
+   * by this operation. For retrieving ATM CTPs, the getContainedInUseTPs()
+   * operation should be considered.</p>
+   *
+   * <p>If DWDM, SONET and/or SDH is combined with ATM, it is advisable that this
+   * operation be used with the appropriate DWDM, SONET and/or SDH layer rates 
+   * entered into the layerRateList. Otherwise, ATM CTPs will be returned and
+   * the resulting list of contained TPs could get prohibitive.</p>
+   * 
+   * <p>For details on how TPs should be modelled, see
+   * <a href=supportingDocumentation/layers.pdf>layering</a>.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> globaldefs::NamingAttributes_T tpName: The name of the PTP or CTP for which to 
+   *  get contained CTPs. 
+   * <br> transmissionParameters::LayerRateList_T layerRateList: The list of the rates the
+   *  contained CTPs to report. An 
+   *  empty list indicates to the EMS to report all contained CTPs (of all rates).
+   * <br> unsigned long how_many: Maximum number of contained CTPs to report in the first batch.
+   * <br> TerminationPointList_T tpList: First batch of contained CTPs.
+   * <br> TerminationPointIterator_I tpIt: Iterator to retrieve the remaining contained CTPs.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tpName does not reference a PTP or CTP object
+   *  or layerRateList contains undefined rates<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tpName references a PTP or CTP object
+   *  that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+   void getContainedPotentialTPs(
+         in globaldefs::NamingAttributes_T tpName,
+         in transmissionParameters::LayerRateList_T layerRateList,
+         in unsigned long how_many,
+         out terminationPoint::TerminationPointList_T tpList, 
+         out terminationPoint::TerminationPointIterator_I tpIt)
+         raises(globaldefs::ProcessingFailureException);
+
+
+
+  /** 
+   * <p>This operation has exactly the same behaviour as 
+   * <a href=_managedElementManager.ManagedElementMgr_I.html#managedElementManager::ManagedElementMgr_I::getContainedPotentialTPs>getContainedPotentialTPs</a>, but
+   * instead of returning the entire object structures, this operation returns their names.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> globaldefs::NamingAttributes_T tpName: Name of the PTP or CTP for which to get
+   *  contained CTPs.
+   * <br> transmissionParameters::LayerRateList_T layerRateList: the list of the rates of
+   *  the contained CTPs to be reported. An 
+   *  empty list indicates to the EMS to get all contained CTPs (of all rates).
+   * <br>  unsigned long how_many: Maximum number of contained CTPs to return in the first batch.
+   * <br>  globaldefs::NamingAttributesList_T nameList: First batch of contained CTPs.
+   * <br>  globaldefs::NamingAttributesListIterator_I nameIt: Iterator to retrieve the remaining
+   *  contained CTPs.
+   * <br> globaldefs::ProcessingFailureException:
+   * As for <a href=_managedElementManager.ManagedElementMgr_I.html#managedElementManager::ManagedElementMgr_I::getContainedPotentialTPs>getContainedPotentialTPs</a>.
+   **/
+   void getContainedPotentialTPNames(
+         in globaldefs::NamingAttributes_T tpName,
+         in transmissionParameters::LayerRateList_T layerRateList,
+         in unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+         raises(globaldefs::ProcessingFailureException);
+
+
+  /** 
+   * <p>This service is used to retrieve the "in use" CTPs that are contained within
+   * a specific PTP or CTP, at specific layer rates. 
+   * An "in use" CTP is defined as a CTP that is used by an SNC
+   * in any state (including pending) or a CTP that is terminated and mapped.
+   * This operation will be used when there are a large number of potential CTPs
+   * (e.g., in ATM).</p>
+   *
+   * <p>Example of usage with respect to ATM:<br>
+   * To retrieve all actual ATM Network Interfaces associated with a PTP,
+   * this operation will be invoked using the PTP name as the tpName and
+   * LR_ATM_NI as the only layer rate in the layerRateList. The VPI and
+   * VCI ranges that are specified in the returned ATM Network Interface
+   * transmissionParams (i.e., Max_VPI_Bits and Max_VCI_Bits) can then be
+   * used to determine the potential VPI/VCI range. A subsequent invocation of
+   * this operation using an ATM Network Interface CTP as input can be used to
+   * determine which VPIs/VCIs are actually in use (with LR_ATM_VP and LR_ATM_VC
+   * included in the connectionRateList).<br></p>
+   *
+   * <p>Example of usage with respect to SONET/SDH:<br>
+   * Consider an STM4 PTP with layerRate: LR_Optical_OC12_and_STM4.
+   * Assume that the set of CTPs returned by operation getContainedPotentialTPs()
+   * contains one CTP with layerRate LR_STS3c_and_AU4_VC4 that is terminating
+   * an SNC (layerRate LR_STS3c_and_AU4_VC4), and another CTP with layerRate
+   * LR_STS3c_and_AU4_VC4 that is terminated and mapped (attribute
+   * tpMappingMode is set to TM_TERMINATED_AND_AVAILABLE_FOR_MAPPING).
+   * The CTP with layerRate LR_STS3c_and_AU4_VC4 that is terminated and mapped
+   * contains one CTP with layerRate LR_VT2_and_TU12_VC12
+   * that is involved in an SNC. None of the other contained CTPs have attribute
+   * tpMappingMode set to TM_TERMINATED_AND_AVAILABLE_FOR_MAPPING, or are
+   * involved in an SNC.<br>
+   * Operation getContainedInUseTPs then returns three CTPs:<ul>
+   * <li>The CTP with layerRate LR_STS3c_and_AU4_VC4 that is terminating an SNC.</li>
+   * <li>The CTP with layerRate LR_STS3c_and_AU4_VC4 that has attribute
+   * tpMappingMode set to TM_TERMINATED_AND_AVAILABLE_FOR_MAPPING.</li>
+   * <li>The CTP with layerRate LR_VT2_and_TU12_VC12 that is terminating an SNC.</li>
+   * </ul><br></p>
+   * 
+   * <p>For details on how TPs should be modelled, see
+   * <a href=supportingDocumentation/layers.pdf>layering</a>.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> globaldefs::NamingAttributes_T tpName: The name of the PTP or CTP for which to get 
+   *  contained actual CTPs.
+   * <br> transmissionParameters::LayerRateList_T layerRateList: The list of rates of the
+   *  contained actual CTPS to be returned.
+   *  An empty list indicates to the EMS to get all contained actual CTPs (for all rates).
+   * <br> unsigned long how_many: The maximum number of CTPs to be returned in the first batch.
+   * <br> TerminationPointList_T tpList: First batch of contained in use CTPs.
+   * <br> TerminationPointIterator_I tpIt: Iterator to retrieve the remaining
+   *  contained in use CTPs.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tpName does not reference a PTP or CTP object
+   *  or layerRateList contains undefined rates<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tpName references a PTP or CTP object
+   *  that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+   void getContainedInUseTPs(
+         in globaldefs::NamingAttributes_T tpName,
+         in transmissionParameters::LayerRateList_T layerRateList,
+         in unsigned long how_many,
+         out terminationPoint::TerminationPointList_T tpList, 
+         out terminationPoint::TerminationPointIterator_I tpIt)
+         raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This operation has exactly the same behaviour as 
+   * <a href=_managedElementManager.ManagedElementMgr_I.html#managedElementManager::ManagedElementMgr_I::getContainedInUseTPs>getContainedInUseTPs</a>, but
+   * instead of returning the entire object structures, this operation returns their names.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> globaldefs::NamingAttributes_T tpName: The name of the TP for which to get contained 
+   *  in use TPs.
+   * <br> transmissionParameters::LayerRateList_T layerRateList: The list of rates of the 
+   *  contained in use CTPs to be returned. An 
+   *  empty list indicates to the EMS to get all contained in use CTPs (of all rates).
+   * <br> unsigned long how_many: Maximum number of CTP names to be returned in the first batch.
+   * <br> globaldefs::NamingAttributesList_T nameList: First batch of CTP names.
+   * <br> globaldefs::NamingAttributesListIterator_I nameIt: Iterator to retrieve the remaining
+   *  CTP names.
+   * <br> globaldefs::ProcessingFailureException:
+   * As for <a href=_managedElementManager.ManagedElementMgr_I.html#managedElementManager::ManagedElementMgr_I::getContainedInUseTPs>getContainedInUseTPs</a>.
+   **/
+   void getContainedInUseTPNames(
+         in globaldefs::NamingAttributes_T tpName,
+         in transmissionParameters::LayerRateList_T layerRateList,
+         in  unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+         raises(globaldefs::ProcessingFailureException);
+
+
+  /** 
+   * <p>This service is used to retrieve the "current" CTPs that are contained within
+   * a specific PTP or CTP, at specific layer rates. 
+   * A "current" CTP is defined as a CTP that is either cross-connectable or cross-connected, 
+   * in the current mapping configuration. </p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> globaldefs::NamingAttributes_T tpName: The name of the PTP or CTP for which to get 
+   *  current contained CTPs.
+   * <br> transmissionParameters::LayerRateList_T layerRateList: The list of rates of the
+   *  current contained CTPS to be returned.
+   *  An empty list indicates to the EMS to get all current contained CTPs (of all rates).
+   * <br> unsigned long how_many: The maximum number of CTPs to be returned in the first batch.
+   * <br> TerminationPointList_T tpList: First batch of contained current CTPs.
+   * <br> TerminationPointIterator_I tpIt: Iterator to retrieve the remaining
+   *  contained current CTPs.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS cannot support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tpName does not reference a PTP or CTP object
+   *  or layerRateList contains undefined rates<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tpName references a PTP or CTP object
+   *  that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+   void getContainedCurrentTPs(
+         in globaldefs::NamingAttributes_T tpName,
+         in transmissionParameters::LayerRateList_T layerRateList,
+         in unsigned long how_many,
+         out terminationPoint::TerminationPointList_T tpList, 
+         out terminationPoint::TerminationPointIterator_I tpIt)
+         raises(globaldefs::ProcessingFailureException);
+
+
+/**
+   * <p>This operation has exactly the same behaviour as 
+   * <a href=_managedElementManager.ManagedElementMgr_I.html#managedElementManager::ManagedElementMgr_I::getContainedCurrentTPs>getContainedCurrentTPs</a>, but
+   * instead of returning the entire object structures, this operation returns their names.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> globaldefs::NamingAttributes_T tpName: The name of the PTP or CTP for which to get 
+   *  current contained CTPs.
+   * <br> transmissionParameters::LayerRateList_T layerRateList: The list of rates of the
+   *  current contained CTPS to be returned.
+   *  An empty list indicates to the EMS to get all current contained CTPs (of all rates).
+   * <br> unsigned long how_many: Maximum number of CTP names to be returned in the first batch.
+   * <br> globaldefs::NamingAttributesList_T nameList: First batch of CTP names.
+   * <br> globaldefs::NamingAttributesListIterator_I nameIt: Iterator to retrieve the remaining
+   *  CTP names.
+   * <br> globaldefs::ProcessingFailureException:
+   * As for <a href=_managedElementManager.ManagedElementMgr_I.html#managedElementManager::ManagedElementMgr_I::getContainedCurrentTPs>getContainedCurrentTPs</a>.
+   **/
+   void getContainedCurrentTPNames(
+         in globaldefs::NamingAttributes_T tpName,
+         in transmissionParameters::LayerRateList_T layerRateList,
+         in  unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+         raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This service returns a list of the containing TPs given a CTP. 
+   * Using the UPSR OC3 example used in getContainedPotentialTPs, getContainingTPs
+   * on the working T1 CTP will return a working STS1 CTP and a working OC3 
+   * PTP.
+   * If the OC3 was in APS, then getContainingTPs on the T1 CTP would return
+   * an STS1 CTP, an OC3 working PTP and an OC3 protect PTP. 
+   * 
+   * <p>For details on how TPs should be modelled, see
+   * <a href=supportingDocumentation/layers.pdf>layering</a>.</p>
+   *
+   * <br> globaldefs::NamingAttributes tpName: Name of the CTP for which containing
+   * CTPs and PTPs are to be reported.
+   * <br> terminationPoint::TerminationPointList_T tpList: List of the containing
+   * CTPs and PTPs.
+   * <br> globaldefs::ProcessingFailureException:<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tpName does not reference a CTP object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tpName references a CTP object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void getContainingTPs(
+         in globaldefs::NamingAttributes_T tpName,
+         out terminationPoint::TerminationPointList_T tpList)
+         raises (globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This operation has exactly the same behaviour as 
+   * <a href=_managedElementManager.ManagedElementMgr_I.html#managedElementManager::ManagedElementMgr_I::getContainingTPs>getContainingTPs</a>, but
+   * instead of returning the entire object structures, this operation returns their names.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T tpName: Name of the PTP or CTP for which to get
+   * the names of the containing TPs.
+   * <br> globaldefs::NamingAttributesList_T tpNameList: List of the names of the containing TPs.
+   * <br> globaldefs::ProcessingFailureException:
+   * As for <a href=_managedElementManager.ManagedElementMgr_I.html#managedElementManager::ManagedElementMgr_I::getContainingTPs>getContainingTPs</a>.
+   **/
+   void getContainingTPNames(
+         in globaldefs::NamingAttributes_T tpName,
+         out globaldefs::NamingAttributesList_T tpNameList)
+         raises (globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This allows an NMS to request all of the active alarms and TCAs 
+   * for the specified managed element.
+   * Alarms that are not reported by the ME to the EMS should not be reported by this operation.
+   * Some alarms may be
+   * filtered out (excluded) by specifying their probable causes or severities.
+   * </p>
+   *
+   * <p>The result of this operation is independent of the filtering set up by the NMS 
+   * for the notification service.</p>
+   *
+   * <br> globaldefs::NamingAttributes meName: The name of the 
+   * Managed Element for which to retrieve alarms and TCAs.
+   * <br> notifications::ProbableCauseList_T excludeProbCauseList: List of probable causes
+   *  to exclude from the output event list.
+   * <br> notifications::PerceivedSeverityList_T excludeSeverityList: List of severities
+   *  to exclude from the output event list.
+   * <br> unsigned long how_many: Maximum number of events to report in the first batch.
+   * <br>  notifications::EventList_T eventList: First batch of events.
+   * <br>  notifications::EventIterator_I eventIt: Iterator to retrieve the remaining events.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when meName does not reference a managed element object or
+   *  excludeProbCauseList contains undefined values<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when meName references an ME object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void getAllActiveAlarms(
+         in globaldefs::NamingAttributes_T meName,
+         in notifications::ProbableCauseList_T excludeProbCauseList,
+         in notifications::PerceivedSeverityList_T excludeSeverityList,
+         in unsigned long how_many,
+         out notifications::EventList_T eventList,
+         out notifications::EventIterator_I eventIt) 
+	     raises(globaldefs::ProcessingFailureException);
+ 
+  /** 
+   * <p>This service allows the NMS to set parameters on a specified 
+   * Termination Point.</p>
+   *
+   * <p>This operation is best effort. The results of the operation are returned
+   * so that the NMS is aware of what modifications succeeded.</p>
+   *
+   * <p>If the source TP of a broadcast system is used as input, then
+   * the entire multipoint system will be affected based on the new
+   * parameter values for the source TP.</p>
+   *
+   * <p>The tpMappingMode may be set with this operation. When the mode is
+   * set to TM_TERMINATED_AND_AVAILABLE_FOR_MAPPING, the EMS will terminate the
+   * specified CTP. In this case the EMS must create the specified CTP on the NE
+   * if it does not actually exist. 
+   * Setting the tpMappingMode of an ATM VP or VC CTP can only be done if
+   * the CTP has been created. Note that the tpMappingMode can be set
+   * only on the ingress and egress CTPs of an ATM SNC since they are the only
+   * ones which may not be cross-connected.</p>
+   *
+   * <p>No change to tpMappingMode or trafficDescriptors will take place if
+   * there is any active cross connect (NE cross connect)
+   * using the CTP passed in parameter.</p>
+   *
+   * <p>The transmissionParams is a "delta" list that needs to be
+   * applied to the specified TP, i.e. only a subset of the
+   * parameters may be specified in the list, in which case only those
+   * should be applied in the NE.</p>
+   *
+   * <br> subnetworkConnection::TPData_T tpInfo: Details of modifications required.
+   * <br> terminationPoint::TerminationPoint_T modifiedTP: Result of modification.
+   * <br> globaldefs::ProcessingFailureException:<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised if the TP referred to in tpInfo does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void setTPData(
+         in subnetworkConnection::TPData_T tpInfo,
+         out terminationPoint::TerminationPoint_T modifiedTP)
+        raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This allows an NMS to request a list of the cross-connects for the specified managed element 
+   * at the specified layer rates.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,   
+   * this operation uses an iterator. See   
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>   
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> globaldefs::NamingAttributes_T managedElementName: Name of the 
+   * Managed Element for which to retrieve CCs.
+   * <br> transmissionParameters::LayerRateList_T connectionRateList: List of 
+   * rates for which to retrieve CCs. This must not be an empty list. In this case an 
+   * INVALID_INPUT exception is thrown.
+   * <br> in unsigned long how_many: Maximum number of CCs to report in the first batch.
+   * <br> subnetworkConnection::CrossConnectList_T ccList: First batch of CCs.
+   * <br> subnetworkConnection::CCIterator_I ccIt: Iterator to retrieve remaining CCs.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised if connectionRateList is empty or contains
+   *  invalid rates, or if managedElementName does not reference a managed element.<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when managedElementName references an ME object
+   * that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+   void getAllCrossConnections(
+         in globaldefs::NamingAttributes_T managedElementName,
+         in transmissionParameters::LayerRateList_T connectionRateList,
+         in unsigned long how_many,
+         out subnetworkConnection::CrossConnectList_T ccList,
+         out subnetworkConnection::CCIterator_I ccIt)
+         raises(globaldefs::ProcessingFailureException);
+ 
+   /**
+   * <p>Query all current alarms for the specified objects (NE, board, PTP, CTP and so on). These objects can be of different type</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,   
+   * this operation uses an iterator. See   
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>   
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> globaldefs::NamingAttributes_T objectNameList: The name list of the object needs to query alarm.
+   * <br> notifications::ProbableCauseList_T excludeProbCauseList: List of probable causes
+   *  to exclude from the output event list.
+   * <br> notifications::PerceivedSeverityList_T excludeSeverityList: List of severities
+   *  to exclude from the output event list.
+   * <br> unsigned long how_many: Maximum number of events to report in the first batch.
+   * <br>  notifications::EventList_T eventList: First batch of events.
+   * <br>  notifications::EventIterator_I eventIt: Iterator to retrieve the remaining events.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised if any input parameter is invalid.<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object
+   * that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+   void getActiveAlarms(in globaldefs::NamingAttributesList_T objectNameList,
+	 in notifications::ProbableCauseList_T excludeProbCauseList,
+	 in notifications::PerceivedSeverityList_T excludeSeverityList,
+	 in unsigned long how_many,
+	 out notifications::EventList_T eventList,
+	 out notifications::EventIterator_I eventIt)
+	     raises(globaldefs::ProcessingFailureException);
+
+   /**
+   * <p>Check current alarms. If an alarm has cleared, it is returned. The end time is shown in the End Time field.
+   * If this alarm does not exist, it is also returned. 1900-1-1 00:00:00.0 is shown in the End Time field.
+</p>
+   *
+   * <br> notifications::EventList_T activeEventList: The list of current alarms to be checked.
+   * <br> notifications::EventList_T clearedEventList: List of alarms that are cleared and does not exist.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised if any input parameter is invalid.<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object
+   * that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>   
+   *  can support has been reached.
+   * <br>
+   **/
+   void checkActiveAlarms(in notifications::EventList_T activeEventList,
+	 out notifications::EventList_T clearedEventList)                      
+	raises(globaldefs::ProcessingFailureException);    	     
+
+   /**
+   * <p>Query networkwide alarms. The EMS will query all alarms and transfer to the NMS specified location via FTP.
+   * The user can specify the parameters for filtering alarms at the same time.</p>
+   *
+   * <p>This operation is asynchrounous and is not required to wait until the Alarm data is extracted
+   * or until the FTP transfer is over before it returns.
+   * Notifications can be generated to inform the NMS of the progress of the transfer.  See
+   * <a href=supportingDocumentation/notificationServiceUsage.html>Notification Service
+   * Usage</a> for details.</p>
+   *
+   * <br> Destination_T destination: The destination to which the
+   * Performance Monitoring Data file is to be send.
+   * <br> String userName: necessary for file transfer with FTP
+   * <br> String password: necessary for file transfer with FTP
+   * <br> globaldefs::NamingAttributesList_T meNameList: NE name list, if the list is empty, it indicates it is all NEs to be queried
+   * <br> notifications::ProbableCauseList_T excludeProbCauseList: List of probable causes
+   *  to exclude from the output event list.
+   * <br> notifications::PerceivedSeverityList_T excludeSeverityList: List of severities
+   *  to exclude from the output event list.
+   * <br> globaldefs::Time_T startTime: Specifies the start of the time window for collection
+   * (included).
+   * <br> globaldefs::Time_T endTime: Specifies the end of the time window for collection
+   * (excluded).
+   * <br> globaldefs::NamingAttributesList_T failedMeNameList: Query failed NE name list
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised if any input parameter is invalid.<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object
+   * that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>   
+   * <br>
+   **/
+   void getAllAlarmsByFTP(
+	in string destination,
+	in string userName, 
+	in string password,
+	in globaldefs::NamingAttributesList_T meNameList,
+	in notifications::ProbableCauseList_T  excludeProbCauseList,
+	in notifications::PerceivedSeverityList_T excludeSeverityList,
+	in globaldefs::Time_T startTime,
+	in globaldefs::Time_T endTime,
+	out globaldefs::NamingAttributesList_T failedMeNameList)
+	raises(globaldefs::ProcessingFailureException);
+   
+  /**
+   * <p>Query NE static information.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,   
+   * this operation uses an iterator. See   
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>   
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> globaldefs::NamingAttributes_T managedElementName: Name of the NE whose static information is to be queried. If the name is empty
+   * it indicates it is all NEs to be queried.
+   * <br> unsigned long how_many: Maximum number of MEs' information to report in the first batch.
+   * <br> globaldefs::NamingAttributesList_T staticInfoList: NE static informatin list.
+   * <br> globaldefs::NamingAttributesIterator_I staticInfoIt: Iterator to retrieve the remaining information of MEs.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised when an EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised if managedElementName does not reference a managed element.<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object
+   * that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/ 
+  void getNEStaticInfo(
+         in globaldefs::NamingAttributes_T managedElementName,
+         in unsigned long how_many,
+         out globaldefs::NamingAttributesList_T staticInfoList,
+         out globaldefs::NamingAttributesIterator_I staticInfoIt )
+   	raises(globaldefs::ProcessingFailureException);   
+    
+  /**
+   * <p>Create corssconnection</p>
+   *   
+   * subnetworkConnection::CrossConnectList_T <b>ccList</b>:
+   * <br>The corssconnection to be create.<br>
+   *   
+   * subnetworkConnection::CrossConnectList_T <b>successedCCList</b>:
+   * <br>list of succeed corssconnection.<br>
+   *
+   * subnetworkConnection::CrossConnectList_T <b>failedCCList</b>:
+   * <br>list of failed corssconnection..<br>
+   *
+   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if the EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal
+   *  failure (see errorReason attribute of ProcessingFailureException())<br>
+   * EXCPT_INVALID_INPUT - Raised when mfdName is incorrectly formed <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName references an object
+   *  that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when the communication to the managed
+   *  element containing mfdName is lost<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable or unwilling to 
+   *  execute the request<br>
+   * <br>
+   *
+   **/
+  void createCrossConnections (
+         in subnetworkConnection::CrossConnectList_T ccList,
+         out subnetworkConnection::CrossConnectList_T successedCCList, 
+         out subnetworkConnection::CrossConnectList_T failedCCList )
+  raises(globaldefs::ProcessingFailureException);   
+  
+  /**
+   * <p>Activate corssconnection</p>
+   *   
+   * subnetworkConnection::CrossConnectList_T <b>ccList</b>:
+   * <br>The corssconnection to be activate.<br>
+   *   
+   * subnetworkConnection::CrossConnectList_T <b>successedCCList</b>:
+   * <br>list of succeed corssconnection.<br>
+   *
+   * subnetworkConnection::CrossConnectList_T <b>failedCCList</b>:
+   * <br>list of failed corssconnection..<br>
+   *
+   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if the EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal
+   *  failure (see errorReason attribute of ProcessingFailureException())<br>
+   * EXCPT_INVALID_INPUT - Raised when mfdName is incorrectly formed <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName references an object
+   *  that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when the communication to the managed
+   *  element containing mfdName is lost<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable or unwilling to 
+   *  execute the request<br>
+   * <br>
+   *
+   **/
+  void activateCrossConnections (
+        in subnetworkConnection::CrossConnectList_T ccList,
+        out subnetworkConnection::CrossConnectList_T successedCCList, 
+        out subnetworkConnection::CrossConnectList_T failedCCList )        
+  raises(globaldefs::ProcessingFailureException);   
+     
+  /**
+   * <p>Deactivate corssconnection</p>
+   *   
+   * subnetworkConnection::CrossConnectList_T <b>ccList</b>:
+   * <br>The corssconnection to be deactivate.<br>
+   *   
+   * subnetworkConnection::CrossConnectList_T <b>successedCCList</b>:
+   * <br>list of succeed corssconnection.<br>
+   *
+   * subnetworkConnection::CrossConnectList_T <b>failedCCList</b>:
+   * <br>list of failed corssconnection..<br>
+   *
+   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if the EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal
+   *  failure (see errorReason attribute of ProcessingFailureException())<br>
+   * EXCPT_INVALID_INPUT - Raised when mfdName is incorrectly formed <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName references an object
+   *  that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when the communication to the managed
+   *  element containing mfdName is lost<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable or unwilling to 
+   *  execute the request<br>
+   * <br>
+   *
+   **/
+  void deactivateCrossConnections (
+        in subnetworkConnection::CrossConnectList_T ccList,
+        out subnetworkConnection::CrossConnectList_T successedCCList, 
+        out subnetworkConnection::CrossConnectList_T failedCCList )        
+  raises(globaldefs::ProcessingFailureException);      
+
+  /**
+   * <p>Deletex corssconnection</p>
+   *   
+   * subnetworkConnection::CrossConnectList_T <b>ccList</b>:
+   * <br>The corssconnection to be delete.<br>
+   *   
+   * subnetworkConnection::CrossConnectList_T <b>successedCCList</b>:
+   * <br>list of succeed corssconnection.<br>
+   *
+   * subnetworkConnection::CrossConnectList_T <b>failedCCList</b>:
+   * <br>list of failed corssconnection..<br>
+   *
+   * <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if the EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal
+   *  failure (see errorReason attribute of ProcessingFailureException())<br>
+   * EXCPT_INVALID_INPUT - Raised when mfdName is incorrectly formed <br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when mfdName references an object
+   *  that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when the communication to the managed
+   *  element containing mfdName is lost<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the EMS is unable or unwilling to 
+   *  execute the request<br>
+   * <br>
+   *
+   **/
+  void deleteCrossConnections (
+        in subnetworkConnection::CrossConnectList_T ccList,
+        out subnetworkConnection::CrossConnectList_T successedCCList, 
+        out subnetworkConnection::CrossConnectList_T failedCCList )        
+  raises(globaldefs::ProcessingFailureException);      
+
+  };
+
+}; 
+
+#endif
+

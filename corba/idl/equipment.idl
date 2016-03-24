@@ -1,0 +1,862 @@
+#ifndef         equipment_idl
+#define         equipment_idl
+
+
+// *************************************
+// *                                   *
+// * equipment.idl                     *
+// *                                   *
+// *************************************
+
+//Include list
+#include "common.idl"
+#include "globaldefs.idl"
+#include "terminationPoint.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the equipment structure
+   * of the NML-EML interface.
+   * It also contains the definition of the equipment manager.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+module equipment
+{
+  /**
+   * <p>Type of equipment object in equipment holder.
+   * Values are vendor-specific.</p>
+   **/
+   typedef string  EquipmentObjectType_T;
+
+
+  /**
+   * <p>Set of types of equipment objects that can be supported by 
+   * an equipment holder.</p> 
+   **/ 
+   typedef sequence<EquipmentObjectType_T> EquipmentObjectTypeList_T;
+
+
+  /**
+   * <p>Basic administration state equipment objects.</p>
+   * <p>It has the following values:<br>
+   * IN_SERVICE means the entity has been put into operation and is operating as provisioned
+   * (completely or partially).<br>
+   * OUT_OF_SERVICE means the entity is entirely not capable of performing its 
+   * provisioned functions and is not restricted by administrative actions.<br>
+   * OUT_OF_SERVICE_BY_MAINTENANCE means that the entity has been taken 
+   * intentionally out of service by a management action.<br>
+   * SERV_NA means that the service state is not applicable.<br></p>
+   **/
+   enum ServiceState_T
+   {
+      IN_SERVICE,
+      OUT_OF_SERVICE,
+      OUT_OF_SERVICE_BY_MAINTENANCE,
+      SERV_NA 
+   };
+
+
+  /**
+   * <p>Types of equipment holders.</p>
+   * Valid values are:<br>
+   * "rack"<br>
+   * "shelf"<br>
+   * "sub_shelf"<br>
+   * "slot"<br>
+   * "sub_slot"<br>
+   **/
+   typedef string  EquipmentHolderType_T;
+
+
+  /**
+   * <p>Indicates the state of the equipment holder object with respect to its 
+   * directly contained equipment.
+   * See <a href=supportingDocumentation/equipmentStates.pdf>Equipment Holder States</a>.
+   * Applies when the equipment holder can contain equipment objects.</p>
+   **/
+   enum HolderState_T
+   {
+      EMPTY,
+      INSTALLED_AND_EXPECTED,
+      EXPECTED_AND_NOT_INSTALLED,
+      INSTALLED_AND_NOT_EXPECTED,
+      MISMATCH_OF_INSTALLED_AND_EXPECTED,
+      UNAVAILABLE,
+      UNKNOWN
+   };
+
+
+   /**
+   * <p>The equipment object represents physical resources managed by an EMS.
+   * An equipment is contained within an equipment holder, and may not itself
+   * contain other equipment.
+   * There is only one equipment struct for identifying replaceable and 
+   * non-replaceable units. For each replaceable hardware unit there shall 
+   * be an equipment object.  The modelling of non-replaceable units as equipment
+   * objects is optional.
+   </p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>The name represents the name of the Equipment
+   * which is assigned by the EMS upon creation.
+   * The EMS is responsible for guaranteeing the uniqueness of the name
+   * within the context of the ManagedElement.
+   * The naming for equipment is deterministic, see
+   * <a href=supportingDocumentation/objectNaming.html>Object Naming</a>
+   * for further detail.<br>
+   *
+   * string <b>userLabel</b>:
+   * <br>The userLabel is provisionable by the NMS. This attribute can be set 
+   * by the NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setUserLabel>setUserLabel</a>. 
+   * It is a read/write attribute.<br>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br> Represents how the equipment is referred to on EMS/NE displays. Its
+   * aim is to provide a "nomenclature bridge" to aid relating information
+   * presented on NMS displays to EMS/NE displays (via GUI cut through).
+   * May be a NULL string.<br>
+
+   * string <b>owner</b>:
+   * <br>owner may be specified by the NMS. May be empty.<br>
+   *
+   * boolean <b>alarmReportingIndicator</b>:
+   * <br> Provides an indication whether alarm reporting for this instance 
+   * is active or not. It is a read/write attribute.<br>
+   *
+   * ServiceState_T <b>serviceState</b>: 
+   * <br>Current state of the equipment.<br>
+   *
+   * EquipmentObjectType_T <b>expectedEquipmentObjectType</b>: 
+   * <br>Defines the type of expected equipment.  This is an 
+   * empty string if there is no expected equipment.<br>
+   *
+   * EquipmentObjectType_T <b>installedEquipmentObjectType</b>: 
+   * <br>Defines the type of installed equipment.  This is an
+   * empty string if there is no installed equipment.<br>
+   *
+   * string <b>installedPartNumber</b>: 
+   * <br>This is the resource part number (PN) of the installed equipment.
+   * If not available (or there is no installed equipment), an empty string shall be used. 
+   * It is a read-only attribute.<br>
+   *
+   * string <b>installedVersion</b>: 
+   * <br>Firmware version of the installed equipment.
+   * If not available (or there is no installed equipment), an empty string shall be used. 
+   * It is a read-only attribute.<br>
+   *
+   * string <b>installedSerialNumber</b>: 
+   * <br> Defines the serial number of the installed equipment. 
+   * If not available (or there is no installed equipment), an empty string shall be used. 
+   * It is a read-only attribute.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>: 
+   * <br> This a vendor specific attribute which contains additional specific 
+   * information about the equipment.
+   * <br> Example: 
+   * (fct,OIS16), (format,22), (manufacturerplace,Mun), (manufacturer year,1999),
+   * (manufacturer month,June), (day,26), (hw-code,S22353-Q900-93X16), 
+   * (hw-status,01)<br>
+   * This list can be empty.
+   * It is a read-only attribute.<br>
+   **/
+   struct Equipment_T 
+   {
+      globaldefs::NamingAttributes_T  name; 
+      string                          userLabel;
+      string                          nativeEMSName;
+      string                          owner;
+      boolean                         alarmReportingIndicator;
+      ServiceState_T                  serviceState;
+      EquipmentObjectType_T           expectedEquipmentObjectType;
+      EquipmentObjectType_T           installedEquipmentObjectType;
+      string                          installedPartNumber;
+      string                          installedVersion;
+      string                          installedSerialNumber;
+      globaldefs::NVSList_T           additionalInfo;
+   };
+
+
+   /**
+   * <p>Represents the data necessary to create an equipment object.</p>
+   *
+   * string <b>userLabel</b>:
+   * <br>The userLabel is provisionable by the NMS.<br>
+   *
+   * boolean <b>forceUniqueness</b>:
+   * <br>Specifies whether uniqueness of the userLabel is required amongst equipments of 
+   *  the EMS.  The operation will fail if userLabel is already in use.<br>
+   *
+   * string <b>owner</b>:
+   * <br>owner may be specified by the NMS. May be empty.<br>
+   *
+   * EquipmentObjectType_T <b>expectedEquipmentObjectType</b>: 
+   * <br>Defines the type of expected equipment.<br>
+   *
+   * globaldefs::NamingAttributes_T <b>equipmentHolderName</b>:
+   * <br>Represents the name of equipment holder that will contain the equipment.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>: 
+   * <br> This a vendor specific attribute which contains additional specific 
+   * information about the equipment.<br>
+   **/
+   struct EQTCreateData_T
+   {
+      string                          userLabel;
+      boolean                         forceUniqueness;
+      string                          owner;
+      EquipmentObjectType_T           expectedEquipmentObjectType;
+      globaldefs::NamingAttributes_T  equipmentHolderName;
+      globaldefs::NVSList_T           additionalInfo;
+   };
+
+
+  /**
+   * <p>Represents the physical resource of a network element that is 
+   * capable of holding other physical resources. Examples of resources 
+   * are equipment racks, shelves, or slots.</p>
+   * An equipment holder object may contain 
+   * a number of instances of other equipment holder objects
+   * (for instance representing 
+   * slots within a shelf, or shelves within a rack), 
+   * and/or a single equipment object.
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>An equipment holder is identified by a unique name.
+   * The EMS is responsible for guaranteeing the uniqueness of the name
+   * within the context of the ManagedElement.
+   * The naming for equipment is deterministic, see
+   * <a href=supportingDocumentation/objectNaming.html>Object Naming</a>.
+   * <br>
+   *
+   * string <b>userLabel</b>:
+   * <br>The userLabel is provisionable by the NMS. This attribute can be set 
+   * by the NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setUserLabel>setUserLabel</a>. 
+   * It is a read/write attribute.<br>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br> Represents how the equipment holder is referred to on EMS/NE displays. Its
+   * aim is to provide a "nomenclature bridge" to aid relating information
+   * presented on NMS displays to EMS/NE displays (via GUI cut through).
+   * May be a NULL string.<br>
+   *
+   * string <b>owner</b>:
+   * <br>owner may be specified by the NMS. May be empty.<br>
+   *
+   * boolean <b>alarmReportingIndicator</b>:
+   * <br> Provides an indication whether alarm reporting for this instance 
+   * is active or not. It is a read/write attribute.<br>
+   *
+   * EquipmentHolderType_T <b>holderType</b>:
+   * <br>Indicates the type of equipment holder.<br>
+   *
+   * NamingAttributes_T <b>expectedOrInstalledEquipment</b>: 
+   * <br>The equipment object expected or installed in the equipment holder, if any.
+   * NULL if the equipment holder is empty or if it only contains other equipment holders.
+   * <br>
+   *
+   * EquipmentObjectTypeList_T <b>acceptableEquipmentTypeList</b>: 
+   * <br>Represents the types of equipment objects that can be supported 
+   * directly by the equipment holder.  This is an empty list if the equipment holder
+   * can only contain other equipment holders.<br>
+   *
+   * HolderState_T <b>holderState</b>: 
+   * <br>Represents the state of the equipment holder.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>This attribute allows the communication from the EMS to the NMS of additional 
+   * information which is not explicitly modelled.
+   * It is a readonly attribute.<br>
+   **/
+   struct EquipmentHolder_T
+   {
+      globaldefs::NamingAttributes_T            name; 
+      string                                    userLabel;
+      string                                    nativeEMSName;
+      string                                    owner;
+      boolean                                   alarmReportingIndicator;
+      EquipmentHolderType_T                     holderType;
+      globaldefs::NamingAttributes_T            expectedOrInstalledEquipment;
+      EquipmentObjectTypeList_T                 acceptableEquipmentTypeList;
+      HolderState_T                             holderState;
+      globaldefs::NVSList_T                     additionalInfo;
+   };
+
+
+  /**
+   * <p>Distinguishes between equipment and equipment holders.</p>
+   **/
+   enum EquipmentTypeQualifier_T
+   {
+      EQT,
+      EQT_HOLDER
+   };
+
+
+  /**
+   * <p>UNION equipmentOrHolder</p>
+   **/
+   union EquipmentOrHolder_T switch (EquipmentTypeQualifier_T)
+   { 
+      case EQT:           Equipment_T               equip;
+      case EQT_HOLDER:    EquipmentHolder_T         holder;
+   };
+
+  /**
+   * <p>List of EquipmentOrHolder_T</p>
+   **/
+   typedef sequence<EquipmentOrHolder_T> EquipmentOrHolderList_T;
+
+   
+   /**
+    * <p>Represents the equipment room information.(defined by Huawei)</p>
+    * string <b>name</b>:
+    * <br>the name of the equipment room.
+    * 
+    * string <b>coontainedCabinet</b>:
+    * <br>all cabinets contained in the equipment room.
+    *
+    * string <b>containedNMManager</b>:
+    * <br>all NMs contained in the equipment room.
+    *
+    * string <b>country</b>:
+    * <br>country name.
+    *
+    * string <b>province</b>:
+    * <br>province name.
+    *
+    * string <b>city</b>:
+    * <br>city name.
+    *
+    * string <b>site</b>:
+    * <br>site name.
+    *
+    * string <b>location</b>:
+    * <br>location information.
+    *
+    * string <b>cableArrage</b>:
+    * <br>cable arrangement mode.[NA/Up/Down]
+    *
+    * string <b>haveFloor</b>:
+    * <br>indicate that there is anti-static floor or not.[NA/Yes/No]
+    * 
+    * long <b>floorHeight</b>:
+    * <br>the height of the floor.(mm)
+    *
+    * string <b>memo</b>:
+    * <br>remark information for the equipment room.
+    **/
+   struct EquipmentRoom_T
+   {
+	string			name;
+	string			containedCabinet;
+	string			containedNMManager;
+	string			country;
+	string			province;
+	string			city;
+	string			site;
+	string			location;
+	string			cableArrange;
+	string			defendStaticFloor;
+	unsigned short  	floorHeight;
+	string			memo;
+   };
+   
+   /**
+    * <p>Represents the information for a cabinet.(defined by Huawei)</p>
+    * string <b>name</b>:
+    * <br>cabinet name.
+    *
+    * string <b>equipmentRoom</b>:
+    * <br>name of the equipment room contains this cabinet.
+    *
+    * string <b>containedShelfList</b>:
+    * <br>shelves contained in the cabinet.
+    * 
+    * string <b>type</b>:
+    * <br>cabinet type.
+    *
+    * long <b>height</b>:
+    * <br>height of the cabinet.
+    * 
+    * long <b>width</b>:
+    * <br>width of the cabinet.
+    *
+    * long <b>voltage</b>:
+    * <br>voltage of the cabinet.
+    *
+    * long <b>powerBoxType</b>:
+    * <br>type of the power box.
+    *
+    * string <b>memo</b>:
+    * <br>remark information for the cabinet.
+    **/
+   struct Cabinet_T
+   {
+	string           name;
+	string           equipmentRoomName;
+	string           containedShelfList;
+	string           type;
+	unsigned short   height;
+	unsigned short   width;
+	unsigned short   depth;
+	long             voltage;
+	string           powerBoxType;
+	string           memo;
+   };
+   
+   
+   /**
+    *<p>Represents the shelf information.(defined by Huawei)</p>
+
+    * string <b>name</b>:
+    * <br>shelf name.
+    *
+    * string <b>equipmentRoomName</b>:
+    * <br>name of the equipment room contains this shelf.
+    * 
+    * string <b>cabinetName</b>:
+    * <br>name of the cabinet contains this shelf.
+    *
+    * string <b>numbering</b>:
+    * <br>number of the shelf.
+    *
+    * LocationInCabinet_T <b>locationOfCabinet</b>:
+    * <br>location of the shelf.[NA/Up/Middle/Down]
+    *
+    * string <b>memo</b>:
+    * <br>remark information for the shelf.
+    **/
+   struct Shelf_T
+   {
+	string   name;
+	string   equipmentRoomName;
+	string   cabinetName;
+	string   numbering;
+	string   locationOfCabinet;
+	string   memo;
+   };
+   
+   /**
+    * <p>Distinguishes the equipment room, cabinet and shelf.(defined by Huawei)</p>
+    **/
+   enum ResourceTypeQualifier_T
+   {
+    	EQTROOM,
+    	CABINET,
+    	SHELF
+   };
+
+   
+   /**
+    * <p>PhysicalLocationInfo_T</p>
+    **/
+   union PhysicalLocationInfo_T switch( ResourceTypeQualifier_T )
+   {
+    	case EQTROOM:       EquipmentRoom_T		equipRoom;
+    	case CABINET:       Cabinet_T 			cabinet;
+    	case SHELF:         Shelf_T 			shelf;
+   };
+   
+   
+   /**
+    * <p> Sequence of PhysicalLocationInfo_T </p>
+    **/
+   typedef sequence<PhysicalLocationInfo_T> PhysicalLocationInfoList_T;
+   
+
+  /**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   **/
+
+   interface EquipmentOrHolderIterator_I
+   {
+      boolean  next_n(in unsigned long          how_many,
+	 out EquipmentOrHolderList_T   equipmentOrHolderList)
+	    raises (globaldefs::ProcessingFailureException);
+
+      unsigned long getLength()
+	 raises (globaldefs::ProcessingFailureException);
+
+      void     destroy()
+	 raises (globaldefs::ProcessingFailureException);
+   };
+
+
+  /**
+   * <p>The EquipmentInventoryMgr_I is used to gain access to operations
+   * which deal with equipment</p>
+   *
+   * <p>A handle to an instance of this interface is gained via the
+   * <a href=_emsSession.EmsSession_I.html#emsSession::EmsSession_I::getManager>
+   * getManager</a> operation in Manager.</p>
+   **/
+
+   interface EquipmentInventoryMgr_I: common::Common_I
+   {
+
+   /**
+   * <p> This operation allows the NMS to permanently provision an equipment in
+   * an equipment holder in a Managed Element. 
+   * The successful result of this operation is the creation or update of the equipment object 
+   * and the creation of all its related objects such as Termination Points. 
+   * The resulting object will be returned. </p>
+   *
+   * <p>The equipment holder that will contain the equipment must exist.
+   * The equipment object may already exist, but the equipment holder must not have
+   * an expected equipment already provisioned.
+   * See <a href=supportingDocumentation/equipmentStates.pdf>Equipment Holder States</a>.</p>
+   *
+   * <br> EQTCreateData_T equipmentCreateData: data that describes the equipment to create.
+   * <br> Equipment_T createEquipment: the resulting created equipment.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS can not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_OBJECT_IN_USE - Raised when the equipment holder already has an expected equipment<br>
+   * EXCPT_INVALID_INPUT - Raised when equipmentHolder does not reference an equipmentHolder
+   *  object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when equipmentHolder references object that does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the equipment can not be created at the NE<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void provisionEquipment(
+      in  EQTCreateData_T equipmentCreateData,
+      out Equipment_T     createdEquipment)
+        raises(globaldefs::ProcessingFailureException);
+
+   /**
+   * <p> This operation allows the NMS to permanently unprovision an equipment
+   * from the Managed Element.
+   * The successful result of this operation is the potential deletion of the equipment object 
+   * and the deletion of all its related objects such as Termination Points.</p>
+   *
+   * <p>The EMS should attempt to set the equipment to OUT_OF_SERVICE_BY_MAINTENANCE
+   * before it unprovisions it.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T equipmentName:
+   *       the name of equipment to be unprovisioned.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when equipmentName does not reference an equipment object<br>
+   * EXCPT_OBJECT_IN_USE - Deletion is rejected because equipment resources are in use<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when equipmentName references object which does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY -  Raised when the equipment can not be unprovisioned at the NE.<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void unprovisionEquipment(
+      in  globaldefs::NamingAttributes_T equipmentName)
+        raises(globaldefs::ProcessingFailureException);
+
+   /**
+   * <p>This operation enables (activates, or turns on) alarm reporting 
+   * on an equipment or equipment holder.  
+   * Only alarms from the equipment or equipment holder (not TP alarms)
+   * are turned on.</p>
+   *
+   * <p>The EMS sends an attribute value change notification in case of success.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T equipmentOrHolderName: the equipment or holder on which
+   *  to activate alarm reporting.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when equipmentOrHolderName does not reference an equipment
+   *  or holder<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when equipmentOrHolderName references an object
+   *  that does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY -  Raised when alarm reporting can not be enabled for the equipment
+   * or holder<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void setAlarmReportingOn(
+      in globaldefs::NamingAttributes_T equipmentOrHolderName)
+      raises(globaldefs::ProcessingFailureException);
+
+
+   /**
+   * <p> This operation disables (deactivates, or turns off) alarm reporting on an
+   * equipment or equipment holder.  Only alarms from the equipment or holder (not TP alarms)
+   * are turned off.</p>
+   *
+   * <p>The EMS sends an attribute value change notification in case of success.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T equipmentOrHolderName: name of the equipment or holder
+   * on which to deactivate alarm reporting.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when equipmentOrHolderName does not reference an equipment
+   *  or holder<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when equipmentOrHolderName references an object
+   *  that does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY -  Raised when alarm reporting can not be disabled for the equipment
+   *  or holder<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void setAlarmReportingOff(
+      in globaldefs::NamingAttributes_T equipmentOrHolderName)
+      raises(globaldefs::ProcessingFailureException);
+
+
+   /**
+   * <p> This service returns the equipments and equipment holders directly contained by a
+   * specific equipment holder.  This method differs from getAllEquipment in that it only
+   * looks at the next level of the containment hierachy.
+   * </p>
+   *
+   * <br> globaldefs::NamingAttributes_T equipmentHolderName: name of the equipment holder
+   * for which to retrieve the directly contained equipment and equipment holders.
+   * <br> EquipmentOrHolderList_T equipmentOrHolderList: the directly contained equipments
+   *  and equipment holders.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when equipmentHolderName does not reference an equipment
+   *  holder object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when equipmentHolderName references an equipment holder
+   *  that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void getContainedEquipment (
+      in globaldefs::NamingAttributes_T equipmentHolderName,
+      out EquipmentOrHolderList_T       equipmentOrHolderList)
+      raises(globaldefs::ProcessingFailureException);
+
+
+   /**
+   * <p> This service returns the equipment or equipment holder for the given equipment 
+   * or equipment holder name.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T equipmentOrHolderName: name of the equipment or
+   * equipment holder to retrieve.
+   * <br> EquipmentOrHolder_T equip: the returned equipment or equipment holder.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when equipmentOrHolderName does not reference an equipment
+   *  nor an equipment holder<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when equipmentOrHolderName references an equipment or 
+   *  equipment holder that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void getEquipment(
+      in globaldefs::NamingAttributes_T equipmentOrHolderName,
+      out EquipmentOrHolder_T           equip)
+      raises(globaldefs::ProcessingFailureException);
+
+
+  /** <p> This allows an NMS to request all of the equipments and equipment holders that are
+   * contained in a managed element or equipment holder.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T meOrHolderName:
+   *       the name of the ME or equipment holder for which to retrieve contained equipments
+   *       and equipment holders.
+   * <br> unsigned long how_many: maximum number of EquipmentOrHolder_Ts to return 
+   *       in the first batch.
+   * <br> EquipmentOrHolderList_T eqList: the first batch of EquipmentOrHolder_Ts.
+   * <br> EquipmentOrHolderIterator_I eqIt: the iterator used to retrieve the remaining
+   * EquipmentOrHolder_Ts.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when managedElementOrEquipmentName does not reference a
+   * managed element or an equipment holder<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when managedElementOrEquipmentName references object
+   * which does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.<br>
+   * <br>
+   **/
+   void getAllEquipment(
+      in  globaldefs::NamingAttributes_T     meOrHolderName,
+      in  unsigned long                      how_many,
+      out EquipmentOrHolderList_T            eqList,
+      out EquipmentOrHolderIterator_I        eqIt)
+      raises(globaldefs::ProcessingFailureException);
+
+
+   /**
+   * <p>This operation has exactly the same behaviour as 
+   * <a href=_equipmentInventory.EquipmentInventoryMgr_I.html#equipmentInventory::EquipmentInventoryMgr_I::getAllEquipment>getAllEquipment</a>, but 
+   * returns the object names instead of returning the 
+   * entire objects.</p> 
+   * 
+   * <br> globaldefs::NamingAttributes_T meOrHolderName:
+   *       the name of the ME or equipment holder for which to retrieve contained equipment
+   *       and equipment holder names.
+   * <br>  unsigned long how_many: maximum number of names to return 
+   *       in the first batch.
+   * <br>  globaldefs::NamingAttributesList_T nameList: the first batch of names.
+   * <br>  globaldefs::NamingAttributesListIterator_I nameIt: the iterator to retrieve the 
+   *  remaining names.
+   * <br> As for <a href=_equipmentInventory.EquipmentInventoryMgr_I.html#equipmentInventory::EquipmentInventoryMgr_I::getAllEquipment>getAllEquipment</a>.
+   * <br>
+   **/
+   void getAllEquipmentNames(
+      in globaldefs::NamingAttributes_T           meOrHolderName,
+      in unsigned long                            how_many,
+      out globaldefs::NamingAttributesList_T      nameList,
+      out globaldefs::NamingAttributesIterator_I  nameIt)
+      raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p> This service allows an NMS to request the PTPs that are
+   * directly supported by a given equipment. The PTPs that are returned
+   * are those that share their physical layer with the primary equipment (i.e. that
+   * represent a port on the equipment or are connected by a fibre, wire, etc.).</p>
+   *
+   * <p>When there is equipment protection, this operation reports PTPs for the primary
+   * equipment only.  That is, when called on a protecting equipment (as opposed to
+   * the primary equipment), this operation returns an empty list, irrespective of the 
+   * current switch status.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T equipmentName: the name of the equipment for which
+   * to retrieve supported PTPs.
+   * <br>  unsigned long how_many: the maximum number of PTPs to be reported in the first batch.
+   * <br>  TerminationPointList_T tpList: the first batch of PTPs.
+   * <br>  TerminationPointIterator_I tpIt: the iterator to retrieve the remaining PTPs.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when equipmentName does not reference an equipment object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when equipmentName references object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.<br>
+   * <br>
+   **/
+   void getAllSupportedPTPs(
+      in  globaldefs::NamingAttributes_T               equipmentName,
+      in  unsigned long                                how_many,
+      out terminationPoint::TerminationPointList_T     tpList,
+      out terminationPoint::TerminationPointIterator_I tpIt)
+     raises(globaldefs::ProcessingFailureException);
+
+
+   /**
+   * <p>This operation has exactly the same behaviour as 
+   * getAllSupportedPTPs, but 
+   * returns the object names instead of returning the 
+   * entire objects.</p> 
+   * 
+   * <br>  globaldefs::NamingAttributes_T equipmentName: the name of the equipment for which
+   * to retrieve supported PTPs.
+   * <br>  unsigned long how_many: the maximum number of PTP names to be reported
+   * in the first batch.
+   * <br>  globaldefs::NamingAttributesList_T nameList: the first batch of PTP names.
+   * <br>  globaldefs::NamingAttributesListIterator_I nameIt: the iterator to retrieve the
+   * remaining PTP names.
+   * <br> As for <a href=_equipmentInventory.EquipmentInventoryMgr_I.html#equipmentInventory::EquipmentInventoryMgr_I::getAllSupportedPTPs>getAllSupportedPTPs</a>.
+   * <br>
+   **/
+   void getAllSupportedPTPNames(
+      in globaldefs::NamingAttributes_T equipmentName,
+      in  unsigned long how_many,
+      out globaldefs::NamingAttributesList_T   nameList,
+      out globaldefs::NamingAttributesIterator_I  nameIt)
+      raises(globaldefs::ProcessingFailureException);
+
+
+   /** 
+   * <p> This service allows an NMS to request all of the equipment 
+   * which implement a PTP.  The equipments that are returned
+   * are those which support the physical layer of the PTP (i.e. have the
+   * port on them or are connected by a fibre, wire, etc.). For a particular PTP
+   * the Tx port and Rx port may be on different cards and in this case
+   * both should be returned.
+   * Equipment that are used by the PTPs, but that do not support them directly (such as
+   * a shared DEMUX card) are not reported.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T ptpName: the name of the PTP for which to retrieve
+   * the supporting equipments.
+   * <br>  EquipmentOrHolderList_T eqList: the list of equipments (not 
+   *  equipment holders) directly implementing the PTP.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when ptpName does not reference a PTP object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when ptpName references a PTP object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost
+   * <br>
+   **/
+   void getAllSupportingEquipment(
+      in globaldefs::NamingAttributes_T ptpName,
+      out EquipmentOrHolderList_T       eqList)
+      raises(globaldefs::ProcessingFailureException);
+
+
+   /**
+   * <p>This operation has exactly the same behaviour as 
+   * <a href=_equipmentInventory.EquipmentInventoryMgr_I.html#equipmentInventory::EquipmentInventoryMgr_I::getAllSupportingEquipment>getAllSupportingEquipment</a>,
+   * but returns the object names instead of returning the 
+   * entire objects.</p> 
+   * 
+   * <br> globaldefs::NamingAttributes_T ptpName: the name of the PTP for which to retrieve
+   * the supporting equipments.
+   * <br>  globaldefs::NamingAttributesList_T nameList: the list of equipment names (not 
+   *  equipment holder names) directly implementing the PTP.
+   * <br> As for <a href=_equipmentInventory.EquipmentInventoryMgr_I.html#equipmentInventory::EquipmentInventoryMgr_I::getAllSupportingEquipment>getAllSupportingEquipment</a>.
+   * <br>
+   **/
+   void getAllSupportingEquipmentNames(
+      in globaldefs::NamingAttributes_T         ptpName,
+      out globaldefs::NamingAttributesList_T    nameList)
+      raises(globaldefs::ProcessingFailureException);
+
+
+   /** 
+   * <p> This service allows an NMS to request all of the static 
+   * information of all circuitpacks.(defined by Huawei)</p>
+   *
+   * <br> EquipmentObjectTypeList_T typeList: the list of equipment types(it's vendor-specific) for 
+   * which to filter the retrieved result.
+   * <br> unsigned long how_many: the maximum number of static information for equipment to be reported
+   * in the first batch.
+   * <br> globaldefs::NamingAttributesList_T staticInfoList: the first batch of data.
+   * <br> globaldefs::NamingAttributesIterator_I staticInfoIt: the iterator to retrieve the 
+   *  remaining data.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>      
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+   *  that the EMS can support has been reached<br>
+   * <br>
+   **/	
+   void getEquipmentStaticInfo(
+	in EquipmentObjectTypeList_T typeList,
+	in unsigned long how_many,
+	out globaldefs::NamingAttributesList_T staticInfoList,
+	out globaldefs::NamingAttributesIterator_I staticInfoIt )
+    raises(globaldefs::ProcessingFailureException);
+
+
+   /**
+    * <p> This operation allows the NMS to retrieve all physical location infomation of the equipment.(defined by Huawei)</p>
+    *
+   * <br> PhysicalLocationInfoList_T phyLocationInfoList: physical information for all equipment.   
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>         
+   * <br>
+    **/
+   void getPhysicalLocationInfo( out PhysicalLocationInfoList_T phyLocationInfoList )
+         raises(globaldefs::ProcessingFailureException);
+	  
+   };
+
+}; 
+
+#endif

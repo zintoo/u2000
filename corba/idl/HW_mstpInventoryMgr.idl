@@ -1,0 +1,1768 @@
+#ifndef __HUAWEI_MSTP_INVENTORY_MGR_IDL__
+#define __HUAWEI_MSTP_INVENTORY_MGR_IDL__
+
+// ********************************
+// *                              *
+// * HW_mstpInventoryMgr.idl      *
+// *                              *
+// ********************************
+
+#include "globaldefs.idl"
+#include "terminationPoint.idl"
+#include "common.idl"
+
+#pragma prefix "mtnm.huawei.com"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the MSTP protection description structure
+   * of the NML-EML interface.
+   * It also contains the definition of the MSTP protection manager.</p>
+   * 
+   * This module is defined by Huawei Technologies Co., LTD. All rights reserved!
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module HW_mstpInventory
+{
+	/**
+	* <p>MSTP End Point Type Definition</p>
+	*
+	* <br>HW_MEPT_ATM: ATM Physical End Point
+	* <br>HW_MEPT_ATMTRUNK: ATM Trunk End Point
+	* <br>HW_MEPT_ETH: Ethernet MAC End Point
+	* <br>HW_MEPT_ETHTRUNK: Ethernet Trunk End Point
+	* <br>HW_MEPT_LP: Ethernet Virtual Bride Logical End Point
+	* <br>HW_MEPT_RPR: Ethernet RPR End Point
+	**/	
+	enum HW_MSTPEndPointType_T
+	{
+		HW_MEPT_NA,
+		HW_MEPT_ATM,
+		HW_MEPT_ATMTRUNK,
+		HW_MEPT_ETH,
+		HW_MEPT_ETHTRUNK,		
+		HW_MEPT_LP,
+		HW_MEPT_RPR
+	};
+
+	/**
+	* <p>Sequence of HW_MSTPEndPointType_T.</p>
+	**/
+
+	typedef sequence<HW_MSTPEndPointType_T> HW_MSTPEndPointTypeList_T;
+
+	/**
+	* <p>QOS Type Definition. </p>
+	*
+	* <br>HW_MQOST_CAR: represents CAR, which is used to specify the bandwidth parameters.
+	* <br>HW_MQOST_COS: represents COS, which is used to specify the priority parameters of QoS.
+	**/
+	enum HW_QosType_T
+	{
+		HW_QT_NA,
+		HW_QT_CAR,
+		HW_QT_COS
+	};
+
+	/**
+	* <p>Sequence of HW_QosType_T.</p>
+	**/
+
+	typedef sequence<HW_QosType_T> HW_QosTypeList_T;
+
+	/**
+	* <p>Bound Path Parameter Definition of MSTP ATMTrunk or ETHTrunk End Point</p>
+	*
+	* terminationPoint::Directionality_T <b>direction</b>: 
+	* <br>Path Binding Direction: Uplink (source), downlink (sink) and bidirectional
+	*
+	* globaldefs::NamingAttributesList_T <b>allPathList</b>: 
+	* <br>Name List of All Bound Paths
+	*
+	* globaldefs::NamingAttributesList_T <b>usedPathList</b>: 
+	* <br>Name List of Paths Used in Bound Ones
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>: 
+	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 					
+	**/
+	struct HW_MSTPBindingPath_T
+	{
+		terminationPoint::Directionality_T direction;
+		globaldefs::NamingAttributesList_T allPathList;
+		globaldefs::NamingAttributesList_T usedPathList;
+		globaldefs::NVSList_T additionalInfo;
+	};
+
+	/**
+	* <p>Sequence of HW_MSTPBindingPath_T.</p>
+	**/
+	typedef sequence<HW_MSTPBindingPath_T> HW_MSTPBindingPathList_T;
+	
+	/**
+	* <p>MSTP End Point Data Structure Definition</p>
+	* <p>Be aware that the name of logical end point differs from that of the general MSTP end points. As the logical end point is attached to the VB object, it needs to identify the VB object ID.
+	* The naming rules of MSTP end points are as follows:
+	* <br> 1. name="EMS";value="CompanyName/EMSname" <br>
+    	* <br> 2. name="ManagedElement";value="ManagedElementName" <br>
+    	* <br> 3. name="PTP";value="PTPName" <br>
+	* The MstpEndPointName format is:
+	* <br>"/rack=xx/shelf=yy/slot=zz/domain=kk/type=tt/port=nn"
+	* For logical end points, the format is:
+	* <br>"/rack=xx/shelf=yy/slot=zz/domain=kk/type=tt/vb=aa/port=bb"</p>
+	*  
+	* globaldefs::NamingAttributes_T <b>name</b>:
+	* <br>Name of an MSTP end point. The EMS must ensure it is a unique name.
+	* 
+	* string <b>nativeEMSName</b>:
+	* <br>The local name of an MSTP end point, that is, the string name displayed on the EMS interface.
+	*
+	* string <b>userLabel</b>:
+	* <br>The user label of an MSTP end point, that is, the string name displayed on the NMS interface.
+	*
+	* string <b>owner</b>:
+	* <br>The owner of an MSTP end point.
+	*
+	* terminationPoint::Directionality_T <b>direction</b>:
+	* <br>Direction of an MSTP end point. The default is bidirectional.
+	*
+	* HW_MSTPEndPointType_T <b>type</b>:
+	* <br>Type of an MSTP end point.
+	*
+	* transmissionParameters::LayeredParameterList_T <b>transmissionParams</b>:
+	* <br>List of MSTP end point transmission parameters, that is, the end point attributes list. Refer to the attached MSTP Object Parameter List for the MSTP end point transmission parameters list.
+	*	
+	* globaldefs::NVSList_T <b>additionalInfo</b>: 
+	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 					
+	**/
+	struct HW_MSTPEndPoint_T
+	{
+		globaldefs::NamingAttributes_T name;
+		string  userLabel;
+		string	nativeEMSName;					
+		string  owner;
+		terminationPoint::Directionality_T direction;
+		HW_MSTPEndPointType_T type;
+		transmissionParameters::LayeredParameterList_T transmissionParams;
+		globaldefs::NVSList_T additionalInfo;
+	};	
+
+	/**
+	* <p>Sequence of HW_MSTPEndPoint_T.</p>
+	**/
+	typedef sequence<HW_MSTPEndPoint_T> HW_MSTPEndPointList_T;
+
+	/**
+	* <p>Sequence of HW_MSTPEndPoint_T.</p>
+	**/
+	typedef sequence<HW_MSTPEndPoint_T> HW_MSTPLogicalEndPointList_T;
+
+	/**
+	* <p>MSTP VLAN Forwarding End Point Data Structure Definition</p>
+	*
+	* globaldefs::NamingAttributes_T <b>logicTPName</b>:
+	* <br>Name of VLAN forwarding end point. It can only be the logical end point of VB. For naming rules, please read description in HW_MSTPEndPoint_T.
+	*
+	* globaldefs::NVSList_T <b>paraList</b>: 
+	* <br>Forwarding end ooint parameters list, refer to MSTP Object Parameters List.
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>: 
+	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 						
+	**/
+	struct HW_ForwardEndPoint_T
+	{
+		globaldefs::NamingAttributes_T logicTPName;
+		globaldefs::NVSList_T paraList;	
+		globaldefs::NVSList_T additionalInfo;
+	};
+
+	/**
+	* <p>Sequenc of HW_ForwardEndPoint_T.</p>
+	**/
+	typedef sequence<HW_ForwardEndPoint_T> HW_ForwardEndPointList_T;
+
+	/**
+	* <p>Ethernet Virtual Bridge Data Strcture Definition</p>
+	* <p>The naming rules of Ethernet virtual bridge are as follows:
+	* <br> 1. name="EMS";value="CompanyName/EMSname" <br>
+   	* <br> 2. name="ManagedElement";value="ManagedElementName" <br>
+    	* <br> 3. name="VB";value="VBName" <br>
+	*
+	* The VBName format is:
+	* <br>"/rack=xx/shelf=yy/slot=zz/vb=nn" <br></p>
+	*
+	* globaldefs::NamingAttributes_T <b>name</b>:
+	* <br>Name of Ethernet VB. The EMS must ensure it is a unique name.
+	*
+	* string <b>nativeEMSName</b>:
+	* <br>The local name of an VB object, that is, the string name displayed on the EMS interface.
+	*
+	* string <b>userLabel</b>:
+	* <br>The user label of an VB object, that is, the string name displayed on the NMS interface.
+	*
+	* string <b>owner</b>:
+	* <br>The owner of an VB object.
+	*
+	* HW_MSTPLogicalEndPointList_T <b>logicalTPList</b>:
+	* <br>The logical end point list contained in Ethernet VB.
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>: 
+	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 						
+	**/
+	struct HW_VirtualBridge_T
+	{
+		globaldefs::NamingAttributes_T name;
+		string  userLabel;
+		string	nativeEMSName;					
+		string  owner;
+		HW_MSTPLogicalEndPointList_T logicalTPList;
+		globaldefs::NVSList_T additionalInfo;
+	};
+
+	/**
+	* <p>Sequence of HW_VirtualBridge_T.</p>
+	**/
+	typedef sequence<HW_VirtualBridge_T> HW_VirtualBridgeList_T;
+
+	/**
+	* <p>Ethernet Virtual LAN Data Structure Definition</p>
+	*
+	* <p>The naming rules of Ethernet VLAN are as follows:
+	*
+	* <br> 1. name="EMS";value="CompanyName/EMSname" <br>
+    	* <br> 2. name="ManagedElement";value="ManagedElementName" <br>
+    	* <br> 3. name="VB";value="VBName" <br>
+	* <br> 4. name="VLAN";value="VLANName" <br></p>
+	*
+	* globaldefs::NamingAttributes_T <b>name</b>:
+	* <br>VLAN name. The EMS must ensure it is a unique name.
+	*
+	* string <b>nativeEMSName</b>:
+	* <br>The local name of a VLAN object, that is, the string name displayed on the EMS interface.
+	*
+	* string <b>userLabel</b>:
+	* <br>The user label of a VLAN object, that is, the string name displayed on the NMS interface.
+	*
+	* string <b>owner</b>:
+	* <br>The owner of a VLAN object.
+	*
+	* globaldefs::NVSList_T <b>paraList</b>:
+	* <br>VLAN supported attributes list. Refer to the MSTP Object Attributes List.
+	*
+	* HW_ForwardEndPointList_T <b>forwardTPList</b>:
+	* <br>The forwarding filter end point list contained in VLAN.
+	*	
+	* globaldefs::NVSList_T <b>additionalInfo</b>: 
+	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 						
+	**/	
+	struct HW_VirtualLAN_T
+	{
+		globaldefs::NamingAttributes_T name;
+		string  userLabel;
+		string	nativeEMSName;					
+		string  owner;
+		globaldefs::NVSList_T paraList;	
+		HW_ForwardEndPointList_T forwardTPList;
+		globaldefs::NVSList_T additionalInfo;
+	};
+
+	/**
+	* <p>Sequence of HW_VirtualLAN_T.</p>
+	**/
+	typedef sequence<HW_VirtualLAN_T> HW_VirtualLANList_T;
+
+	/**
+	* <p>Structure of Ethernet QoS rule data</p>
+	*
+	* <p>The naming rules on QoS rules are as follows:
+	*
+	* <br> 1. name="EMS";value="CompanyName/EMSname" <br>
+        * <br> 2. name="ManagedElement";value="ManagedElementName" <br>
+	* <br> 3. name="QosRule";value="QosRuleName" <br></p>
+	*
+	* The format of QosRuleName is as follows:
+	* <br>"/rack=xx/shelf=yy/slot=zz/qostype£½aaa/qos=nn" <br></p>
+	*
+	* globaldefs::NamingAttributes_T <b>name</b>:
+	* <br>The name of the QOS name. It should be unique networkwide and do not change with T2000 upgrade
+	*
+	* string <b>nativeEMSName</b>:
+	* <br>The local name of the QOS fule. It is also the character string showed on T2000 interfaces.
+	*
+	* string <b>userLabel</b>:
+	* <br>The user label of the QOS rule. It is also the character string showed on the NMS interfaces.
+	*
+	* string <b>owner</b>:
+	* <br>The owner of the QOS rule.
+	*
+	* HW_QosType_T <b>type</b>:
+	* <br>The type of the QOS rule.
+	*
+	* globaldefs::NVSList_T <b>paraList</b>:
+	* <br>The attribute list supported by the QOS rule. CAR type QoS parameters include Enable, CIR, DCBS, PIR, and DMBS. COS type QoS parameters include costype,and tag priority to user priority mapping.
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>: 
+	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 						
+	**/	
+	struct HW_QosRule_T
+	{
+		globaldefs::NamingAttributes_T name;
+		string  userLabel;
+		string	nativeEMSName;					
+		string  owner;
+		HW_QosType_T type;
+		globaldefs::NVSList_T paraList;	
+		globaldefs::NVSList_T additionalInfo;
+	};
+
+	/**
+	* <p>Sequence of HW_QosRule_T.</p>
+	**/
+	typedef sequence<HW_QosRule_T> HW_QosRuleList_T;
+
+	/**
+	* <p>Structure of Ethernet flow data</p>
+	*
+	* <p>The naming rules on Ethernet flows are as follows:
+	*
+	* <br> 1. name="EMS";value="CompanyName/EMSname" <br>
+    	* <br> 2. name="ManagedElement";value="ManagedElementName" <br>
+    	* <br> 3. name="Flow";value="FlowName" <br></p>
+	*
+	* The format of FlowName is as follows:
+	* <br>"/rack=xx/shelf=yy/slot=zz/flow=nn" <br></p>
+	*
+	* globaldefs::NamingAttributes_T <b>name</b>:
+	* <br>The name of the Flow. This name must be unique networkwide and do not change with EMS upgrade.
+	*
+	* string <b>nativeEMSName</b>:
+	* <br>The local name of the flow object. It is also the character string showed on T2000 interfaces.
+	*
+	* string <b>userLabel</b>:
+	* <br>The user label of the flow object. It is also the character string showed on NMS interfaces.
+	*
+	* string <b>owner</b>:
+	* <br>The owner of the flow object.
+	*
+	* globaldefs::NamingAttributesList_T  <b>qosRuleNames</b>:
+	* <br>The QoS rule list bound with the flow, including a CAR and a COS. The CAR and COS bound during flow creation are invalid. Bound QoS rules of a flow must be set using the "SetFlow" interface.
+	*
+	* globaldefs::NVSList_T  <b>paraList</b>:
+	* <br>Parameters of the flow, including the flow type, port ID, port type, VLAN ID, VB ID, and priority. The  latter parameters vary with the flow type.
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>: 
+	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 						
+	**/	
+	struct HW_Flow_T
+	{
+		globaldefs::NamingAttributes_T name;
+		string   userLabel;
+		string	 nativeEMSName;					
+		string   owner;
+		globaldefs::NamingAttributesList_T qosRuleNames;
+		globaldefs::NVSList_T paraList;	
+		globaldefs::NVSList_T additionalInfo;
+	};
+
+	/**
+	* <p>Sequence of HW_Flow_T.</p>
+	**/
+	typedef sequence<HW_Flow_T> HW_FlowList_T;
+
+	/**
+	* <p>Structure of LinkAggregation branchport </p>
+	*
+	* globaldefs::NamingAttributesList_T  <b>branchPortName</b>:
+	* <br>The branch port name
+	*
+	* globaldefs::NVSList_T  <b>paraList</b>:
+	* <br>The parameters of the branchport,including States(SELECTED,STANDBY,UNSELECTED,NA), for extended future.
+	**/	
+	struct HW_LAGBranchPort_T
+	{
+		globaldefs::NamingAttributes_T branchPortName;
+		globaldefs::NVSList_T branchPortParaList;	
+	};
+
+	/**
+	* <p>Sequence of HW_LAGBranchPort_T.</p>
+	**/
+	typedef sequence<HW_LAGBranchPort_T> HW_LAGBranchPortList_T;
+
+	/**
+	* <p>Structure of linkaggregation group</p>
+	*
+	* <p>The naming rules on Ethernet linkaggregation are as follows:
+	*
+	* <br> 1. name="EMS";value="CompanyName/EMSname" <br>
+    	* <br> 2. name="ManagedElement";value="ManagedElementName" <br>
+    	* <br> 3. name="LAG";value="xx" <br></p>
+	*
+	* globaldefs::NamingAttributes_T <b>name</b>:
+	* <br>The name of the linkaggregation. This name must be unique networkwide and do not change with EMS upgrade.
+	*
+	* string <b>nativeEMSName</b>:
+	* <br>The local name of the linkaggregation object. It is also the character string showed on T2000 interfaces.
+	*
+	* string <b>userLabel</b>:
+	* <br>The user label of the linkaggregation object. It is also the character string showed on NMS interfaces.
+	*
+	* string <b>owner</b>:
+	* <br>The owner of the linkaggregation object.
+	*
+	* globaldefs::NVSList_T  <b>paraList</b>:
+	* <br>Parameters of the linkaggregation, including the LAG type(MANUAL,STATIC),sharing type(SHARE,NOSHARE).
+	*
+	* globaldefs::NamingAttributes_T  <b>mainport</b>:
+	* <br>The main port of the linkaggregation.
+	*
+	* HW_LAGBranchPortList_T  <b>branchPortList</b>:
+	* <br>The branchport list.
+	*
+	* globaldefs::NVSList_T <b>additionalInfo</b>: 
+	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 						
+	**/	
+	struct HW_LinkAggregationGroup_T
+	{
+		globaldefs::NamingAttributes_T name;
+		string   userLabel;
+		string	 nativeEMSName;					
+		string   owner;
+		globaldefs::NVSList_T paraList;	
+		globaldefs::NamingAttributes_T mainPortName;
+		HW_LAGBranchPortList_T branchPortList;
+		globaldefs::NVSList_T additionalInfo;
+	};
+
+	/**
+	* <p>Sequence of HW_LinkAggregationGroup_T.</p>
+	**/
+	typedef sequence<HW_LinkAggregationGroup_T> HW_LinkAggregationGroupList_T;
+
+	/**
+	* <p>Structure of ShapingQueue</p>
+	*
+	* unsigned long <b>queueID</b>:
+	* <br>The queue ID.
+	*
+	* boolean <b>bEnable</b>:
+	* <br>Specify the enable state of the queue.
+	*
+	* long <b>CIR</b>:
+	* <br>Committed Information Rate of the queue.
+	*
+	* long  <b>CBS</b>:
+	* <br>Committed Burst Size of the queue.
+	*
+	* long  <b>EIR</b>:
+	* <br>Excess Information Rate of the queue.
+	*
+	* long  <b>EBS</b>:
+	* <br>Excess Burst Size of the queue.
+	**/	
+	struct ShapingQueue
+	{
+		unsigned long  queueID;
+		boolean bEnable; 
+		long CIR;  
+		long CBS; 
+		long EIR;  
+		long EBS; 
+	};
+
+	/**
+	* <p>Sequence of Shaping.</p>
+	**/
+	typedef sequence<ShapingQueue> ShapingQueueList_T;
+
+	/**
+	* <p>Structure of the Ethernet virtual bridge's port </p>
+	*
+	* globaldefs::NamingAttributes_T <b>portName</b>:
+	* <br>The port name.
+	*
+	* string <b>userLabel</b>:
+	* <br>The user label of a port, that is, the string name displayed on the NMS interface.
+	*
+	* string <b>nativeEMSName</b>:
+	* <br>The local name of a port, that is, the string name displayed on the EMS interface.
+	*
+	* string <b>owner</b>:
+	* <br>The owner of a port.
+	*
+	* globaldefs::NVSList_T  <b>additionalInfo</b>:
+	* <br>This attribute allows the communication from the EMS to the NMS of additional 
+    	* information which isn't explicitly modelled. 
+    	* It is a readonly attribute.<br> 
+	*
+	**/
+	struct  HW_STCurrentPort_T
+	{			
+		globaldefs::NamingAttributes_T portName;
+		string  userLabel;
+		string	nativeEMSName;
+		string  owner;
+		globaldefs::NVSList_T additionalInfo;
+	};
+
+	/**
+	* <p>Sequence of Ethernet virtual bridge's port.</p>
+	**/
+	typedef sequence<HW_STCurrentPort_T> HW_STCurrentPortList_T;
+
+	/**
+	* <p>Structure of the spanning tree </p>
+	*
+	* globaldefs::NamingAttributes_T <b>name;</b>:
+	* <br>The spanning tree name.
+	*
+	* string <b>userLabel</b>:
+	* <br>The user label of the spanning tree, that is, the string name displayed on the NMS interface.
+	*
+	* string <b>nativeEMSName</b>:
+	* <br>The local name of the spanning tree, that is, the string name displayed on the EMS interface.
+	*
+	* string <b>owner</b>:
+	* <br>The owner of a spanning tree.
+	*
+	* globaldefs::NVSList_T  <b>STInfo</b>:
+	* <br>The information of the spanning tree.
+	*
+	*
+	* globaldefs::NVSList_T  <b>STCurrentBridge</b>:
+	* <br>The information of the spanning tree bridge.
+	*
+	* HW_STCurrentPortList_T  <b>STCurrentPort</b>:
+	* <br>The information of the spanning tree bridge's port.
+	**/
+	struct HW_SpanningTree_T
+	{
+		globaldefs::NamingAttributes_T name;
+		string  userLabel;
+		string	nativeEMSName;
+		string  owner;
+		globaldefs::NVSList_T STInfo;
+		globaldefs::NVSList_T STCurrentBridge;
+		HW_STCurrentPortList_T STCurrentPort;
+	};
+
+	/**
+	* <p>Sequence of spanning tree.</p>
+	**/
+	typedef sequence<HW_SpanningTree_T> HW_SpanningTreeList_T;
+
+	/**
+   	* <p>In order to allow the NMS to deal with a large number of objects,
+   	* iterators are used.</p>
+   	* <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   	* for information on how iterators are used in this interface.</p>
+   	**/
+	interface HW_MSTPEndPointIterator_I
+	{
+		boolean next_n( in unsigned long how_many,
+						out HW_MSTPEndPointList_T endPointList )
+						raises (globaldefs::ProcessingFailureException );
+
+		unsigned long getLength() raises( globaldefs::ProcessingFailureException );
+
+		void destroy() raises( globaldefs::ProcessingFailureException );
+	};
+
+	/**
+   	* <p>In order to allow the NMS to deal with a large number of objects,
+   	* iterators are used.</p>
+   	* <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   	* for information on how iterators are used in this interface.</p>
+   	**/
+	interface HW_VirtualBridgeIterator_I
+	{
+		boolean next_n( in unsigned long how_many,
+						out HW_VirtualBridgeList_T vbList )
+						raises (globaldefs::ProcessingFailureException );
+
+		unsigned long getLength() raises( globaldefs::ProcessingFailureException );
+
+		void destroy() raises( globaldefs::ProcessingFailureException );
+	};
+
+	/**
+   	* <p>In order to allow the NMS to deal with a large number of objects,
+   	* iterators are used.</p>
+   	* <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   	* for information on how iterators are used in this interface.</p>
+   	**/
+	interface HW_VirtualLANIterator_I
+	{
+		boolean next_n( in unsigned long how_many,
+						out HW_VirtualLANList_T vlanList )
+						raises (globaldefs::ProcessingFailureException );
+
+		unsigned long getLength() raises( globaldefs::ProcessingFailureException );
+
+		void destroy() raises( globaldefs::ProcessingFailureException );
+	};
+
+	/**
+   	* <p>In order to allow the NMS to deal with a large number of objects,
+   	* iterators are used.</p>
+   	* <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   	* for information on how iterators are used in this interface.</p>
+   	**/
+	interface HW_QosRuleIterator_I
+	{
+		boolean next_n( in unsigned long how_many,
+						out HW_QosRuleList_T qosRuleList )
+						raises (globaldefs::ProcessingFailureException );
+
+		unsigned long getLength() raises( globaldefs::ProcessingFailureException );
+
+		void destroy() raises( globaldefs::ProcessingFailureException );
+	};
+
+	/**
+   	* <p>In order to allow the NMS to deal with a large number of objects,
+   	* iterators are used.</p>
+   	* <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   	* for information on how iterators are used in this interface.</p>
+   	**/
+	interface HW_FlowIterator_I
+	{
+		boolean next_n( in unsigned long how_many,
+						out HW_FlowList_T flowList )
+						raises (globaldefs::ProcessingFailureException );
+
+		unsigned long getLength() raises( globaldefs::ProcessingFailureException );
+
+		void destroy() raises( globaldefs::ProcessingFailureException );
+	};
+
+	/**
+   	* <p>In order to allow the NMS to deal with a large number of objects,
+   	* iterators are used.</p>
+   	* <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   	* for information on how iterators are used in this interface.</p>
+   	**/
+	interface HW_LinkAggregationGroupIterator_I
+	{
+		boolean next_n( in unsigned long how_many,
+						out HW_LinkAggregationGroupList_T lagList )
+						raises (globaldefs::ProcessingFailureException );
+
+		unsigned long getLength() raises( globaldefs::ProcessingFailureException );
+
+		void destroy() raises( globaldefs::ProcessingFailureException );
+	};
+
+	/**
+   	* <p>In order to allow the NMS to deal with a large number of objects,
+   	* iterators are used.</p>
+   	* <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   	* for information on how iterators are used in this interface.</p>
+   	**/	
+	interface HW_SpanningTreeIterator_I
+	{
+		boolean next_n( in unsigned long how_many,
+			out HW_SpanningTreeList_T SpanningTreeList )
+			raises (globaldefs::ProcessingFailureException );
+
+		unsigned long getLength() raises( globaldefs::ProcessingFailureException );
+
+		void destroy() raises( globaldefs::ProcessingFailureException );
+	};
+
+	/**
+   	* <p>The HW_MSTPInventoryMgr_I is used as a handle to gain access to the
+   	* mstp inventory management functionalities of the NML-EML interface, including
+   	* atm network inventory management and ether network inventory management functionalities. </p>
+   	*
+   	* <p>A handle to an instance of this interface is gained via the
+   	* <a href=_emsSession.EmsSession_I.html#emsSession::EmsSession_I::getManager>
+   	* getManager</a> operation in Manager.</p>
+   	**/
+	interface HW_MSTPInventoryMgr_I : common::Common_I 
+	{
+		/**
+		* <p>Query all MSTP end points in an NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>meName</b>: NE name
+		* <br>HW_MSTPEndPointTypeList_T <b>typeList</b>: End point type. If the parameter is null, it means to query all end point types
+		* <br>unsigned long <b>how_many</b>: Number of records returned in the first batch
+		* <br>HW_MSTPEndPointList_T <b>endPointList</b>: The end point list returned
+		* <br>HW_mstpEndPointIterator_I <b>endPointIt</b>: End point iterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when meName or typeList is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>	    
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllMstpEndPoints( in globaldefs::NamingAttributes_T meName,
+						in HW_MSTPEndPointTypeList_T typeList,
+						in unsigned long how_many,
+						out HW_MSTPEndPointList_T endPointList,
+						out HW_MSTPEndPointIterator_I endPointIt )
+						raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Query name of all MSTP end points in an NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>meName</b>: NE name
+		* <br>HW_MSTPEndPointTypeList_T <b>typeList</b>: End point type. If the parameter is null, it means to query all end point types
+		* <br>unsigned long <b>how_many</b>: Number of records returned in the first batch
+		* <br>globaldefs::NamingAttributesList_T <b>nameList</b>: The end point name list returned
+		* <br>globaldefs::NamingAttributesIterator_I <b>nameIt</b>: Name iterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when meName or typeList is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>	    
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllMstpEndPointNames( in globaldefs::NamingAttributes_T meName,
+						in HW_MSTPEndPointTypeList_T typeList,
+						in unsigned long how_many,
+						out globaldefs::NamingAttributesList_T nameList,
+						out globaldefs::NamingAttributesIterator_I nameIt )
+						raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Query the specified MSTP end points</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>endPointName</b>: Name of MSTP end point
+		* <br>HW_MSTPEndPointList_T <b>endPoint</b>: MSTP end point object
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when endPointName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	**/
+		void getMstpEndPoint( in globaldefs::NamingAttributes_T endPointName,
+						out HW_MSTPEndPoint_T endPoint )
+						raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Set MSTP end point attribute parameters</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>endPointName</b>: MSTP end point name
+		* <br>transmissionParameters::LayeredParameterList_T <p>paraList</b>: The attribute parameters list you wish to set. The list cannot be empty.		
+		* <br>HW_MSTPEndPoint_T <b>endPoint</b>: End point objects that are set successfully
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when endPointName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>	    
+		**/
+		void setMstpEndPoint( in globaldefs::NamingAttributes_T endPointName,
+					in transmissionParameters::LayeredParameterList_T paraList,
+					out HW_MSTPEndPoint_T endPoint )
+					raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Query all virtual bridge objects in an NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>meName</b>: NE name
+		* <br>unsigned long <b>how_many</b>: Number of data returned in the first batch
+		* <br>HW_VirtualBridgeList_T <b>vbList</b>: the virtual bridge list returned		
+		* <br>HW_VirtualBridgeIterator_I <b>vbIt</b>: virtual bridge iterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when meName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllVBs( in globaldefs::NamingAttributes_T meName, 
+						in unsigned long how_many,
+						out HW_VirtualBridgeList_T vbList, 
+						out HW_VirtualBridgeIterator_I vbIt )
+						raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Query name of all virtual bridge objects in an NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>meName</b>: NE name
+		* <br>unsigned long <b>how_many</b>: Number of data returned in the first batch
+		* <br>globaldefs::NamingAttributesList_T <b>nameList</b>: the virtual bridge name list returned		
+		* <br>globaldefs::NamingAttributesIterator_I <b>nameIt</b>: Name iterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when meName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllVBNames( in globaldefs::NamingAttributes_T meName, 
+					in unsigned long how_many,
+					out globaldefs::NamingAttributesList_T nameList, 
+					out globaldefs::NamingAttributesIterator_I nameIt )
+					raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Query the specified virtual bridge in an NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>vbName</b>: Name of virtual bridge		
+		* <br>HW_VirtualBridge_T <b>vb</b>: virtual bridge object		
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when vbName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+		* <br>
+		**/
+		void getVirtualBridge( in globaldefs::NamingAttributes_T vbName,
+					out HW_VirtualBridge_T vb )
+					raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Create an virtual bridge object</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>equipmentName</b>: Ethernet board name
+		* <br>unsigned short <b>vbId</b>: The ID of a virtual bridge object. Make sure it is a unique name. Otherwise, creation will fail.
+		* <br>string <b>vbName</b>: virtual bridge name		
+		* <br>HW_VirtualBridge_T <b>vb</b>: the newly created virtual bridge object				
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		* <br>
+		**/
+		void createVirtualBridge( in globaldefs::NamingAttributes_T equipmentName,
+						in unsigned short vbId,
+						in string vbName,
+						out HW_VirtualBridge_T vb )
+						raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Delete a virtual bridge</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>vbName</b>: virtual bridge name
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when vbName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		* <br>
+		**/
+		void deleteVirtualBridge( in globaldefs::NamingAttributes_T vbName )
+						raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Create a VLAN</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>vbName</b>: virtual bridge name
+		* <br>unsigned short <b>vlanId</b>: The ID of a virtual LAN. Make sure it is a unique name in its virtual bridge. Otherwise, creation will fail.
+		* <br>globaldefs::NamingAttributesList_T <b>forwardTPList</b>: The name list of end points used for VLAN forwarding filter		
+		* <br>HW_VirtualLAN_T <b>vlan</b>: the newly created VLAN object
+		* <br>globaldefs::ProcessingFailureException:
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>	    
+		**/
+		void createVLAN( in globaldefs::NamingAttributes_T vbName,
+					in unsigned short vlanId,
+					in globaldefs::NamingAttributesList_T forwardTPList,
+					out HW_VirtualLAN_T vlan )
+					raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Delete a VLAN</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>vlanName</b>: virtual LAN name				
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when vlanName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>	    
+		**/
+		void deleteVLAN( in globaldefs::NamingAttributes_T vlanName )
+					raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Query all VLAN objects contained in virtual bridge</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>vbName</b>: NE name	
+		* <br>unsigned long <b>how_many</b>: Number of records returned in the first batch
+		* <br>HW_VirtualLANList_T <b>vlanList</b>: the VLAN object list returned
+		* <br>HW_VirtualLANIterator_I <b>vlanIt</b>: VLAN iterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when vbName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllVLANs( in globaldefs::NamingAttributes_T vbName, 
+					in unsigned long how_many, 
+					out HW_VirtualLANList_T vlanList,
+					out HW_VirtualLANIterator_I vlanIt )
+					raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Query all VLAN names in virtual bridge</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>vbName</b>: virtual bridge name		
+		* <br>unsigned long <b>how_many</b>: Number of records returned in the first batch
+		* <br>globaldefs::NamingAttributesList_T <b>nameList</b>: The VLAN object name list returned
+		* <br>globaldefs::NamingAttributesIterator_I <b>nameIt</b>: VLAN object name iterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when vbName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllVLANNames( in globaldefs::NamingAttributes_T vbName, 
+					in unsigned long how_many,
+					out globaldefs::NamingAttributesList_T nameList,
+					out globaldefs::NamingAttributesIterator_I nameIt )
+					raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Query the specified VLAN</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>vlanName</b>: VLAN object name		
+		* <br>HW_VirtualLAN_T <b>vlan</b>: the VLAN object returned
+		* <br>globaldefs::ProcessingFailureException:
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when vlanName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+		**/
+		void getVLAN( in globaldefs::NamingAttributes_T vlanName, 
+				  out HW_VirtualLAN_T vlan )
+				  raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Add forwarding end points to a VLAN</p>		
+		*
+		* <br>globaldefs::NamingAttributes_T <b>vlanName</b>: VLAN object name
+		* <br>globaldefs::NamingAttributesList_T <b>forwardTPList</b>: The forwarding end points name list. The forwarding end points must be the logical ones and the list cannot be empty		
+		* <br>HW_VirtualLAN_T <b>vlan</b>: The VLAN objects that are set successfully
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		**/
+		void addVLANForwardPort( in globaldefs::NamingAttributes_T vlanName,
+						in globaldefs::NamingAttributesList_T forwardTPList,
+						out HW_VirtualLAN_T vlan )
+						raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Delete a VLAN forwarding end point</p>		
+		*
+		* <br>globaldefs::NamingAttributes_T <b>vlanName</b>: VLAN object name
+		* <br>globaldefs::NamingAttributesList_T <b>forwardTPList</b>: The forwarding end points name list. The forwarding end points must be the logical ones in virtual bridge and the list cannot be empty		
+		* <br>HW_VirtualLAN_T <b>vlan</b>: The VLAN objects that are set successfully
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		**/
+		void delVLANForwardPort( in globaldefs::NamingAttributes_T vlanName,
+						in globaldefs::NamingAttributesList_T forwardTPList,
+						out HW_VirtualLAN_T vlan )
+						raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Set VLAN attributes</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>vlanName</b>: VLAN object name
+		* <br>globaldefs::NVSList_T <b>paraList</b>: the attribute parameter list you wish to set		
+		* <br>HW_VirtualLAN_T <b>vlan</b>: The VLAN objects that are set successfully	
+		* <br>globaldefs::ProcessingFailureException:
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		**/
+		void setVLANData( in globaldefs::NamingAttributes_T vlanName,
+						in globaldefs::NVSList_T paraList,
+						out HW_VirtualLAN_T vlan )
+						raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Query bound paths of ATMTrunk or ETHTrunk end point</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>endPointName</b>: MSTP end point name. Here the end points are of ATMTrunk or Eth Trunk type		
+		* <br>HW_MSTPBindingPathList_T <b>bindingPathList</b>: How paths at end point are bound, including binding direction, path level, bound path list, used paths list and so on.
+		* <br>globaldefs::ProcessingFailureException:
+		* <br>globaldefs::ProcessingFailureException:
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when endPointName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+		**/	
+		void getBindingPath( in globaldefs::NamingAttributes_T endPointName,
+						out HW_MSTPBindingPathList_T bindingPathList )
+						raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Add bound paths at ATMTrunk or ETHTrunk end point</p>		
+		*
+		* <br>globaldefs::NamingAttributes_T <b>endPointName</b>: MSTP end point name. Here the end points are of ATMTrunk or Eth Trunk type
+		* <br>terminationPoint::Directionality_T <b>bindingDirect</b>: direction of binding paths, uplink (source), downlink (sink) or bidirectional
+		* <br>globaldefs::NamingAttributesList_T <b>pathList</b>: list of paths to be bound
+		* <br>HW_MSTPBindingPathList_T <b>bindingPathList</b>: how are bound paths like after they are set successfully
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		**/		
+		void addBindingPath( in globaldefs::NamingAttributes_T endPointName, 
+						in terminationPoint::Directionality_T bindingDirect,
+						in globaldefs::NamingAttributesList_T pathList, 
+						out HW_MSTPBindingPathList_T bindingPathList )
+						raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Delete bound paths at ATMTrunk or ETHTrunk end point</p>		
+		*
+		* <br>globaldefs::NamingAttributes_T <b>endPointName</b>: MSTP end point name. Here the end points can only be of ATM Trunk or Eth Trunk type.
+		* <br>terminationPoint::Directionality_T <b>bindingDirect</b>: direction of binding paths, uplink (source), downlink (sink) or bidirectional
+		* <br>globaldefs::NamingAttributesList_T <b>pathList</b>: list of bound paths to delete
+		* <br>HW_MSTPBindingPathList_T <b>bindingPathList</b>: how are bound paths like after they are set successfully
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		**/		
+		void delBindingPath( in globaldefs::NamingAttributes_T endPointName, 
+						in terminationPoint::Directionality_T bindingDirect,
+						in globaldefs::NamingAttributesList_T pathList, 
+						out HW_MSTPBindingPathList_T bindingPathList )
+						raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Query enabling status of ETHTrunk end point LCAS protocol</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>endPointName</b>: end point name. Here the end points can only be of Eth Trunk type				
+		* <br>boolean <b>enableState</b>: the enabling status of LCAS protocol returned
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	   	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when endPointName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		**/
+		void getLCASState( in globaldefs::NamingAttributes_T endPointName, 
+						out boolean enableState )
+						raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Set enabling status of ETHTrunk end point LCAS protocol</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>endPointName</b>: end point name. Here the end points can only be of Eth Trunk type				
+		* <br>boolean <b>enableState</b>: Enabling flag of end point LCAS protocol
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when endPointName is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		**/		
+		void setLCASState( in globaldefs::NamingAttributes_T endPointName,
+						in boolean enableState )
+						raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Query the name of all current CTP contained in ATM or ATMTrunk end point</p>
+		* <p>Here CTP includes VP CTP or VC CTP. The CTP refers to the one used or will be used by ATM cross-connection</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>endPointName</b>: MSTP end point name. Here the end points can only be of ATM or ATM Trunk
+		* <br>transmissionParameters::LayerRateList_T <b>layerRateList</b>: CTP layer rate list, used for CTP filtering
+		* <br>unsigned long <b>how_many</b>: Number of record entries returned in the first batch
+		* <br>globaldefs::NamingAttributesList_T <b>nameList</b>: name list of the currect CTPs returned
+		* <br>globaldefs::NamingAttributesIterator_I <b>nameIt</b>: the currect CTP name iterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllContainedCurrentTPNames( in globaldefs::NamingAttributes_T endPointName,
+						in transmissionParameters::LayerRateList_T layerRateList, 
+						in unsigned long how_many,
+						out globaldefs::NamingAttributesList_T nameList,
+						out globaldefs::NamingAttributesIterator_I nameIt )
+						raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Query the name of all current VP or VC CTP contained in ATM or ATMTrunk end point</p>		
+		* <p>Here CTP includes VP CTP or VC CTP. The CTP refers to the one used by ATM cross-connection, or probably mapped to lower order CTP. If VP is mapped to VC, VP CTP is the currently used CTP</p>
+		</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>endPointName</b>: MSTP end point name. Here the end points can only be of ATM or ATM Trunk
+		* <br>transmissionParameters::LayerRateList_T <b>layerRateList</b>: CTP layer rate list, used for CTP filtering
+		* <br>unsigned long <b>how_many</b>: Number of record entries returned in the first batch
+		* <br>globaldefs::NamingAttributesList_T <b>nameList</b>: name list of the currect CTPs returned
+		* <br>globaldefs::NamingAttributesIterator_I <b>nameIt</b>: the currect CTP name iterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllContainedInUseTPNames( in globaldefs::NamingAttributes_T endPointName, 
+						in transmissionParameters::LayerRateList_T layerRateList, 
+						in unsigned long how_many,
+						out globaldefs::NamingAttributesList_T nameList,
+						out globaldefs::NamingAttributesIterator_I nameIt )
+						raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Create QoS rules</p>		
+		*
+		* <br>globaldefs::NamingAttributes_T <b>equipmentName</b>: the name of the Ethernet board
+		* <br>HW_QosType_T <b>qosType</b>: the type of the QoS rule.
+		* <br>globaldefs::NVSList_T <b>paraList</b>: The QOS parameters. CAR type QoS parameters include enable, CIR, DCBS, PIR, and DBMS. COS type QoS parameters include COSTYPE, and tag priority to user priority mapping.
+		* <br>HW_QosRule_T <b>qosRule</b>: the QoS object newly created.
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* <br>
+		**/
+		void createQosRule( in globaldefs::NamingAttributes_T equipmentName, 
+			                in HW_QosType_T qosType,
+					in globaldefs::NVSList_T paraList,
+					out HW_QosRule_T qosRule )
+					raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Set QOS rules</p>		
+		*
+		* <br>globaldefs::NamingAttributes_T <b>qosRuleName</b>: the name of the QOS rule
+		* <br>globaldefs::NVSList_T <b>paraList</b>: the QOS parameters. CAR type QOS parameters include enable, CIR, DCBS, PIR, and DBMS. COS type QoS include tag priority to user priority mapping. The COS type cannot be modified.
+		* <br>HW_QosRule_T <b>qosRule</b>: the object after modified
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* <br>
+		**/
+		void setQosRule( in globaldefs::NamingAttributes_T qosRuleName, 
+					in globaldefs::NVSList_T paraList,
+					out HW_QosRule_T qosRule )
+					raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Create flows</p>		
+		*
+		* <br>globaldefs::NamingAttributes_T <b>equipmentName</b>: the board of the Ethernet board
+		* <br>globaldefs::NVSList_T <b>paraList</b>: the flow parameters. For details, refer to the structure definition of HW_Flow_T.
+		* <br>HW_Flow_T <b>flow</b>: the flow object newly created
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* <br>
+		**/
+		void createFlow( in globaldefs::NamingAttributes_T equipmentName, 
+					in globaldefs::NVSList_T paraList,
+					out HW_Flow_T flow )
+					raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Query all QoS rules in the NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>meName</b>: the NE name
+		* <br>unsigned long <b>how_many</b>: the number of data returned at the first lot
+		* <br>HW_QosRuleList_T <b>qosRuleList</b>: the QoS rule list returned		
+		* <br>HW_QosRuleIterator_I <b>qosRuleIt</b>: the QOS rule reiterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllQosRules( in globaldefs::NamingAttributes_T meName, 
+					in unsigned long how_many,
+					out HW_QosRuleList_T qosRuleList, 
+					out HW_QosRuleIterator_I qosRuleIt )
+					raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Query the name of all QoS rules in the NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>meName</b>: the NE name
+		* <br>unsigned long <b>how_many</b>: the number of data returned at the first lot
+		* <br>globaldefs::NamingAttributesList_T <b>nameList</b>: the QoS rule name list returned		
+		* <br>globaldefs::NamingAttributesIterator_I <b>nameIt</b>: the name reiterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllQosRuleNames( in globaldefs::NamingAttributes_T meName, 
+						in unsigned long how_many,
+						out globaldefs::NamingAttributesList_T nameList, 
+						out globaldefs::NamingAttributesIterator_I nameIt )
+						raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Query the specified QoS in the NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>qosRuleName</b>: the name of the  QOS rule		
+		* <br>HW_QosRule_T <b>qosRule</b>: the QoS object		
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+		* <br>
+		**/
+		void getQosRule( in globaldefs::NamingAttributes_T qosRuleName,
+					out HW_QosRule_T qosRule )
+					raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Deleting a QoS bound to a flow failed</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>qosRuleName</b>: the name of the QoS rule
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		* <br>
+		**/
+		void deleteQosRule( in globaldefs::NamingAttributes_T qosRuleName )
+					raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Query all flow objects in the NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>meName</b>: the NE name
+		* <br>unsigned long <b>how_many</b>: the number of data returned at the first lot
+		* <br>HW_FlowList_T <b>flowList</b>: the flow list returned		
+		* <br>HW_FlowIterator_I <b>flowIt</b>: flow reiterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllFlows( in globaldefs::NamingAttributes_T meName, 
+					in unsigned long how_many,
+					out HW_FlowList_T flowList, 
+					out HW_FlowIterator_I flowIt )
+					raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Query the name of all flow objects in teh NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>meName</b>: the NE name
+		* <br>unsigned long <b>how_many</b>: the number of data returned at the first lot
+		* <br>globaldefs::NamingAttributesList_T <b>nameList</b>: the flow name list returned		
+		* <br>globaldefs::NamingAttributesIterator_I <b>nameIt</b>: the name reiterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllFlowNames( in globaldefs::NamingAttributes_T meName, 
+					in unsigned long how_many,
+					out globaldefs::NamingAttributesList_T nameList, 
+					out globaldefs::NamingAttributesIterator_I nameIt )
+					raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Query the specified flow object in the NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>flowName</b>: the flow name		
+		* <br>HW_Flow_T <b>flow</b>: the flow object		
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+		* <br>
+		**/
+		void getFlow( in globaldefs::NamingAttributes_T flowName,
+				out HW_Flow_T flow )
+				raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Bind flows and QoS rules. A flow can be bound to a CAR type QoS and a COS QoS at most.</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>flowName</b>: the name of the flow object
+		* <br>globaldefs::NamingAttributesList_T <b>qosRuleNames</b>: the name list of the QoS rules. A flow can be bound to two QOS rules.
+		* <br>HW_Flow_T <b>flow</b>: the flow object successfully set		
+		* <br>globaldefs::ProcessingFailureException:
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		**/
+		void setFlow( in globaldefs::NamingAttributes_T flowName,
+				in globaldefs::NamingAttributesList_T qosRuleNames,
+				out HW_Flow_T flow )
+				raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Delete the specified flow object</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>flowName</b>: the name of the flow object
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		* <br>
+		**/
+		void deleteFlow( in globaldefs::NamingAttributes_T flowName )
+						raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Create LAG</p>		
+		*
+		* <br>globaldefs::NamingAttributes_T <b>meName</b>: the name of the managedElement
+		* <br>globaldefs::NVSList_T <b>paraList</b>: the LAG parameters. Including lag's NativeEMSName,lag type and lag share type.
+		* <br>globaldefs::NamingAttributes_T <b>mainportName</b>: the name of the main port
+		* <br>globaldefs::NamingAttributesList_T <b>branchportNameList</b>: the name of the branchports
+		* <br>HW_LinkAggregationGroup_T <b>lag</b>: the lag object newly created
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+    	*  failure<br>
+    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+    	*  does not exist<br>
+    	* <br>
+		**/
+		void createLinkAggregationGroup( in globaldefs::NamingAttributes_T meName, 
+					in globaldefs::NVSList_T paraList,
+					in globaldefs::NamingAttributes_T mainPortName,
+					in globaldefs::NamingAttributesList_T branchPortNameList, 
+					out HW_LinkAggregationGroup_T lag )
+					raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Query all link aggregation groups in NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>meName</b>: the name of the NE
+		* <br>unsigned long <b>how_many</b>: the number of data returned at the first lot
+		* <br>HW_LinkAggregationGroupList_T <b>lagList</b>: the link aggregation group list returned. Each group include the main port and branch port
+		* <br>HW_LinkAggregationGroupIterator_I <b>lagIt</b>: the link aggregation reiterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+    	*  failure<br>
+    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+    	*  does not exist<br>
+    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+    	*  that the EMS can support has been reached<br>
+    	* <br>
+		**/
+		void getAllLinkAggregationGroups( in globaldefs::NamingAttributes_T meName, 
+						in unsigned long how_many,
+						out HW_LinkAggregationGroupList_T lagList, 
+						out HW_LinkAggregationGroupIterator_I lagIt )
+						raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Query the name of all lag objects in the NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>meName</b>: the NE name
+		* <br>unsigned long <b>how_many</b>: the number of data returned at the first lot
+		* <br>globaldefs::NamingAttributesList_T <b>nameList</b>: the lag name list returned
+		* <br>globaldefs::NamingAttributesIterator_I <b>nameIt</b>: the name reiterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAllLinkAggregationGroupNames( in globaldefs::NamingAttributes_T meName, 
+					in unsigned long how_many,
+					out globaldefs::NamingAttributesList_T nameList, 
+					out globaldefs::NamingAttributesIterator_I nameIt )
+					raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Query the specified lag object in the NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>lagName</b>: the lag name
+		* <br>HW_LinkAggregationGroup_T <b>lag</b>: the lag object		
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+		* <br>
+		**/
+		void getLinkAggregationGroup( in globaldefs::NamingAttributes_T lagName,
+				out HW_LinkAggregationGroup_T lag )
+				raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Query the available ports(can used for lag) of a board</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>equipmentName</b>: the name of the board
+		* <br>unsigned long <b>how_many</b>: the number of data returned at the first lot
+		* <br>globaldefs::NamingAttributesList_T <b>nameList</b>: the available port list returned
+		* <br>globaldefs::NamingAttributesIterator_I <b>nameIt</b>: the name reiterator
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>
+	    	* EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators 
+	    	*  that the EMS can support has been reached<br>
+	    	* <br>
+		**/
+		void getAvailablePortNames( in globaldefs::NamingAttributes_T equipmentName, 
+						in unsigned long how_many,
+						out globaldefs::NamingAttributesList_T nameList, 
+						out globaldefs::NamingAttributesIterator_I nameIt )
+						raises (globaldefs::ProcessingFailureException );
+
+
+		/**
+		* <p>Modify link aggregation group</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>lagName</b>: the name of the lag
+		* <br>globaldefs::NVSList_T <b>paraList</b>: parameters of the lag,including the NativeEMSName of the lag,and others in the future. 
+		* <br>globaldefs::NamingAttributesList_T <b>addedBranchPortNameList</b>: the name list of branch ports to added.
+		* <br>globaldefs::NamingAttributesList_T <b>deletedBranchPortNameList</b>: the name list of branch ports to deleted.
+		* <br>HW_LinkAggregationGroup_T <b>lag</b>: the link aggregation group successfully modified.
+		* <br>globaldefs::ProcessingFailureException:
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+	    	* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		**/
+		void modifyLinkAggregationGroup( in globaldefs::NamingAttributes_T lagName,
+					    in globaldefs::NVSList_T paraList,
+						in globaldefs::NamingAttributesList_T addedBranchPortNameList,
+						in globaldefs::NamingAttributesList_T deletedBranchPortNameList,
+						out HW_LinkAggregationGroup_T lag)
+						raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Delete the specified lag object</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>lagName</b>: the name of the lag object
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		* <br>
+		**/
+		void deleteLinkAggregationGroup( in globaldefs::NamingAttributes_T lagName )
+						raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Set Shaping Queue of MstpEndPoint</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>endPointName</b>: the name of the end Point.
+		* <br>ShapingList_T <b>shapingList</b>: the shaping queue list to set.
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		* <br>
+		**/
+		void setMstpEndPointShapingQueue( in globaldefs::NamingAttributes_T  endPointName,inout ShapingQueueList_T shapingQueueList)
+						raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Get Shaping Queue of MstpEndPoint</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>endPointName</b>: the name of the end Point.
+		* <br>ShapingList_T <b>shapingList</b>: the shaping queue list.
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal 
+	    	*  failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that 
+	    	*  does not exist<br>		
+		* <br>
+		**/
+		void getMstpEndPointShapingQueue( in globaldefs::NamingAttributes_T  endPointName,out ShapingQueueList_T shapingQueueList)
+						raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Get the information about the spanning tree of a specified NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>equipmentName</b>: the name of the equipment.
+		* <br>unsigned long <b>how_many</b>: Number of records returned in the first batch.
+		* <br>HW_SpanningTreeList_T <b>spanningTreeList</b>: the spanning tree list.
+		* <br>HW_SpanningTreeIterator_I <b>spanningTreeIt</b>:  spanning tree object iterator.
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that does not exist<br>		
+		* <br>
+		**/
+		void getAllSpanningTrees( in globaldefs::NamingAttributes_T equipmentName, 
+								in unsigned long how_many,
+								out HW_SpanningTreeList_T spanningTreeList, 
+								out HW_SpanningTreeIterator_I spanningTreeIt )
+								raises (globaldefs::ProcessingFailureException );
+		
+		/**
+		* <p>Get the name of the spanning tree of a specified NE</p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>equipmentName</b>: the name of the equipment.
+		* <br>unsigned long <b>how_many</b>: Number of records returned in the first batch.
+		* <br>globaldefs::NamingAttributesList_T <b>nameList</b>: the spanning tree name list.
+		* <br>globaldefs::NamingAttributesIterator_I <b>nameIt</b>: the spanning tree name iterator.
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that does not exist<br>		
+		* <br>
+		**/				
+		void getAllSpanningTreeNames( in globaldefs::NamingAttributes_T equipmentName, 
+								in unsigned long how_many,
+								out globaldefs::NamingAttributesList_T nameList, 
+								out globaldefs::NamingAttributesIterator_I nameIt )
+								raises (globaldefs::ProcessingFailureException );
+		/**
+		* <p>Get the information about a specified spanning tree </p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>spanningTreeName</b>: the name of the spanning tree.
+		* <br>HW_SpanningTree_T <b>spanningTree</b>: the spanning tree information.		
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that does not exist<br>		
+		* <br>
+		**/				
+		void getSpanningTree( in globaldefs::NamingAttributes_T spanningTreeName, 
+							  out HW_SpanningTree_T spanningTree ) 
+							  raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Set the working mode and enabling flag of the spanning tree of the Ethernet virtual bridge </p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>spanningTreeName</b>: the name of the spanning tree.
+		* <br>globaldefs::NVSList_T <b>paraList</b>: parameters of the spanning tree, including ProtocolEnabled(Disable,Enable), ProtocolType(STP,RSTP).		
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that does not exist<br>		
+		* <br>
+		**/
+		void setSTProtocolParam( in globaldefs::NamingAttributes_T spanningTreeName, 
+							  in globaldefs::NVSList_T paraList ) 
+							  raises (globaldefs::ProcessingFailureException );
+
+		/**
+		* <p>Set the parameters of the Ethernet virtual bridge </p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>spanningTreeName</b>: the name of the spanning tree.
+		* <br>globaldefs::NVSList_T <b>paraList</b>: parameters of the Ethernet virtual bridge, including MaxAge([6,40] or [1,4]), Priority[0,0xffff], HelloTime[1,10], ForwardDelay[4,30].		
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that does not exist<br>		
+		* <br>
+		**/
+		void setSTBridgeParam( in globaldefs::NamingAttributes_T spanningTreeName, 
+							  in globaldefs::NVSList_T paraList ) 
+							  raises (globaldefs::ProcessingFailureException );	
+
+		/**
+		* <p>Set the port attributes of the Ethernet virtual bridge </p>
+		*
+		* <br>globaldefs::NamingAttributes_T <b>spanningTreeName</b>: the name of the spanning tree.
+		* <br>globaldefs::NamingAttributes_T <b>portName</b>: the name of the port.
+		* <br>globaldefs::NVSList_T <b>paraList</b>: the parameters of the port, including PortPathCost[1,65535], Priority[0,255].
+		* <br><b>Raises</b> globaldefs::ProcessingFailureException <br>
+		* EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+	    	* EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+	    	* EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+	    	* EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that does not exist<br>		
+		* <br>
+		**/
+		void setSTPortParam( in globaldefs::NamingAttributes_T spanningTreeName, 
+							 in globaldefs::NamingAttributes_T portName, 
+							 in globaldefs::NVSList_T paraList ) 
+							 raises (globaldefs::ProcessingFailureException );						
+	};
+};
+
+#endif /*__HUAWEI_MSTP_INVENTORY_MGR_IDL__*/
+
+

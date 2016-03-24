@@ -1,0 +1,157 @@
+#ifndef topologicalLink_idl
+#define topologicalLink_idl
+
+// ********************************
+// *                              *
+// * topologicalLink.idl          *
+// *                              *
+// ********************************
+
+//Include list
+#include "globaldefs.idl"
+#include "transmissionParameters.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the topologicalLink_T structure
+   * of the NML-EML interface.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module topologicalLink
+{
+
+  /**
+   * <p>The TopologicalLink structure provides information to the NMS
+   * to allow it to present and interpret a topological view of the network
+   * managed by the EMSes.</p>
+   * 
+   * <p>For details on how topologicalLinks should be modelled see
+   * <a href=supportingDocumentation/layers.pdf>layering</a>.</p>
+   *
+   * <p>The rate of a TopologicalLink describes the layer at which the
+   * link is modelled. E.g. in SDH links could be modelled at the RS
+   * layer and the MS layer.</p>
+   *
+   * <p>A TopologicalLink has a name and references to the two TPs. These TPs
+   * are either both CTPs or both PTPs (i.e. cannot be a mix PTP-CTP)</p>
+   *
+   * <p>For a TP that is connected outside of the EMS' span of control, if the EMS
+   * knows about the remote end, the EMS may provide this information via 
+   * a single-ended topological link. See 
+   * <a href=supportingDocumentation/objectNaming.html>Object Naming</a>
+   * for details of naming "off network" TPs.</p>
+   *
+   * <p>Note that an ATM link is an example of TopologicalLink terminated by CTPs 
+   * defined at LR_ATM_NI layer rate. Such a link is used to transport VP traffic 
+   * and 'VC without VP' traffic between ATM NEs. Another example would be a VP 
+   * trail internal to an ATM subnetwork. The EMS should expose such a trail as a 
+   * topological link since this VP is a component of the ATM infrastructure used for 
+   * VC traffic (PVCCs or SVCCs). The trail has been created as a subnetwork 
+   * connection between two ATM VP CTPs at the LR_ATM_VP Layer Rate, which 
+   * has been 'extended' on both ends by two further ATM VP CTPs that are 
+   * terminated and mapped. Each terminated CTP is attached to its connected 
+   * counterpart CTP by a topological link that needs not be exposed at the interface. 
+   * But the whole VP trail between the two terminated VP CTPs should be exposed 
+   * as a topological link with layer rate LR_ATM_VP. See also Appendix O 
+   * 'VP Overlay Network' of TMF 513.</p> 
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>The name represents the name of the
+   * Topological Link which is assigned by the EMS upon creation.
+   * The EMS is responsible for guaranteeing the uniqueness of the name
+   * within the context of the EMS.
+   * It is a readonly attribute.<br>
+   *
+   * string <b>userLabel</b>:
+   * <br>The user label of the topological link is NMS Data
+   * (typically end-to-end trail data). This could be used by the EMS 
+   * to display to the user (to associate topological links to the NMS data),
+   * but this is not a requirement on the EMS to display on its GUI.
+   * The userLabel is provisionable by the NMS. This attribute can be set
+   * by NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setUserLabel>setUserLabel</a>. 
+   * It is a read/write attribute.<br>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br>The name represents how the link is refered to on EMS displays. Its
+   * aim is to provide a "nomenclature bridge" the aid relating information
+   * presented on NMS displays to EMS displays (via GUI cut through).
+   * The native name is defaulted to a NULL string. However, this could
+   * be used by the EMS for its implementation dependent purpose.<br>
+   *
+   * string <b>owner</b>
+   * <br>The owner is provisionable by the NMS. This attribute can be set
+   * by NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setOwner>setOwner</a>. 
+   * It is a read/write attribute.<br>
+   *
+   * globaldefs::ConnectionDirection_T <b>direction</b>
+   * <br>Direction of the topological link.  A topological link can be unidirectional even
+   * if both its ends are bidirectional TPs.<br>
+   *
+   * transmissionParameters::LayerRate_T <b>rate</b>:
+   * <br>The layer of the topological link.<br>
+   *
+   * globaldefs::NamingAttributes_T <b>aEndTP</b>:
+   * <br>Name of A end TP.<br>
+   *
+   * globaldefs::NamingAttributes_T <b>zEndTP</b>:
+   * <br>Name of Z end TP.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>This attribute allows the communication from the EMS to the NMS of additional 
+   * information which is not explicitly modelled.
+   * This may be an empty list.
+   * It is a readonly attribute.<br>
+   * <br>
+   **/
+  struct TopologicalLink_T
+  {
+   globaldefs::NamingAttributes_T name;
+   string userLabel;
+   string nativeEMSName;
+   string owner;
+   globaldefs::ConnectionDirection_T direction;
+   transmissionParameters::LayerRate_T rate;
+   globaldefs::NamingAttributes_T aEndTP; 
+   globaldefs::NamingAttributes_T zEndTP;
+   globaldefs::NVSList_T          additionalInfo;
+  };
+
+  /**
+   * <p>Sequence of TopologicalLink_T.<p>
+   **/
+  typedef sequence<TopologicalLink_T> TopologicalLinkList_T;
+ 
+
+  /**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   **/
+
+  interface TopologicalLinkIterator_I
+    {
+	boolean  next_n(in unsigned long 		how_many,
+		        out TopologicalLinkList_T 	topoLinkList)
+	         raises (globaldefs::ProcessingFailureException);
+
+        unsigned long getLength()
+	         raises (globaldefs::ProcessingFailureException);
+
+   	void	 destroy()
+	         raises (globaldefs::ProcessingFailureException);
+    };
+
+
+};
+
+#endif
+

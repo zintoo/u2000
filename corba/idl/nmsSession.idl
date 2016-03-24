@@ -1,0 +1,86 @@
+#ifndef nmsSession_idl
+#define nmsSession_idl
+
+// ********************************
+// *                              *
+// * nmsSession.idl               *
+// *                              *
+// ********************************
+
+
+//Include list
+#include "session.idl"
+#include "globaldefs.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the nmsSession interface
+   * of the NML-EML interface.</p>
+   *
+   * <p>The nmsSession module provides a means for the server to inform the NMS
+   * of problems with the notifications.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module nmsSession
+{
+    /** 
+     * <p>A handle to an instance of this interface is gained via the client parameter of the
+     * <a href=_emsSessionFactory.EmsSessionFactory_I.html#emsSessionFactory::EmsSessionFactory_I::getEmsSession>
+     * getemsSession</a> operation in EmsSessionFactory_I.</p>
+     */
+  interface NmsSession_I : session::Session_I
+  {
+     
+  /**
+   * <p>When an EMS fails to push an event, it can notify all connected NMSs by invoking
+   * this method on every active NmsSession_I.  This method should also be invoked on any 
+   * new NmsSession_I set up during the event loss period.</p>
+   * 
+   * <p>Once the EMS invokes this method on the NmsSession_Is, it sets an internal flag to
+   * indicate that it has already informed NMSes of event loss. As long as this flag is
+   * set, the EMS will not invoke this method again.</p>
+   *
+   * <p>When this method is invoked on an NmsSession_I, the NMS comes to know that the
+   * EMS has failed to push one or more events that may be of interest to it.  The NMS
+   * should consider itself to be potentially out-of-sync with the EMS. It should wait
+   * until the EMS calls eventLossCleared before resynchronizing with the EMS.
+   * </p>
+   *
+   * <br> startTime: The time of the first notification lost.
+   * <br> notificationId: The notificationId of the first notification lost.
+   **/
+   void eventLossOccurred(
+            in globaldefs::Time_T startTime,
+            in string notificationId);
+
+
+  /**
+   * <p>The EMS invokes this method to indicate that the event loss period is over,
+   * and that it is now capable of providing relevant notifications.</p>
+   * 
+   * <p>After invoking this method on the NmsSession_Is, the EMS clears the internal flag
+   * set by eventLossOccurred.  If event loss occurs again, eventLossOccurred will be
+   * called.</p>
+   *
+   * <p>How and when the EMS decides to invoke eventLossCleared is an EMS implementation
+   * detail. The actual algorithm that the EMS uses may be as simple as a timer-based
+   * mechanism or a complicated one which monitors the current rate at which the EMS
+   * pushes events and the available resources in NOSE.</p>
+   *
+   * <br> endTime: The time of the end of the event loss period, as determined by the EMS.
+   **/
+   void eventLossCleared(
+            in globaldefs::Time_T endTime);
+
+    };
+
+};
+
+#endif
+

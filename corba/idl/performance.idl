@@ -1,0 +1,1114 @@
+#ifndef         performance_idl
+#define         performance_idl
+
+// *************************************
+// *                                   *
+// * performance.idl                   *
+// *                                   *
+// *************************************
+
+//Include list
+#include "transmissionParameters.idl"
+#include "common.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the performance management types and structures
+   * of the NML-EML interface.
+   * It also contains the definition of the performance management manager.</p>
+   *
+   * <p>PM functionality for ATM is not supported in this release of the interface.</p>
+   *
+   * <p>The NMS can enable and disable the collection of PM Data.
+   * The NMS may specify a list of Termination Points and the set of PM parameters (e.g. nearEnd 
+   * and/or farEnd) for which measurement of PM parameters may be turned on/off.
+   * The NMS may specify a list of Termination Points, the set of PM parameters (e.g. nearEnd and/or 
+   * farEnd) and the time window for the delivery of history PM data records.
+   * The transfer of history PM data is by FTP.  The NMS may query 
+   * the EMS for the time period within which PM data records may be retrieved once the 
+   * corresponding collection bin is closed.
+   * The NMS may query the EMS for the supported PM parameters of an ME.
+   * The NMS may also query for current PM data records.</p>
+   * <p>
+   * The NMS may enable/disable notification of threshold crossing alerts by constructing the 
+   * appropriate filter via the notification service. 
+   * The NMS may set the threshold for the TCA for each of the supported TCA types per 
+   * TP/layerRate measurement point.
+   * The NMS may retrieve the current values of TCA thresholds for a Termination Point.
+   * The NMS may enable/disable TCA generation.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+module performance
+{
+
+  /**
+   * <p>In the request for retrieval of history PM Data requests with PM data transfer
+   * using FTP,  the 
+   * NMS may specify the target destination for the PM Data file (operation getHistoryPMData()).
+   * Within 
+   * the destination field, the hostname of the destination machine and the full path name of the
+   * target file (including the directory name and the file name) within the destination machine
+   * are specified.
+   * Hostname and full path name are separated by a colon ( : ). 
+   * The '/' or '\' in path name are dependent on the destination and managed by the client.</p>
+   **/
+   typedef string  Destination_T;
+
+
+  /** 
+   * <p>Count period for which PM data may be collected 
+   * (and subsequently retrieved).</p>
+   *
+   * <p>The format is one of:
+   * <ul><li>"<i>n</i>min" (representing <i>n</i> minute granularity)
+   * for values of n that are not multiples of 60</li>
+   * <li>"<i>n</i>h" (representing <i>n</i> hour granularity)</li>
+   * <li>"NA" (representing instantaneous measurements)</li>
+   * </ul></p>
+   * 
+   * <p>Standard values are:<br>
+   * "15min"<br>
+   * "24h"<br>
+   * "NA" (for current instantaneous measurements)<br></p>
+   **/
+   typedef string Granularity_T;
+
+
+  /**
+   * <p>Sequence of Granularity_T.</p>
+   **/ 
+   typedef sequence<Granularity_T> GranularityList_T;
+
+
+  /** 
+   * <p>PM parameters may relate to measurements taken on receive or transmit traffic either
+   * at the named TP (PML_NEAR_END_Rx/Tx) or at the TP at the far end of the trail
+   * (circuit/path) connected to the named TP (PML_FAR_END_Rx/Tx).  Alternatively, the
+   * PM parameters may be bidirectional e.g. resulting from a second by second
+   * summation and evaluation of both far and near TPs
+   * (PML_BIDIRECTIONAL).</p>
+   * Valid values are:<br>
+   * "PML_NEAR_END_Rx"<br>
+   * "PML_FAR_END_Rx"<br>
+   * "PML_NEAR_END_Tx"<br>
+   * "PML_FAR_END_Tx"<br>
+   * "PML_BIDIRECTIONAL"<br>
+   * <br>
+   **/
+   typedef string PMLocation_T;
+
+
+  /**
+   * <p> A set of PMLocation_T.
+   * In PM related operations, PM parameters may be specified per nearEnd 
+   * and/or farEnd category, or bidirectional category.</p>
+   **/ 
+   typedef sequence<PMLocation_T> PMLocationList_T;
+
+
+  /**
+   * <p>Holds the name of Performance Measurements.
+   * It has been defined as a string to accomodate proprietary extension.</p>
+   *
+   * Valid values are:<br>
+   * 
+   * "PMP_AISS": Alarm Indication Signal (AIS) Seconds (counter) <br>
+   * "PMP_B1_CVS": B1 Coding Violation Seconds(counter) <br>
+   * "PMP_BBE": (counter)<br>
+   * "PMP_BBER": BBE Ratio (counter) <br>
+   * "PMP_BER": Bit Error Rate, meter parameter = a measure of the signal quality measured at the
+   *            facility port input, expressed as a bit error rate (measurement/estimation methods
+   *             are NE-specific)<br>
+   * "PMP_BER_AVG": Average Bit Error Rate during the interval<br>
+   * "PMP_BER_MIN": Minimum Bit Error Rate during the interval<br>
+   * "PMP_BER_MAX": Maximum Bit Error Rate during the interval<br>
+   * "PMP_BES": Bursty Errored Seconds(counter) <br>
+   * "PMP_CRC": Cyclical Redundancy Check(counter) <br>
+   * "PMP_CV": (counter)<br>
+   * "PMP_EB": (counter)<br>
+   * "PMP_ES": (counter)<br>
+   * "PMP_ES_TA": Errored Seconds Type A(counter) <br>
+   * "PMP_ES_TB": Errored Seconds Type B(counter) <br>
+   * "PMP_ESR": ES Ratio (counter) <br>
+   * "PMP_FC": Failure Count (counter) <br>
+   * "PMP_FEBE": Far End Bit Errors(counter) <br>
+   * "PMP_FEC_EC": Forward Error Correction Error Count(counter) <br>
+   * "PMP_FEC_UBC": Forward Error Correction Uncorrectable Block Count(counter) <br> 
+   * "PMP_FREQUENCY": meter parameter = It specifies the measured optical channel frequency
+   *                  of tunable lasers<br>
+   * "PMP_FREQUENCY_AVG": Average optical channel frequency during the interval<br>
+   * "PMP_FREQUENCY_MIN": Minimum optical channel frequency during the interval<br>
+   * "PMP_FREQUENCY_MAX": Maximum optical channel frequency during the interval<br>
+   * "PMP_LBC": Laser BackFire Current (gauge) <br>
+   * "PMP_LBC_AVG": Laser BackFire Current Average (gauge) <br>
+   * "PMP_LBC_MAX": Laser BackFire Current Maximum (gauge) <br>
+   * "PMP_LBC_MIN": Laser BackFire Current Minimum (gauge) <br>
+   * "PMP_LSS": Loss of Signal Seconds (counter) <br>
+   * "PMP_NPJ": Negative Pointer Justification(counter) <br>
+   * "PMP_OPT_LBIAS": Current Laser Bias Current (also known as Pump Current)<br>
+   * "PMP_OPT_LBIAS_AVG": Average Laser Bias Current during the interval<br>
+   * "PMP_OPT_LBIAS_MAX": Maximum Laser Bias Current during the interval<br>
+   * "PMP_OPT_LBIAS_MIN": Minimum Laser Bias Current during the interval<br>
+   * "PMP_OPT_LBIASN": Laser Bias Current Normalized, meter parameter = It specifies the current
+   *                   Laser Bias Current as a normalized percentage (normalization algorithms are
+   *                   NE-specific)<br>
+   * "PMP_OPT_LBIASN_AVG": Average Laser Bias Current Normalized during the interval<br>
+   * "PMP_OPT_LBIASN_MIN": Minimum Laser Bias Current Normalized during the interval<br>
+   * "PMP_OPT_LBIASN_MAX": Maximum Laser Bias Current Normalized during the interval<br>
+   * "PMP_OPT_LTEMP": Current Laser Temperature<br>
+   * "PMP_OPT_LTEMP_AVG": Average Laser Temperature during the interval<br>
+   * "PMP_OPT_LTEMP_MAX": Maximum Laser Temperature during the interval<br>
+   * "PMP_OPT_LTEMP_MIN": Minimum Laser Temperature during the interval<br>
+   * "PMP_PJE": (counter)<br>
+   * "PMP_PPJ": Positive Pointer Justification(counter) <br>
+   * "PMP_PSC": Protection Switch Count(counter) <br> 
+   * "PMP_PSD": Protection Switch Duration (counter) <br>
+   * "PMP_RPL": Current Receive Power Level (Input Signal Power)<br>
+   * "PMP_RPL_AVG": Average Receive Power Level (Input Signal Power) during the interval<br>
+   * "PMP_RPL_MAX": Maximum Receive Power Level (Input Signal Power) during the interval<br>
+   * "PMP_RPL_MIN": Minimum Receive Power Level (Input Signal Power) during the interval<br>
+   * "PMP_RPLN": Received Power Level Normalized, meter parameter = The received optical power
+   *             expressed as a normalized percentage (normalization algorithms are NE-specific)<br>
+   * "PMP_RPLN_AVG": Average Received Power Level Normalized during the interval<br>
+   * "PMP_RPLN_MIN": Minimum Received Power Level Normalized during the interval<br>
+   * "PMP_RPLN_MAX": Maximum Received Power Level Normalized during the interval<br>
+   * "PMP_RSQ": Received Signal Quality Indicator, meter parameter = a measure of the signal quality
+   *            measured at the facility port input, expressed as unit-less ratiometric value<br>
+   * "PMP_RSQ_AVG": Average Received Signal Quality Indicator during the interval<br>
+   * "PMP_RSQ_MIN": Minimum Received Signal Quality Indicator during the interval<br>
+   * "PMP_RSQ_MAX": Maximum Received Signal Quality Indicator during the interval<br>
+   * "PMP_SEF_AISS": Severly Errored Frame (SEF)/Alarm Indication Signal (AIS)Seconds<br>
+   * "PMP_SEFS": (counter)<br>
+   * "PMP_SEP": Severely Errored Period (counter) <br>
+   * "PMP_SEPI": SEP Intensity (counter) <br>
+   * "PMP_SES": (counter)<br>
+   * "PMP_SESR": SES Ration (counter) <br>
+   * "PMP_SNR": Signal Noise Ratio<br>
+   * "PMP_SNR_AVG": Average Signal Noise Ratio during the interval<br>
+   * "PMP_SNR_MAX": Maximum Signal Noise Ratio during the interval<br>
+   * "PMP_SNR_MIN": Minimum Signal Noise Ratio during the interval<br>
+   * "PMP_TCM_BBE": (counter) TCM BBE<br>
+   * "PMP_TCM_ES": (counter) Tandem Connection Monitoring ES<br>
+   * "PMP_TCM_SES": (counter) TCM SES<br>
+   * "PMP_TCM_UAS": (counter) TCM UAS<br>
+   * "PMP_TPL": Current Transmit Power Level (Output Signal Power)<br>
+   * "PMP_TPL_AVG": Average Transmit Power Level (Output Signal Power) during the interval<br>
+   * "PMP_TPL_MAX": Maximum Transmit Power Level (Output Signal Power) during the interval<br>
+   * "PMP_TPL_MIN": Minimum Transmit Power Level (Output Signal Power) during the interval<br>
+   * "PMP_UAS": Unavailable seconds (counter)<br>
+   * <br>
+   **/   
+   typedef string PMParameterName_T;  
+
+
+  /**
+   * <p>List of PMParameterName_T.</p>
+   **/
+   typedef sequence<PMParameterName_T> PMParameterNameList_T;
+
+
+  /**
+   * <p>This struct is used to represent the parameterName qualified by its location.</p>
+   *
+   * PMParameterName_T <b>pmParameterName</b>:
+   * <br>Represents the name of the PM Measure.<br>
+   *
+   * PMLocation_T <b>pmLocation</b>:
+   * <br>Represents the location of the PM Measure.<br>
+   * <br>
+   **/ 
+   struct PMParameter_T {
+      PMParameterName_T  pmParameterName;
+      PMLocation_T pmLocation;
+   };
+
+ 
+  /**
+   * <p>Sequence of PMParameter_T.</p>
+   **/
+   typedef sequence <PMParameter_T> PMParameterList_T ;
+
+
+  /**
+   * <p>Describes threshold types for TCA parameters.</p> 
+   * 
+   * <p>The TWM_HIGH and TWM_HIGHEST types are used for TCAs that are raised when the measured
+   * value goes above the threshold.
+   * The TWM_LOW and TWM_LOWEST types are used for TCAs that are raised when the measured
+   * value goes below the threshold (only apply to gauges).</p>
+   *
+   * <p>When there is only one level of TCA trigger, only TWM_HIGH and/or TWM_LOW are used.
+   * When there are two levels of TCA triggers, TWM_HIGHEST and/or TWM_LOWEST
+   * are used in addition.
+   * </p>
+   **/
+   enum PMThresholdType_T 
+   {
+      TWM_HIGHEST,
+      TWM_HIGH,
+      TWM_LOW,
+      TWM_LOWEST
+   };
+
+
+  /**
+   * <p>Holds a PM threshold value.</p>
+   *
+   * <p>See <a href=supportingDocumentation/TCAs.gif>TCAs</a> for information on how
+   * threshold values are used.</p>
+   *
+   * PMParameterName_T <b>pmParameterName</b>:
+   * <br>Represents the name of the PM Measure.<br>
+   *
+   * PMLocation_T <b>pmLocation</b>:
+   * <br>Represents the location of the PM Measure.<br>
+   *
+   * PMThresholdType_T <b>thresholdType</b>:
+   * <br>Represents the type of threshold value.<br>
+   *
+   * boolean <b>triggerFlag</b>:
+   * <br>Indicates if the threshold is for the trigger (true) or the clear (false).<br>
+   *
+   * float <b>value</b>:
+   * <br>Threshold for parameter (float used to incorporate gauge PM parameters).<br>
+   *
+   * string <b>unit</b>:
+   * <br>Free format string describing the units for the threshold value.<br>
+   * <br>
+   **/
+   struct PMThresholdValue_T 
+   {
+      PMParameterName_T  pmParameterName;
+      PMLocation_T       pmLocation;
+      PMThresholdType_T  thresholdType;
+      boolean            triggerFlag;
+      float              value;
+      string             unit;
+   };
+
+
+  /**
+   * <p>Sequence of PMThresholdValue_T.</p>
+   **/ 
+   typedef sequence<PMThresholdValue_T> PMThresholdValueList_T ;
+
+
+  /**
+   * <p>Holds a PM measurement and description of validity.</p>
+   *
+   * PMParameterName_T <b>pmParameterName</b>:
+   * <br>Represents the name of the PM Measure.<br>
+   *
+   * PMLocation_T <b>pmLocation</b>:
+   * <br>Represents the location of the PM Measure.<br>
+   *
+   * float <b>value</b>:
+   * <br>Value of parameter (float used to incorporate gauge PM parameters).<br>
+   *
+   * string <b>unit</b>:
+   * <br>Free format string describing the units for the PM measurement value.<br>
+   * string <b>intervalStatus</b>:
+
+   * <br>The following string values for  name attributes are allowed:<br>
+   * "Valid" - valid data,<br>
+   * "Incomplete" - data not available for the complete interval,<br>
+   * "Invalid" - data available but marked as invalid for the interval (when the EMS can not
+   *  distinguish incomplete measurements from invalid measurements, "Invalid" will be used)<br>
+   * "Unavailable" - no data available at all for this interval,<br>
+   * "Zero-suppressed" - zero-suppressed intervals.<br>
+   * <br><br>
+   * <br>
+   **/
+   struct PMMeasurement_T 
+   {
+     PMParameterName_T  pmParameterName;
+     PMLocation_T       pmLocation;
+     float              value;
+     string             unit;
+     string             intervalStatus;
+   };
+
+
+  /**
+   * <p>Sequence of PMMeasurement_T.</p>
+   **/ 
+   typedef sequence<PMMeasurement_T> PMMeasurementList_T ;
+
+
+  /**
+   * <p>Holds a PM Event State .</p>
+   *
+   * PMParameterName_T <b>pmParameterName</b>:
+   * <br>Represents the name of the PM Measure.<br>
+   *
+   * PMLocation_T <b>pmLocation</b>:
+   * <br>Represents the location of the PM Measure.<br>
+   *
+   * boolean <b>bEnableMonitor</b>:
+   * <br>Specifys whether the Paramer being Monitored or not.<br>
+   *
+   * boolean <b>bAutoReport</b>:
+   * <br>Specifys whether the PM Measurement is auto reported to the ems or not.<br>
+   * <br><br>
+   * <br>
+   **/
+   struct PMEventState_T 
+   {
+     PMParameterName_T  pmParameterName;
+     PMLocation_T       pmLocation;
+     boolean            bEnableMonitor;    
+     boolean            bAutoReport;      
+   };
+
+
+  /**
+   * <p>Sequence of PMEventState_T.</p>
+   **/ 
+   typedef sequence<PMEventState_T> PMEventStateList_T ;
+
+
+  /**
+   * <p>This struct is used to pass current PM data for one 
+   * collection bin from the EMS to the NMS.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>tpName</b>:
+   * <br>The name of the termination point.<br>
+   *
+   * transmissionParameters::LayerRate_T <b>layerRate</b>:
+   * <br>Layer of the collected PM data.<br>
+   *
+   * Granularity_T <b>granularity</b>:
+   * <br>Identifies whether the granularity of the data.<br>
+   *
+   * globaldefs::Time_T <b>retrievalTime</b>:
+   * <br>ME time at which PM measurement was obtained from the ME.<br>
+   *
+   * PMMeasurementList_T <b>pmMeasurementList</b>:
+   * <br>PM values.<br>
+   * <br>
+   **/ 
+   struct PMData_T {
+     globaldefs::NamingAttributes_T      tpName;
+     transmissionParameters::LayerRate_T layerRate;
+     Granularity_T                       granularity;
+     globaldefs::Time_T                  retrievalTime;
+     PMMeasurementList_T                 pmMeasurementList;
+   };
+
+ 
+  /**
+   * <p>Sequence of PMData.</p>
+   **/
+   typedef sequence<PMData_T> PMDataList_T;
+
+
+  /**
+   * <p>This struct is used to pass PM State for one 
+   * collection bin from the EMS to the NMS.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>tpName</b>:
+   * <br>The name of the termination point.<br>
+   *
+   * transmissionParameters::LayerRate_T <b>layerRate</b>:
+   * <br>Layer of the collected PM data.<br>
+   *
+   * Granularity_T <b>granularity</b>:
+   * <br>Identifies whether the granularity of the data.<br>
+   *
+   * PMEventStateList_T <b>pmEventStateList</b>:
+   * <br>PM Event State.<br>
+   * <br>
+   **/ 
+   struct PMState_T {
+     globaldefs::NamingAttributes_T      tpName;
+     transmissionParameters::LayerRate_T layerRate;
+     Granularity_T                       granularity;
+     PMEventStateList_T                  pmEventStateList;
+   };
+
+ 
+  /**
+   * <p>Sequence of PMState_T.</p>
+   **/
+   typedef sequence<PMState_T> PMStateList_T;
+
+  
+
+  /** 
+   * <p>Used to specify the scope for a PM operation.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>The name of the object to which this selection applies. This may be:
+   * <br> ManagedElement: The selection applies to all termination points
+   * contained within the ManagedElement.<br>
+   * <br> TerminationPoint: The selection applies only to the named termination point
+   * which will be a PTP or a CTP. Unlike the case for managedElement, the operation 
+   * will not apply to any "contained" TPs when a PTP or CTP is specified.<br>
+   * <br> Note: as noted in the requirements, the possible scopes do not include "SNC".<br><br>
+   *
+   * transmissionParameters::LayerRateList_T <b>layerRate</b>:
+   * <br>Set of layers to which the selection applies. An empty list
+   * means all layers supported by the equipment.<br>
+   *
+   * PMLocationList_T <b>pMLocationList</b>:
+   * <br>Identifies set of locations (i.e. farEnd and/or nearEnd and/or bidirectional).
+   * An empty list means all locations supported by the equipment.<br>
+   *
+   * GranularityList_T <b>granularityList</b>:
+   * <br>Identifies set of granularities. An empty list
+   * means all granularities supported by the equipment.<br>
+   * <br>
+   **/
+   struct PMTPSelect_T {
+     globaldefs::NamingAttributes_T          name;
+     transmissionParameters::LayerRateList_T layerRateList;
+     PMLocationList_T                        pMLocationList;
+     GranularityList_T                       granularityList;
+   };
+ 
+ 
+  /**
+   * <p>Sequence of PMTPSelect. Used by several methods to identify sets
+   * of PM parameters to which to apply the operation.</p> 
+   **/
+   typedef sequence<PMTPSelect_T> PMTPSelectList_T;
+ 
+  /**
+   * <p>By means of this struct, the EMS informs the NMS about the minimum time it holds
+   * 24h PM data records and 15min PM data records.
+   * This minimum time refers to the time after the particular collection bins are closed.</p>
+   *
+   * short <b>storeTime24hr</b>:
+   * <br>minimum store time in hours for 24h data<br>
+   *
+   * short <b>storeTime15min</b>:
+   * <br>minimum store time in hours for 15min data<br>
+   * <br>
+   **/
+   struct HoldingTime_T {
+     short storeTime24hr; 
+     short storeTime15min;
+   }; 
+
+
+  /**
+   * <p>TCAParameters is used to get or set one or more PM Thresholds
+   * for a given TP/layer/granularity measurement point.</p>
+   *
+   * transmissionParameters::LayerRate_T <b>layerRate</b>:
+   * <br>Identifies layer to which tcaTypeValues applies.<br>
+   *
+   * Granularity_T <b>granularity</b>:
+   * <br>Identifies the granularity of the data.  For gauges, this should be "NA".<br>
+   *
+   * PMThresholdValueList_T <b>tcaTypeValues</b>:
+   * <br>Identifies threshold values.<br>
+   **/
+   struct TCAParameters_T  {
+     transmissionParameters::LayerRate_T layerRate;
+     Granularity_T                       granularity;
+     PMThresholdValueList_T              tcaTypeValues;
+   }; 
+
+  /**
+   * <p>AdministrativeState_T indicates whether a specified function is enabled 
+   * (unlocked) or disabled (locked). </p>
+   **/
+   enum AdministrativeState_T {
+    AS_Locked,
+    AS_Unlocked
+   };
+   
+   
+    /**
+   * R5 ADDED BEGIN
+   **/
+   /**
+   * <p>Sequence of string.</p>
+   **/
+   typedef sequence<string> CollectTaskNameList_T;
+   
+   
+    struct CollectTaskInfo_T  {
+        string m_TaskName;		                    
+	globaldefs::NamingAttributesList_T m_listPMTPSelect;	
+	string m_Period;                            
+	string m_StartTime;		                            
+	string m_EndTime;		                            
+	string m_UserEMSName;		                
+	string m_FTPName;		                   
+	string m_FTPPassWord;		                
+	string m_FTPAddress;
+	boolean forceUpload;		
+   }; 
+   
+   /**
+   * <p>Sequence of CollectTaskInfo_T.</p>
+   **/
+   typedef sequence<CollectTaskInfo_T> CollectTaskInfoList_T;
+
+    /**
+   * R5 ADDED END
+   **/
+
+  /**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   **/
+
+   interface PMDataIterator_I 
+   {
+	boolean  next_n(in  unsigned long    how_many,
+			out PMDataList_T       pmDataList)
+		 raises (globaldefs::ProcessingFailureException);
+
+	unsigned long getLength()
+		 raises (globaldefs::ProcessingFailureException);
+
+	void     destroy()
+		 raises (globaldefs::ProcessingFailureException);
+   };
+
+
+  /**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   **/
+
+   interface PMStateIterator_I 
+   {
+	boolean  next_n(in  unsigned long    how_many,
+			out PMStateList_T       pmStateList)
+		 raises (globaldefs::ProcessingFailureException);
+
+	unsigned long getLength()
+		 raises (globaldefs::ProcessingFailureException);
+
+	void     destroy()
+		 raises (globaldefs::ProcessingFailureException);
+   };
+
+
+  /**
+   * <p>The PerformanceManagementMgr_I is used to gain access to operations
+   * which deal with performance Monitoring</p>
+   *
+   * <p>A handle to an instance of this interface is gained via the
+   * <a href=_emsSession.EmsSession_I.html#emsSession::EmsSession_I::getManager>
+   * getManager</a> operation in Manager.</p>
+   **/
+
+   interface PerformanceManagementMgr_I: common::Common_I
+   {
+
+
+  /**
+   * <p>This operation allows the NMS to request, from the EMS, the set
+   * of PM parameters supported by a particular ME at a specific layer.<p>
+   *
+   * <br> globaldefs::NamingAttributes meName gives the name of the managed element
+   * <br> transmissionParameters::LayerRate layerRate gives the layerRate considered.
+   * <br> PMParameterList pmParameterList This out parameter contains the set of 
+   * PM parameters that are supported by the ME referred to.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when meName does not reference an managedElement object
+   * or layerRate contains undefined rates<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when meName references object which does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void getMEPMcapabilities(
+         in globaldefs::NamingAttributes_T meName,
+         in transmissionParameters::LayerRate_T layerRate,
+         out PMParameterList_T pmParameterList)
+        raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This operation instructs the EMS to turn off PM data collection for a list of
+   * measurement points. Within the request for each measurement point, 
+   * one may specify the granularity (15min, 24h, NA, etc.) and location (nearEnd 
+   * and/or farEnd and/or bidirectional) for the PM parameters that are to be deactivated.<p>
+   * <p>Disabling is done on a best-effort basis. If PM could not be disabled
+   * for a subset of cases in
+   * the PMTPSelectList a  list identifying this subset is returned.</p>
+   * <p>PM collection stops immediately, i.e., before the completion of the current
+   * 15 minute or 24 hour monitoring period. This may lead to incomplete collection periods.
+   * If PM collection was never started for this TP, the operation is considered successful.</p>
+   *
+   * <br> PMTPSelectList_T pmTPSelectList: This struct contains the relevant 
+   *  data for the disablePMData request. This must not be empty.
+   * <br> PMTPSelectList_T failedTPSelectList: List of points which were not completely disabled.
+   * An empty list indicates that the total request was successful.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised if pmTPSelectList is empty.<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/ 
+   void disablePMData(
+         in PMTPSelectList_T pmTPSelectList,
+         out PMTPSelectList_T failedTPSelectList)
+        raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This operation instructs the EMS to enable (turn on) PM data collection
+   * for a list of
+   * measurement points. Within the request for each measurement point, one may specify the
+   * granularity (15min, 24h, NA, etc.) and location (nearEnd 
+   * and/or farEnd and/or bidirectional) for the PM parameters that are to be activated.</p>
+   *
+   * <p>Enabling is done on best-effort basis. If PM could not be
+   * enabled for a subset of cases in
+   * the pmTPSelectList, a list identifying this subset is returned.</p>
+   *
+   * <p>PM collection starts immediately, i.e., before the completion of the current
+   * 15 minute or 24 hour monitoring period. This may lead to incomplete collection periods.
+   * If PM collection was already on for a TP,
+   * the operation is considered successful.</p>
+   *
+   * <br> PMTPSelectList_T pmTPSelectList: This struct contains the relevant 
+   *  data for the enablePMData request. This must not be empty.
+   * <br> PMTPSelectList_T failedTPSelectList: List of points which were not completely enabled.
+   *  An empty list indicates that the total request was successful.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised if pmTPSelectList is empty or contains invalid data<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * EXCPT_CAPACITY_EXCEEDED - Raised when the maximum number of simultaneously enablable 
+   *  monitoring points is exceeded<br>
+   * <br>
+   **/ 
+   void enablePMData(
+         in PMTPSelectList_T pmTPSelectList,
+         out PMTPSelectList_T failedTPSelectList)
+        raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This operation instructs the EMS to clear (reset) the PM registers
+   * for a list of
+   * measurement points. Within the request for each measurement point, one may specify the
+   * granularity (15min, 24h, NA, etc.) and location (nearEnd 
+   * and/or farEnd and/or bidirectional) for the PM registers that are to be reset.</p>
+   *
+   * <p>Clearing PM gauge minimum, maximum, and average registers means to reset them
+   * to the current measurement; for the actual gauge measurement, it has no effect.
+   * This is not considered a failure case.</p>
+   *
+   * <p>Clearing PM registers is done on best-effort basis. If registers could not be
+   * completely cleared for a subset of cases in
+   * the pmTPSelectList, a list identifying this subset is returned.</p>
+   *
+   * <br> PMTPSelectList_T pmTPSelectList: This struct contains the relevant 
+   *  data for the clearPMData request. This must not be empty.
+   * <br> PMTPSelectList_T failedTPSelectList: List of points for which PM registers 
+   *  were not completely cleared.
+   *  An empty list indicates that the total request was successful.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised if pmTPSelectList is empty or contains invalid data<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost
+   * <br>
+   **/ 
+   void clearPMData(
+         in PMTPSelectList_T pmTPSelectList,
+         out PMTPSelectList_T failedTPSelectList)
+        raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>The EMS is requested to inform the NMS about how many hours PM data records (24h/15min) 
+   * are held in the EMS. This is the minimum time. If EMS does not store PM data it is the time 
+   * supported in the NE (minimum time of all managed NEs).</p>
+   *
+   * <br> HoldingTime holdingTime: This out parameter contains the time period in hours
+   * within which 24h PM data records and 15min PM data records may be retrieved.
+   *
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_NE_COMM_LOSS - Raised if communication is down to an NE and holding time cannot be
+   *  retrieved
+   * <br>
+   **/ 
+   void getHoldingTime(out HoldingTime_T holdingTime)
+     raises(globaldefs::ProcessingFailureException);
+
+
+  /** 
+   * <p>The purpose of this operation is to retrieve the values of PM thresholds on a 
+   * TP/layerRate measurement point. The operation is best-effort. Results are returned in the out
+   * parameter of this operation. The operation can be applied to either a PTP or CTP. 
+   * The NMS requests the TCA parameters for the particular TP and granularity specified.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T tpName: Identification of the TP for which the values of
+   * the TCA parameters are to be retrieved.
+   * <br> transmissionParameters::LayerRate_T layerRate: LayerRate for which the values of
+   * the TCA parameters are to be retrieved.
+   * <br> <b>in</b>  Granularity_T granularity: Granularity for which the TCA parameters
+   * are to be retrieved.
+   * <br> <b>out</b> TCAParameters_T tcaParameter. Result of the operation.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tpName does not reference an terminationPoint object or
+   *  layerRateList contains undefined rates or Granularity contains an undefined value<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tpName references object which does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void getTCATPParameter (
+         in globaldefs::NamingAttributes_T tpName,
+         in transmissionParameters::LayerRate_T layerRate, 
+         in Granularity_T granularity,
+         out TCAParameters_T tcaParameter)   
+         raises (globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This operation instructs the EMS to store history PM data into a file,
+   * and to send that file by 
+   * FTP to the destination as specified in the request. Within the 
+   * request a list of TP/layerRate measurement points and a time frame are specified. For each 
+   * measurement point, the granularity (15min, 24h, NA, etc.) and location (nearEnd and/or farEnd
+   * and/or bidirectional) may be specified.
+   * A filtered set (scoped by the input parameter pmParameters) of PM parameters
+   * collected for a particular TP/layerRate measurement point for the
+   * granularity, 
+   * location and time window specified is made available.</p>
+   *
+   * <p>Measurement intervals and the given time frame are considered as half open intervals to 
+   * the right, i.e. startTime <= t < endTime.</p>
+   *
+   * <p>A particular historic measurement interval (of duration
+   * 15 min resp. 24 h) is defined to be covered by the specified time
+   * frame if there is a non empty intersection between the measurement
+   * interval and the given time frame, i.e.
+   * <br>endTime[PM record] > startTime[request parameter] AND<br>
+   * <br>startTime[PM record] &lt; endTime[request parameter]<br>
+   * PM data are returned for all covered measurement intervals.</p>
+   *
+   * <p>For records partly included in the time frame specified, PM data will be returned.
+   * In case a history bin has incomplete PM measurement data (for instance because PM data 
+   * collection was disabled for some time period(s) within the bin's time span), the particular 
+   * measurement period will be marked as incomplete.</p>
+   *
+   * <p>If the forceUpload parameter is true,
+   * the EMS is to upload the data for all the specified collection periods (provided they
+   * do exist in the MEs) and provide the entire PM data requested.
+   * If the forceUpload parameter is false,
+   * measurement intervals within the specified time frame for which
+   * PM data has been collected in the ME but not yet uploaded to the
+   * EMS will be included in the PM file with status "Unavailable",
+   * however without valid PM data.  </p>
+   *
+   * <p>Performance Monitoring Data transfer normally involves huge amounts of data.
+   * The capability to send PM data to a controlled destination other than the NMS
+   * allows for flexibility 
+   * in the choice of the PM data file format, the particular file transfer protocol (including the 
+   * possibility to apply data compression techniques) and the destination machine so as to make 
+   * optimal use of the available data network capacity. 
+   * The file transfer protocol to transfer PM data is the FTP protocol.</p>
+   *
+   * <p>This operation is asynchrounous and is not required to wait until the PM data is extracted
+   * or until the FTP transfer is over before it returns.
+   * Notifications can be generated to inform the NMS of the progress of the transfer.  See
+   * <a href=supportingDocumentation/notificationServiceUsage.html>Notification Service
+   * Usage</a> for details.</p>
+   *
+   * <p>Performance monitoring data on multiple TPs of multiple MEs is transferred in one data file.
+   * This PM data file has the following format:
+   * <a href=supportingDocumentation/PmFileFormat.html>PM File format definition</a>.</p>
+   *
+   * <br> Destination_T destination: The destination to which the
+   * Performance Monitoring Data file is to be send.
+   * <br> String userName: necessary for file transfer with FTP
+   * <br> String password: necessary for file transfer with FTP
+   * <br> PMTPSelectList_T pmTPSelectList. This parameter specifies which history PM data
+   * to return. 
+   * If pmTPSelectList is empty, PM data for all monitored TPs of all MEs managed by the EMS
+   * (all layer rates, all granularities) are stored in the file.
+   * <br> PMParameterNameList_T pmParameters. This parameter specifies which PM parameters
+   *  within the scope of the pmTPSelectList shall be contained in the file.
+   *  An empty list means to store all supported parameters.
+   *  The returned parameters are best effort, i.e. among the parameters specified 
+   *  only the subset of supported parameters will be stored.
+   * <br> globaldefs::Time_T startTime: Specifies the start of the time window for collection
+   * (included).
+   * <br> globaldefs::Time_T endTime: Specifies the end of the time window for collection
+   * (excluded).
+   * <br> boolean forceUpload: Specifies if the EMS must upload all available PM data
+   *  requested from the MEs.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if the EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is not well formed<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to the NE is down<br>
+   * <br>
+   **/
+   void getHistoryPMData (
+         in Destination_T destination, 
+         in string userName, 
+         in string password,
+         in PMTPSelectList_T pmTPSelectList,
+         in PMParameterNameList_T pmParameters,
+         in globaldefs::Time_T startTime,
+         in globaldefs::Time_T endTime,
+         in boolean forceUpload)
+         raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This allows an NMS to request a filtered set (scoped by the input parameter pmParameters)
+   * of the current PM data
+   * for a list of TP measurement points. Within the request for each 
+   * measurement point, granularity (15min, 24h, NA, etc.) and location (nearEnd and/or
+   * farEnd and/or bidirectional) may be specified. The operation mode is best effort.</p>
+   *
+   * <p>Current data will generally be marked as incomplete, as the 
+   * current bin is not completed.
+   * If no PM data are available as specified, an empty list is returned.</p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> PMTPSelectList_T pmTPSelectList: list of measurement points for which
+   *  to get the PM data.
+   * <br> PMParameterNameList_T pmParameters: specifies which PM parameters within
+   *  the scope of the pmTPSelectList shall be returned.
+   *  An empty list means to return all supported parameters.
+   *  The returned parameters are best effort, i.e. among the parameters specified 
+   *  only the subset of supported parameters will be returned.
+   * <br> unsigned long how_many: maximum number of PMData to return in the first batch.
+   * <br> PMDataList_T pmDataList: first batch of PMData returned.
+   * <br> PMDataIterator_I pmIt: iterator returned to access the remaining PMData.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if the EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when pmTPSelectList is empty<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to the NE is down<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached<br>
+   * <br>
+   **/
+   void getAllCurrentPMData(
+         in PMTPSelectList_T pmTPSelectList,
+         in PMParameterNameList_T pmParameters,
+         in unsigned long how_many, 
+         out PMDataList_T pmDataList,
+         out PMDataIterator_I pmIt)
+     raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This allows an NMS to request a filtered set (scoped by the input parameter pmParameters)
+   * of the PM State
+   * for a list of TP measurement points. Within the request for each 
+   * measurement point, granularity (15min, 24h, NA, etc.) and location (nearEnd and/or
+   * farEnd and/or bidirectional) may be specified. The operation mode is best effort.</p>
+   *
+   * If no PM State are available as specified, an empty list is returned.</p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> PMTPSelectList_T pmTPSelectList: list of measurement points for which
+   *  to get the PM data.
+   * <br> PMParameterNameList_T pmParameters: specifies which PM parameters within
+   *  the scope of the pmTPSelectList shall be returned.
+   *  An empty list means to return all supported parameters.
+   *  The returned parameters are best effort, i.e. among the parameters specified 
+   *  only the subset of supported parameters will be returned.
+   * <br> unsigned long how_many: maximum number of PMData to return in the first batch.
+   * <br> PMStateList_T pmStateList: first batch of PMState returned.
+   * <br> PMStateIterator_I pmStateIt: iterator returned to access the remaining PMState.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if the EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when pmTPSelectList is empty<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to the NE is down<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached<br>
+   * <br>
+   **/
+   void getPMState(
+         in PMTPSelectList_T pmTPSelectList,
+         in PMParameterNameList_T pmParameters,
+         in unsigned long how_many, 
+         out PMStateList_T pmStateList,
+         out PMStateIterator_I pmStateIt)
+     raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>The purpose of this operation is to modify the values of TCA thresholds on a 
+   * TP-layerRate measurement point. It can be applied to either a PTP or CTP. For a 
+   * threshold, a low and high mark may be specified. The NMS specifies the TP and layerRate, the 
+   * granularity, and the value(s) of one or more TCA threshold(s) to be modified.
+   * The operation mode is best-effort.
+   * If no TCA value is set, a default value will be active.</p>
+   * 
+   * <br> <b>in</b> globaldefs::NamingAttributes_T tpName:
+   *  Identification of the TP for which the values of one or more TCA parameters are set.
+   * <br> <b>inout</b> TCAParameters tcaParameter: The list of TCA
+   *  ids and corresponding values to be applied to a specific 
+   *  layer rate are specified by this parameter.
+   *  The settings that are actually applied are returned in this parameter.<br>
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if the EMS is unable to support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised if tpName does not reference a terminationPoint object or 
+   *  at least one field of tcaParameters is not valid.<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tpName references object which does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void setTCATPParameter (
+         in globaldefs::NamingAttributes_T tpName,
+         inout TCAParameters_T tcaParameters)
+     raises (globaldefs::ProcessingFailureException);
+ 
+
+  /**
+   * <p>This operation will enable TCA generation on a list of TPs and/or MEs
+   * at the ME level.</p> 
+   *
+   * <br> PMTPSelectList_T pmTPSelectList: This struct contains the relevant 
+   *  data for the enableTCA request. This must not be empty.
+   * <br> PMTPSelectList_T failedTPSelectList: List of points which were not completely enabled.
+   *  An empty list indicates that the total request was successful.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if this operation is not supported<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised if pmTPSelectList is empty or contains invalid data<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised if the EMS is unable to enable TCA for the
+   *  specified TP constraint (pmTPSelectList). This is a general error to be used only if
+   *  the operation is supported, but this request failed and no TPs were enabled.<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   */
+   void enableTCA(in PMTPSelectList_T pmTPSelectList,
+                  out PMTPSelectList_T failedTPSelectList)
+     raises (globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This operation will disable TCA generation on a list of TPs and/or MEs
+   * at the ME level.</p>
+   *
+   * <br> PMTPSelectList_T pmTPSelectList: This struct contains the relevant 
+   *  data for the enableTCA request. This must not be empty.
+   * <br> PMTPSelectList_T failedTPSelectList: List of points which were not completely disabled.
+   *  An empty list indicates that the total request was successful.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if this operation is not supported<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised if pmTPSelectList is empty or contains invalid data<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised if the EMS is unable to disable TCA for the
+   *  specified TP constraint (pmTPSelectList). This is a general error to be
+   *  used only if the operation is supported, but this request failed and no TPs were
+   *  disabled.<br>
+   
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   */
+   void disableTCA(in PMTPSelectList_T pmTPSelectList,
+                   out PMTPSelectList_T failedTPSelectList)
+     raises(globaldefs::ProcessingFailureException);
+  
+   
+   /**
+   * <p>This operation instructs the EMS to create a time collection task to store history PM data into a file,
+   * and to send that file by FTP to the destination as specified in the request.
+   *
+   * <p>This operation is asynchrounous and is not required to wait until the PM data is extracted
+   * or until the FTP transfer is over before it returns.
+   * Notifications can be generated to inform the NMS of the progress of the transfer.  See
+   * <a href=supportingDocumentation/notificationServiceUsage.html>Notification Service
+   * Usage</a> for details.</p>
+   *
+   * <br> String taskName: The task's particular id.
+   * <br> String destination: The destination to which the
+   * Performance Monitoring Data file is to be send.
+   * <br> String userName: necessary for file transfer with FTP
+   * <br> String password: necessary for file transfer with FTP
+   * <br> String emsUserName: Standing for the task's creater. 
+   * <br> globaldefs::NamingAttributesList_T pmTPSelectList. This parameter specifies which history PM data
+   * to return. 
+   * <br> String period: Standing for the task's granularity (now only supports 15min, 24h). 
+   * <br> String startTime: Specifies the start of the time window for collection
+   * (included).
+   * <br> String endTime: Specifies the end of the time window for collection
+   * (excluded).
+   * <br> boolean forceUpload: Specifies if the EMS must upload all available PM data
+   *  requested from the MEs.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if the EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is not well formed<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to the NE is down<br>
+   * <br>
+   **/
+   void createPMCollectionTask (
+		 in string taskName,
+		 in string destination,
+		 in string userName,
+		 in string password,
+		 in string emsUserName,		 		 
+		 in globaldefs::NamingAttributesList_T pmTPSelectList,
+		 in string period,
+		 in string startTime,
+		 in string endTime,
+		 in boolean forceUpload )
+	 raises(globaldefs::ProcessingFailureException);
+
+    /**
+    * <p>Delete PM time collection task(s).</p>
+    *
+    * <p>This operation instructs the EMS to delete a time collection task.
+    * <br> CollectTaskNameList_T taskNameList: Namelist of PM time collection tasks to be deleted.
+    * <br> String emsUserName: Identifies who excutes the action.	
+    * <br> globaldefs::ProcessingFailureException <br>
+    * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+    * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+    * <br>
+    **/
+    void deletePMCollectionTask ( 
+		in CollectTaskNameList_T taskNameList,
+		in string emsUserName )
+	raises(globaldefs::ProcessingFailureException);
+
+      /**
+      * <p>Retrieve PM time collection tasks' information.</p>
+      *
+      * <br>CollectTaskNameList_T taskNameList: Namelist of PM time collection tasks to be retrieve( Empty namelist stands for retrieving all the tasks ).
+      * <br> String emsUserName: Identifies who excutes the action.
+      * <br>CollectTaskInfoList_T taskInfoList: Informationlist of PM time colleciton tasks to be shown.
+      * <br> globaldefs::ProcessingFailureException <br>
+      * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this operation<br>
+      * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+      * <br>
+      **/
+   void selectPMCollectionTask (
+                in CollectTaskNameList_T taskNameList, 
+		in string emsUserName,
+		out CollectTaskInfoList_T taskInfoList )
+	raises(globaldefs::ProcessingFailureException);
+    };
+};
+#endif

@@ -1,0 +1,32 @@
+[CosNotification.StructuredEvent(header=CosNotification.EventHeader(fixed_header=CosNotification.FixedEventHeader(event_
+type=CosNotification.EventType(domain_name='tmf_mtnm', type_name='NT_ALARM'), event_name=''), variable_header=[]), filte
+rable_data=[CosNotification.Property(name='notificationId', value=CORBA.Any(CORBA.TC_string, '')), CosNotification.Prope
+rty(name='objectName', value=CORBA.Any(orb.create_sequence_tc(bound=0, element_type=CORBA.TypeCode("IDL:mtnm.tmforum.org
+/globaldefs/NameAndStringValue_T:1.0")), [globaldefs.NameAndStringValue_T(name='EMS', value='Huawei/U2000'), globaldefs.
+NameAndStringValue_T(name='ManagedElement', value='3151268')])), CosNotification.Property(name='nativeEMSName', value=CO
+RBA.Any(CORBA.TC_string, 'Huawei/U2000;UBR6714-PTN910-3-3157')), CosNotification.Property(name='nativeProbableCause', va
+lue=CORBA.Any(CORBA.TC_string, 'NE_COMMU_BREAK')), CosNotification.Property(name='objectType', value=CORBA.Any(CORBA.Typ
+eCode("IDL:mtnm.tmforum.org/notifications/ObjectType_T:1.0"), OT_MANAGED_ELEMENT)), CosNotification.Property(name='emsTi
+me', value=CORBA.Any(CORBA.TC_string, '20121224123304.0Z')), CosNotification.Property(name='neTime', value=CORBA.Any(COR
+BA.TC_string, '20121224123302.0Z')), CosNotification.Property(name='isClearable', value=CORBA.Any(CORBA.TC_boolean, True
+)), CosNotification.Property(name='layerRate', value=CORBA.Any(CORBA.TC_short, 1)), CosNotification.Property(name='proba
+bleCause', value=CORBA.Any(CORBA.TC_string, 'UNIDENTIFIED')), CosNotification.Property(name='probableCauseQualifier', va
+lue=CORBA.Any(CORBA.TC_string, '0-1')), CosNotification.Property(name='perceivedSeverity', value=CORBA.Any(CORBA.TypeCod
+e("IDL:mtnm.tmforum.org/notifications/PerceivedSeverity_T:1.0"), PS_CRITICAL)), CosNotification.Property(name='serviceAf
+fecting', value=CORBA.Any(CORBA.TypeCode("IDL:mtnm.tmforum.org/notifications/ServiceAffecting_T:1.0"), SA_NON_SERVICE_AF
+FECTING)), CosNotification.Property(name='affectedTPList', value=CORBA.Any(orb.create_sequence_tc(bound=0, element_type=
+CORBA.TypeCode("IDL:mtnm.tmforum.org/globaldefs/NamingAttributes_T:1.0")), [])), CosNotification.Property(name='addition
+alText', value=CORBA.Any(CORBA.TC_string, 'Huawei/U2000;3151268')), CosNotification.Property(name='additionalInfo', valu
+e=CORBA.Any(orb.create_sequence_tc(bound=0, element_type=CORBA.TypeCode("IDL:mtnm.tmforum.org/globaldefs/NameAndStringVa
+lue_T:1.0")), [globaldefs.NameAndStringValue_T(name='Direction', value='NA'), globaldefs.NameAndStringValue_T(name='Loca
+tion', value='NA'), globaldefs.NameAndStringValue_T(name='AlarmSerialNo', value='54619332'), globaldefs.NameAndStringVal
+ue_T(name='AlarmReason', value='NE communication was lost'), globaldefs.NameAndStringValue_T(name='ProductName', value='
+OptiX PTN 910'), globaldefs.NameAndStringValue_T(name='EquipmentName', value=''), globaldefs.NameAndStringValue_T(name='
+AffirmState', value='FALSE'), globaldefs.NameAndStringValue_T(name='DetailInfo', value=''), globaldefs.NameAndStringValu
+e_T(name='HandlingSuggestion', value='NE communication fault'), globaldefs.NameAndStringValue_T(name='LocationInfo', val
+ue='Communication with common NE UBR6714-PTN910-3-3157 is interrupted')])), CosNotification.Property(name='X.733::EventT
+ype', value=CORBA.Any(CORBA.TC_string, 'communicationsAlarm')), CosNotification.Property(name='objectTypeQualifier', val
+ue=CORBA.Any(CORBA.TC_string, '')), CosNotification.Property(name='rcaiIndicator', value=CORBA.Any(CORBA.TC_boolean, Fal
+se)), CosNotification.Property(name='X.733::CorrelatedNotifications', value=CORBA.Any(orb.create_sequence_tc(bound=0, el
+ement_type=CORBA.TypeCode("IDL:mtnm.tmforum.org/notifications/CorrelatedNotifications_T:1.0")), [notifications.Correlate
+dNotifications_T(source=[], notifIDs=[])]))], remainder_of_body=CORBA.Any(CORBA.TC_null, None))]

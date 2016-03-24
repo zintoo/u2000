@@ -1,0 +1,439 @@
+#ifndef emsMgr_idl
+#define emsMgr_idl
+
+// ********************************
+// *                              *
+// * emsMgr.idl                   *
+// *                              *
+// ********************************
+
+//Include list
+#include "globaldefs.idl"
+#include "common.idl"
+#include "multiLayerSubnetwork.idl"
+#include "notifications.idl"
+#include "topologicalLink.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the EMS interface
+   * of the NML-EML interface, and related types.  It also contains the
+   * definition of the EMS manager.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module emsMgr
+{
+  /**
+   * <p>Holds EMS identification information.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>Represents the friendly name of the EMS and is constructed
+   * according to the following pattern:<br>
+   * <code> "<i>CompanyName</i>/<i>EMSName</i>" </code>
+   * The EMSName must be unique relative to the CompanyName. It is up to each
+   * company to maintain this.<br>
+   * It is a readonly attribute.<br>
+   *
+   * string <b>userLabel</b>:
+   * <br>The userLabel is a friendly name that the operator wants to give
+   * to the EMS. Typical expectations of the operator is that the same
+   * name is seen on all operation systems. This is set by the NMS and could be
+   * displayed on the EMS based on each systems'
+   * capabilities. THIS IS NOT A MANDATORY EXPECTATION, but is left to the
+   * implementation of the EMS. This attribute can be set
+   * by NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setUserLabel>setUserLabel</a>. 
+   * It is a read/write attribute.<br>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br>Represents how the EMS refers to itself on EMS displays. Its
+   * aim is to provide a "nomenclature bridge" to aid relating information
+   * presented on NMS displays to EMS displays (via GUI cut through).
+   * May be a null string.<br>
+   *
+   * string <b>owner</b>:
+   * <br>The owner is provisionable by the NMS. This attribute can be set
+   * by NMS through the Common_I interface service
+   * <a href=_common.Common_I.html#common::Common_I::setOwner>setOwner</a>. 
+   * It is a read/write attribute.<br>
+   *
+   * string <b>emsVersion</b>:
+   * <br>Software version of the EMS. This is a free format string 
+   * with no semantics attached to it for the NMS. Each EMS system 
+   * models its software version independently. There is no
+   * standard way to represent the software version.
+   * Decision about support of a particular version by the NMS system is
+   * up to the NMS system. emsVersion may be an empty string.
+   * It is a readonly attribute.<br>
+   *
+   * string <b>type</b>:
+   * <br>Free format string indicating the type of EMS.  The EMS type may be empty string.
+   * It is a readonly attribute.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>This attribute allows the communication from the EMS to the NMS of additional 
+   * information which is not explicitly modelled.
+   * It is a readonly attribute.<br>
+   **/
+   struct EMS_T
+   {
+      globaldefs::NamingAttributes_T name;
+      string userLabel;
+      string nativeEMSName;
+      string owner;
+      string emsVersion;
+      string type;
+      globaldefs::NVSList_T additionalInfo;
+   };
+
+   typedef sequence <string> AlarmSerialNoList_T;
+  /**
+   * <p>The EMSMgr_I is used to gain access to operations
+   * which deal with the EMS itself.</p>
+   *
+   * <p>A handle to an instance of this interface is gained via the
+   * <a href=_emsSession.EmsSession_I.html#emsSession::EmsSession_I::getManager>
+   * getManager</a> operation in Manager.</p>
+   **/
+
+  /**
+   * <p>Clock source status identification information.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>name</b>:
+   * <br>name identifies a clock source status entiry. This identifier is assigned a value when the EMS is creating the clock source status, and its uniqueness in an NE is ensured by the EMS
+   *This attribute is read-only.<br>
+   *
+   * <p>The naming rules of clock source status are as follows:
+   * <br> 1. name="EMS";value="CompanyName/EMSname" <br>
+   * <br> 2. name="ManagedElement";value="ManagedElementName" <br>
+   * <br> 3. name="ClockSource";value="clocksourceID" <br>
+   *
+   * string <b>nativeEMSName</b>:
+   * <br>nativeEMSName identifies the local name of the clock source, that is, the name displayed on the EMS interface<br>
+   *
+   * string <b>status</b>:
+   * <br>Clock source status to identify whether this is current clock source or not: CURRENT or NON-CURRENT.<br>
+   *
+   * string <b>timingMode</b>:
+   * <br>The clock source has the following four timing modes: internal source ,external source, line source, tributary source.<br>
+   *
+   * string <b>quality</b>:
+   * <br>The clock quality value as following: Unknown Quality,G.811 clock signal,G.812 Transit clock signal, 
+   * G.812 Local Clock Signal, SETS(Synchronous Equipment Timing Source), Do Not Use For Synchronization, Automatic Extraction, NA.<br>
+   *
+   * string <b>timingMode</b>:
+   * <br>In the master/slave synchronization mode, the slave clock of the node usually has the following three working modes:
+   * Tracing mode, Holdover mode, Free-run mode.<br>
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>This attribute allows the communication from the EMS to the NMS of additional 
+   * information which isn't explicitly modelled. 
+   * It is a readonly attribute.<br> 				
+   * <br>
+   **/
+   struct ClockSourceStatus_T
+   {
+	   globaldefs::NamingAttributes_T name;
+	   string nativeEMSName;
+	   string status;
+	   string timingMode;
+	   string quality;
+	   string workingMode;
+	   globaldefs::NVSList_T additionalInfo; 
+   };
+
+   /**
+	* <p>Sequence of ClockSourceStatus_T.</p>
+	**/
+   typedef sequence<ClockSourceStatus_T> ClockSourceStatusList_T;
+
+   /**
+	* <p>Sequence of string.</p>
+	**/
+
+   interface  EMSMgr_I : common::Common_I
+   {
+  /**
+   * <p>This allows an NMS to request the EMS information.</p>
+   * 
+   * <br>  EMS_T emsInfo : The EMS information.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   **/
+   void getEMS(
+         out EMS_T emsInfo)
+        raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This allows an NMS to request all of the Subnetworks that
+   * are under the control of this EMS.</p>
+   * 
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br>  unsigned long how_many: Maximum number of subnetworks to return in the first batch.
+   * <br>  multiLayerSubnetwork::SubnetworkList_T sList: First batch of subnetworks.
+   * <br>  multiLayerSubnetwork::SubnetworkIterator_I sIt: Iterator to retrieve the remaining
+   * subnetworks.
+   * <br> globaldefs::ProcessingFailureException:<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+   void getAllTopLevelSubnetworks(
+         in unsigned long how_many,
+         out multiLayerSubnetwork::SubnetworkList_T sList,
+         out multiLayerSubnetwork::SubnetworkIterator_I sIt) 
+         raises(globaldefs::ProcessingFailureException);
+
+ 
+  /**
+   * <p>This operation has exactly the same behaviour as 
+   * <a href=_EMS.EMS.html#EMS::EMS::getAllTopLevelSubnetworks>getAllTopLevelSubnetworks</a>, but
+   * instead of returning the entire object structures, this operation returns their names.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> unsigned long how_many: Maximum number of subnetwork names to return in the first batch.
+   * <br> globaldefs::NamingAttributesList_T nameList: First batch of subnetwork names.
+   * <br> globaldefs::NamingAttributesListIterator_I nameIt: Iterator to retrieve the remaining
+   * subnetwork names.
+   * <br> globaldefs::ProcessingFailureException:
+   * As for getAllTopLevelSubnetworks.
+   **/
+   void getAllTopLevelSubnetworkNames(
+         in  unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+         raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This allows an NMS to request all of the Topological Links that
+   * exist between multiLayerSubnetworks under the control of this EMS.</p>
+   * 
+   * <p>For details on how topological links should be modelled, see
+   * <a href=supportingDocumentation/layers.pdf>layering</a>.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br>  unsigned long how_many: Maximum number of topological links
+   * to return in the first batch.
+   * <br>  topologicalLink::TopologicalLinkList_T topoList: First batch of topological links.
+   * <br>  topologicalLink::TopologicalLinkIterator_I topoIt: Iterator to retrieve the remaining
+   * topological links.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS cannot support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+   void getAllTopLevelTopologicalLinks(
+         in unsigned long how_many,
+         out topologicalLink::TopologicalLinkList_T topoList,
+         out topologicalLink::TopologicalLinkIterator_I topoIt) 
+         raises(globaldefs::ProcessingFailureException);
+
+  /**
+   * <p>This operation has exactly the same behaviour as 
+   * getAllTopLevelTopologicalLinks, but
+   * instead of returning the entire object structures, this operation returns their names.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> unsigned long how_many: Maximum number of topological link names
+   * to return in the first batch.
+   * <br> globaldefs::NamingAttributesList_T nameList: First batch of topological link names.
+   * <br> globaldefs::NamingAttributesListIterator_I nameIt: Iterator to retrieve the remaining
+   * topological link names.
+   * <br> globaldefs::ProcessingFailureException:
+   * As for getAllTopLevelTopologicalLinks.
+   **/
+   void getAllTopLevelTopologicalLinkNames(
+         in  unsigned long how_many,
+         out globaldefs::NamingAttributesList_T nameList,
+         out globaldefs::NamingAttributesIterator_I nameIt)
+         raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This service returns a top level topological link given its name.</p>
+   * 
+   * <br> globaldefs::NamingAttributes topoLinkName: Name of the top level 
+   *  topological link to retrieve.
+   * <br> TopologicalLink_T topoLink: Top level topological link returned.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS cannot support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when topoLinkName does not reference a top level topological
+   *  link object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when topoLinkName references a top level topological link
+   *  object that does not exist<br>
+   * <br>
+   **/
+   void getTopLevelTopologicalLink(
+         in globaldefs::NamingAttributes_T topoLinkName,
+         out topologicalLink::TopologicalLink_T topoLink)
+        raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This allows an NMS to request all of the active alarms and TCAs that
+   * are under the control of this EMS (both those raised by
+   * the NEs and those raised by the EMS itself). Some alarms may be
+   * filtered out (excluded) by specifying their probable causes or severities.
+   * </p>
+   * 
+   * <p>The result of this operation is independent of the filtering set up by the NMS 
+   * for the notification service.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> notifications::ProbableCauseList_T excludeProbCauseList: The list of probable
+   * causes to exclude (for which events should not be reported).
+   * <br> notifications::PerceivedSeverityList_T excludeSeverityList: List of severities
+   *  to exclude from the output event list.
+   * <br> unsigned long how_many: Maximum number of alarms and TCAs to report in the first
+   *  batch.
+   * <br>  notifications::EventList_T eventList: First batch of alarms and TCAs.
+   * <br>  notifications::EventIterator_I eventIt: Iterator to retrieve the remaining
+   * alarms and TCAs.
+   * <br> globaldefs::ProcessingFailureException:<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+   void getAllEMSAndMEActiveAlarms(
+         in notifications::ProbableCauseList_T excludeProbCauseList,
+         in notifications::PerceivedSeverityList_T excludeSeverityList,
+         in unsigned long how_many,
+         out notifications::EventList_T eventList,
+         out notifications::EventIterator_I eventIt) 
+        raises(globaldefs::ProcessingFailureException);
+
+
+  /**
+   * <p>This allows an NMS to request all of the active alarms and TCAs that
+   * for the EMS itself.  Some alarms may be
+   * filtered out (excluded) by specifying their severities.</p>
+   * 
+   * <p>The result of this operation is independent of the filtering set up by the NMS 
+   * for the notification service.</p>
+   *
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * this operation uses an iterator. See
+   * <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   * 
+   * <br> notifications::PerceivedSeverityList_T excludeSeverityList: List of severities
+   *  to exclude from the output event list.
+   * <br> unsigned long how_many: Maximum number of alarms and TCAs to report in the first
+   *  batch.
+   * <br>  notifications::EventList_T eventList: First batch of alarms and TCAs.
+   * <br>  notifications::EventIterator_I eventIt: Iterator to retrieve the remaining
+   * alarms and TCAs.
+   * <br> globaldefs::ProcessingFailureException:<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+   void getAllEMSSystemActiveAlarms(
+         in notifications::PerceivedSeverityList_T excludeSeverityList,
+         in unsigned long how_many,
+         out notifications::EventList_T eventList,
+         out notifications::EventIterator_I eventIt) 
+        raises(globaldefs::ProcessingFailureException);
+   
+   /**
+   * <p>This allows an NMS to request all of the root active alarms for the specifical object. </p>
+   * 
+   * globaldefs::NamingAttributes_T <b>objectName</b>:
+   * <br>The name of the object.<br>
+   * 
+   * globaldefs::Time_T <b>startTime</b>:
+   * <br>Start time.<br>
+   * 
+   * globaldefs::Time_T <b>endTime</b>:
+   * <br>End time.<br>
+   * 
+   * <br>  notifications::EventList_T eventList: First batch of alarms and TCAs.
+   * <br>  notifications::EventIterator_I eventIt: Iterator to retrieve the remaining
+   * alarms and TCAs.
+   * <br> globaldefs::ProcessingFailureException:<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+   void getObjectRootAlarms(
+		in globaldefs::NamingAttributes_T objectName,
+		in globaldefs::Time_T startTime,
+		in globaldefs::Time_T endTime,
+        	in unsigned long how_many,
+		out notifications::EventList_T eventList,
+        	out notifications::EventIterator_I eventIt)
+		raises(globaldefs::ProcessingFailureException);
+
+
+	/**
+   * <p>This allows an NMS to request all of the clock source state objects for the SDH managed element. </p>
+   * 
+   * globaldefs::NamingAttributes_T <b>managedElementName</b>:
+   * <br>The name of the SDH managed element.<br>
+   * 
+   * ClockSourceStatusList_T <b>clockSourceStatusList</b>
+   * <br>First batch of clock sources.<br>
+   *
+   * HW_CSIterator_I <b>csIt</b>
+   * <br>Iterator to retrieve the remaining clock sources.<br>
+   *
+   * <br>globaldefs::ProcessingFailureException:<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+	void getObjectClockSourceStatus (in globaldefs::NamingAttributes_T managedElementName,
+		out ClockSourceStatusList_T clockSourceStatusList)
+		raises(globaldefs::ProcessingFailureException);
+		
+		
+    void acknowledgeAlarms(in AlarmSerialNoList_T alarmList,
+    		out AlarmSerialNoList_T failedAlarmList)
+    		raises(globaldefs::ProcessingFailureException);
+
+   void unacknowledgeAlarms(in AlarmSerialNoList_T alarmList,
+   out AlarmSerialNoList_T failedAlarmList)
+   raises(globaldefs::ProcessingFailureException);
+
+
+    };
+ 
+};
+
+#endif
+

@@ -1,0 +1,311 @@
+#ifndef         maintenanceOps_idl
+#define         maintenanceOps_idl
+
+// *************************************
+// *                                   *
+// * maintenanceOps.idl                *
+// *                                   *
+// *************************************
+
+//Include list
+#include "common.idl"
+#include "transmissionParameters.idl"
+
+#pragma prefix "mtnm.tmforum.org"
+
+  /** 
+   * <a href=supportingDocumentation/overview.html>Overview of NML-EML interface</a>
+   *
+   * <p>This module contains the definition of the maintenance manager and
+   * CurrentMaintenanceOperationIterator_I interfaces
+   * of the NML-EML interface, with related types.</p>
+   *
+   * <p> For details on the maintenance operation signal flow
+   * <a href=supportingDocumentation/maintenanceCommands.pdf>
+   * Maintenance Commands</a>.</p>
+   *
+   * <h5> Version 2.1. </h5>
+   **/
+
+
+module maintenanceOps
+{
+  /** 
+   * <p>Maintenance operation.</p>
+   * Valid values are:<br>
+   * "FACILITY_LOOPBACK"<br>
+   * "TERMINAL_LOOPBACK"<br>
+   * "FACILITY_FORCED_AIS"<br>
+   * "TERMINAL_FORCED_AIS"<br>
+   * "FORCE_RDI"<br>
+   * "SET_AS_SEGMENT_END_POINT" (ATM)<br>
+   * "END_TO_END_LOOPBACK_OAM_CELL" (ATM)<br>
+   * "SEGMENT_LOOPBACK_OAM_CELL" (ATM)<br>
+   **/
+   typedef string MaintenanceOperation_T;
+
+
+  /**
+   * <p>Describes the mode of the operation i.e. operate the maintenance
+   * operation or release the maintenance operation.</p>
+   **/
+   enum  MaintenanceOperationMode_T
+   {
+      MOM_OPERATE,
+      MOM_RELEASE
+   };
+
+
+  /**
+   * <p>This struct is used to represent a current persistent 
+   * maintenance operation that has been invoked for the given TP,
+   * and layerRate if applicable.</p>
+   *
+   * globaldefs::NamingAttributes_T <b>tpName</b>:
+   * <br> Name of the TP to which the maintenance operation applies.
+   * It is a readonly attribute.<br>
+   *
+   * MaintenanceOperation_T <b>maintenanceOperation</b>:
+   * <br>Current maintenance operation that has been invoked.
+   * It is a readonly attribute.<br>
+   *
+   * transmissionParameters::LayerRate_T <b>layerRate</b>:
+   * <br>The layer to which the maintenance operation applies.
+   * LR_Optional if not required.<br>
+   *
+   * globaldefs::NVSList_T <b>additionalInfo</b>:
+   * <br>Additional information on the maintenance operation, subject to
+   *  bilateral agreement.<br>
+   * <br>
+   **/ 
+   struct CurrentMaintenanceOperation_T
+   {
+      globaldefs::NamingAttributes_T tpName;
+      MaintenanceOperation_T maintenanceOperation;
+      transmissionParameters::LayerRate_T layerRate;
+      globaldefs::NVSList_T additionalInfo;
+   };
+
+  /**
+   * <p>Sequence of CurrentMaintenanceOperation_T.</p>
+   **/ 
+   typedef sequence<CurrentMaintenanceOperation_T> CurrentMaintenanceOperationList_T;
+
+
+   /**
+   *<p>PRBS Test Duration Definition</p>
+   *<br>Legal values are:
+   *<br> value: test time[1-255]
+   *<br> unit: time[sec,10min,h]
+   **/
+   struct TestDuration_T
+   {
+	unsigned long	value;
+	string		unit;
+   };	
+
+   /**
+   *<p>PRBS Test Sampling Result</p>
+   *<br>sampleTime: Sampling Time
+   *<br>value: Number of Bit Errors
+   **/
+   struct SampleResult_T
+   {
+	globaldefs::Time_T sampleTime;
+	unsigned long	   value;		
+   };	
+
+   /**
+   *<p>Sequence of SampleResult_T.</p>
+   **/	
+   typedef sequence<SampleResult_T> SampleResultList_T;
+
+   /**
+    *<p>PRBS Test Sampling Period Definition</p>
+    <br>SampleGranularity_T: Sampling Period[1sec,1min,30min,1h£¬24h]
+   **/
+   typedef string SampleGranularity_T;	
+
+   /**
+    *<p>PRBS Test Type Definition</p>
+    *<br>Legal values are:
+    * FACILITY_PRBS_TEST
+    * TERMINAL_PRBS_TEST
+   **/
+   typedef string PRBSTestType_T;	
+
+   /**
+   *<p>PRBS Data Sampling Period Definition</p>
+   * <br>testGranularity: Test Duration
+   * <br>testType: Test Type[FACILITY_PRBS_TEST/TERMINAL_PRBS_TEST]
+   * <br>sampleGranularity: Sampling Period[1sec,1min,30min,1h£¬24h]	
+   * <br>accumulatingIndicator: Accumulate bit error values or not
+   **/ 
+   struct PRBSTestParameter_T
+   {
+	globaldefs::NamingAttributes_T tpName;		
+	TestDuration_T		       testDuration;				
+	SampleGranularity_T	       sampleGranularity;		
+	PRBSTestType_T                 testType;
+	boolean			       accumulatingIndicator;
+   };
+
+   /**
+   *<p>Sequence of PRBSTestParameter_T.</p>
+   **/
+   typedef sequence<PRBSTestParameter_T> PRBSTestParameterList_T;
+	
+   /**
+    *<p>PRBS Test Result Definition</p>
+    *<br>testPara: Test Parameters
+    *<br>startTime: Test Start Time
+    *<br>totalBitError: Total Bit Errors
+    *<br>realDuration: Actual Test Duration
+   **/ 	
+   struct PRBSTestResult_T
+   {
+	PRBSTestParameter_T testPara;
+	globaldefs::Time_T  startTime;
+	SampleResultList_T  sampleResultList;
+	unsigned long	    totalBitError;
+	TestDuration_T	    realDuration;
+   };
+
+   /**
+   *<p>Sequence of PRBSTestResult_T.</p>
+   **/
+   typedef sequence<PRBSTestResult_T> PRBSTestResultList_T;   
+
+   /**
+   * <p>In order to allow the NMS to deal with a large number of objects,
+   * iterators are used.</p>
+   * <p>See <a href=supportingDocumentation/iterators.html>iterator overview</a>
+   * for information on how iterators are used in this interface.</p>
+   **/
+
+   interface CurrentMaintenanceOperationIterator_I
+   {
+      boolean next_n(in unsigned long how_many, 
+                     out CurrentMaintenanceOperationList_T cMOList) 
+         raises (globaldefs::ProcessingFailureException);
+
+      unsigned long getLength()
+         raises (globaldefs::ProcessingFailureException);
+
+      void destroy()
+         raises (globaldefs::ProcessingFailureException);
+   };
+
+
+  /**
+   * <p>The MaintenanceMgr_I is used as a handle to gain access to the
+   * maintenance operation functionalities of the NML-EML interface.</p>
+   *
+   * <p>A handle to an instance of this interface is gained via the
+   * <a href=_emsSession.EmsSession_I.html#emsSession::EmsSession_I::getManager>
+   * getManager</a> operation in Manager.</p>
+   **/
+
+   interface MaintenanceMgr_I : common::Common_I
+   {
+  /** 
+   * <p>This operation allows the NMS to operate and release
+   * the maintenance commands that are supported by a TP.</p>
+   *  
+   * <br> CurrentMaintenanceOperation_T maintenanceOperation:
+   *  Information on the maintenance operation to perform.
+   * <br> MaintenanceOperationMode_T maintenanceOperationMode:
+   *  Indicates whether the maintenance operation should be operated or released.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tpName does not reference an TP
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tpName references object which does not exist<br>
+   * EXCPT_UNABLE_TO_COMPLY - Raised when the operation is denied by the managed element<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to managedElement is lost<br>
+   * <br>
+   **/
+   void performMaintenanceOperation(
+      in CurrentMaintenanceOperation_T maintenanceOperation,
+      in MaintenanceOperationMode_T maintenanceOperationMode)
+	 raises (globaldefs::ProcessingFailureException);
+
+  /** 
+   * <p>This operation allows the NMS to query the EMS to determine if 
+   * any persistent maintenance commands have been invoked. 
+   * This query is supported for the PTP, CTP, and ME objects.</p>
+   *
+   * <br> globaldefs::NamingAttributes_T tpOrMeName:
+   * The name of the PTP, CTP, or ME object.
+   * <br> unsigned long how_many: Maximum number of maintenance operations to
+   * return in the first batch.
+   * <br> MaintenanceOperationList_T currentMaintenanceOperationList:
+   * First batch of maintenance operations.
+   * <br> CurrentMaintenanceOperationIterator_I cmoIt: Iterator to access the remaining
+   * maintenance operations.
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when tpOrMeName does not reference a valid object<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when tpOrMeName references an object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to the managed element is lost<br>
+   * EXCPT_TOO_MANY_OPEN_ITERATORS - Raised when maximum number of iterators that the EMS
+   *  can support has been reached.
+   * <br>
+   **/
+   void getActiveMaintenanceOperations(
+      in  globaldefs::NamingAttributes_T tpOrMeName, 
+      in unsigned long how_many,
+      out CurrentMaintenanceOperationList_T currentMaintenanceOpeationList,
+      out CurrentMaintenanceOperationIterator_I cmoIt)
+        raises (globaldefs::ProcessingFailureException);
+   
+  /** 
+   * <p>This operation allows the NMS to start PRBS test.</p>
+   *
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when testParaList is invalid<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to the managed element is lost<br>
+   *  can support has been reached.
+   **/
+   void enablePRBSTest(in PRBSTestParameterList_T testParaList, 
+				out globaldefs::NamingAttributesList_T failedTPList)
+				raises (globaldefs::ProcessingFailureException);
+
+   /** 
+   * <p>This operation allows the NMS to stop PRBS test.</p>
+   *
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to the managed element is lost<br>
+    *  can support has been reached.   
+   **/
+   void disablePRBSTest(in globaldefs::NamingAttributesList_T tpNameList,
+				out globaldefs::NamingAttributesList_T failedTPList)
+				raises (globaldefs::ProcessingFailureException);
+
+   /** 
+   * <p>This operation allows the NMS to query PRBS test result.</p>
+   *
+   * <br> globaldefs::ProcessingFailureException<br>
+   * EXCPT_NOT_IMPLEMENTED - Raised if EMS does not support this service<br>
+   * EXCPT_INTERNAL_ERROR - Raised in case of non-specific EMS internal failure<br>
+   * EXCPT_INVALID_INPUT - Raised when any input parameter is invalid<br>
+   * EXCPT_ENTITY_NOT_FOUND - Raised when resourceName references an object that does not exist<br>
+   * EXCPT_NE_COMM_LOSS - Raised when communications to the managed element is lost<br>
+   *  can support has been reached.   
+   **/
+   void getPRBSTestResult(in globaldefs::NamingAttributesList_T tpNameList,
+				out PRBSTestResultList_T resultList)
+				raises (globaldefs::ProcessingFailureException);
+	};
+}; 
+
+#endif
+
