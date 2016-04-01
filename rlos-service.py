@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import logging
 from logging.handlers import SysLogHandler
 import time
