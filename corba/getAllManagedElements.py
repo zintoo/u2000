@@ -168,7 +168,7 @@ finally:
     if session:
         session.endSession()
 #orb.shutdown(0)
-raw_input('Press <ENTER> to exit.')
+input('Press <ENTER> to exit.')
 ### omniORB.CORBA.BAD_PARAM: CORBA.BAD_PARAM(omniORB.BAD_PARAM_WrongPythonType, CORBA.COMPLETED_NO)
 ### Exception AttributeError: "'NoneType' object has no attribute 'path'" in 
 ### <bound method TypeCode_alias.__del__ of CORBA.TypeCode("IDL:omg.org/PortableServer/ObjectId:1.0")> ignored
