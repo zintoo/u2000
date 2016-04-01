@@ -33,8 +33,8 @@ if __name__ == '__main__':
         service.stop()
     elif cmd == 'status':
         if service.is_running():
-            print "Service is running."
+            print("Service is running.")
         else:
-            print "Service is not running."
+            print("Service is not running.")
     else:
         sys.exit('Unknown command "%s".' % cmd)
