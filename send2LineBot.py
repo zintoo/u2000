@@ -13,5 +13,5 @@ def send2LineBotServer(ip, port, message):
         print("send2LineBotServer()", exp)
 
 send_data="ccadc20b3a4365ee37f6c45150143c203=%s&" % "ข้อความ"
-buffer = str(send_data)#.encode('utf-8')
+buffer = str(send_data).encode('utf-8')
 send2LineBotServer("192.168.99.100", 54321, buffer)
