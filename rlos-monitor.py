@@ -84,7 +84,16 @@ perceivedSeverity = [ notifications.PS_INDETERMINATE,
 
 exclude_perceivedSeverity_list = CORBA.Any(notifications._tc_PerceivedSeverityList_T, perceivedSeverity)
 
-
+def send2LineBotServer(ip, port, message):
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(15)
+        sock.connect((ip, port))
+        sock.send(message)
+        response = sock.recv(1024)
+    except Exception as exp:
+        print("send2LineBotServer()", exp)
+        
 class RLOSMonitor(threading.Thread):
     
     def __init__(self):
@@ -258,9 +267,17 @@ class RLOSMonitor(threading.Thread):
                 print(Style.BRIGHT + Fore.GREEN + "", self.rlos_removed)
                 
                 for k, value in self.rlos_removed.items():
+                    rlos_msg ="CLEAR>> %s %s \n\t%s" % (value[2], value[1], value[0])
+                    send_data="ccadc20b3a4365ee37f6c45150143c203=%s&" % rlos_msg
+                    buffer = str(send_data).encode('utf-8')
+                    send2LineBotServer("192.168.99.100", 54321, buffer)
                     del self.rlos_dict[k]
                         
                 for k, value in self.rlos_new.items():
+                    rlos_msg ="%s %s \n\t%s" % (value[2], value[1], value[0])
+                    send_data="ccadc20b3a4365ee37f6c45150143c203=%s&" % rlos_msg
+                    buffer = str(send_data).encode('utf-8')
+                    send2LineBotServer("192.168.99.100", 54321, buffer)
                     self.rlos_dict[k] = value
                         
                 self.session.endSession()    
