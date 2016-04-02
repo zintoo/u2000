@@ -268,14 +268,14 @@ class RLOSMonitor(threading.Thread):
                 print(Style.BRIGHT + Fore.GREEN + "", self.rlos_removed)
                 
                 for k, value in self.rlos_removed.items():
-                    rlos_msg ="CLEAR>> %s %s \n\t%s" % (value[2], value[1], value[0])
+                    rlos_msg ="CLEAR>> %s\n%s\nAlarm[%s]\nClear[%s]" % (value[1], value[2], value[0], time.strftime("%Y-%m-%d %H:%M:%S"))
                     send_data="ccadc20b3a4365ee37f6c45150143c203=%s&" % rlos_msg
                     buffer = str(send_data).encode('utf-8')
                     send2LineBotServer("192.168.99.100", 54321, buffer)
                     del self.rlos_dict[k]
                         
                 for k, value in self.rlos_new.items():
-                    rlos_msg ="%s %s \n\t%s" % (value[2], value[1], value[0])
+                    rlos_msg ="%s\n%s\n%s" % (value[1], value[2], value[0])
                     send_data="ccadc20b3a4365ee37f6c45150143c203=%s&" % rlos_msg
                     buffer = str(send_data).encode('utf-8')
                     send2LineBotServer("192.168.99.100", 54321, buffer)
