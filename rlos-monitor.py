@@ -137,7 +137,7 @@ class RLOSMonitor(threading.Thread):
                     for event in seq: ## seq should only ever have one element, but loop to be safe
                         #print(type(event))
                         #print(dir(event))
-                        event_counter+=1
+                        
                         nativeProbableCause = event.filterable_data[3].value.value()
                         probableCause = event.filterable_data[9].value.value()
                         neTime = event.filterable_data[6].value.value()
@@ -263,7 +263,7 @@ class RLOSMonitor(threading.Thread):
                         self.rlos_removed[k] = value
                 
                 print(Style.BRIGHT + Fore.RED + "", self.rlos_new)
-                print(Style.BRIGHT + Fore.YELLOW + "", self.rlos_dict)
+                print(Style.BRIGHT + Fore.YELLOW + "%d R_LOS" % len(self.rlos_dict))
                 print(Style.BRIGHT + Fore.GREEN + "", self.rlos_removed)
                 
                 for k, value in self.rlos_removed.items():
