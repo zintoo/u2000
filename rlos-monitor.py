@@ -253,7 +253,7 @@ class RLOSMonitor(threading.Thread):
                     if k not in rlos_query_keys:
                         self.rlos_removed[k] = value
                 
-                print(Style.BRIGHT + Fore.MAGENTA + "", self.rlos_new)
+                print(Style.BRIGHT + Fore.RED + "", self.rlos_new)
                 print(Style.BRIGHT + Fore.YELLOW + "", self.rlos_dict)
                 print(Style.BRIGHT + Fore.GREEN + "", self.rlos_removed)
                 
