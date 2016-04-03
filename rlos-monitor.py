@@ -116,7 +116,7 @@ class RLOSMonitor(threading.Thread):
                 self.session = ems_session.getEmsSession("NMAClient", "my123456", nms_session_o)
                 ems = self.session.getManager("EMS")
                 
-                alarms_tuple = ems.getAllEMSAndMEActiveAlarms(exclude_probableCause_list, exclude_perceivedSeverity_list.value(), 1)
+                alarms_tuple = ems.getAllEMSAndMEActiveAlarms(exclude_probableCause_list, exclude_perceivedSeverity_list.value(), 0)
                 event_iterator = alarms_tuple[1]
                 #more = True
                 more = (event_iterator is not None)
