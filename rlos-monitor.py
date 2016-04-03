@@ -101,6 +101,7 @@ class RLOSMonitor(threading.Thread):
         self.rlos_dict = dict()
         self.rlos_new = dict()
         self.rlos_removed = dict()
+        self.first_run = True
         
          
     def setup(self, q):
@@ -219,6 +220,10 @@ class RLOSMonitor(threading.Thread):
                                 key = '%s#%s#%s' % (neTime, cause, nodename)
                                 rlos_query[key] = (neTime, cause, nodename)
                                 
+                                if not self.first_run:
+                                    if key not in self.rlos_dict.keys():
+                                        self.rlos_new[key] = (neTime, cause, nodename)
+                                        
                                 if neTime.find(today) >= 0:
                                     event_counter+=1
                                     if neDate != neOldDate:
@@ -227,9 +232,9 @@ class RLOSMonitor(threading.Thread):
                                     else:
                                         print(Style.BRIGHT + Fore.MAGENTA + '%d   \t%s \t%s \t%s' % (event_counter, neOnlyTime, cause.ljust(10), nodename))
                                         
-                                    if key not in self.rlos_dict.keys():
-                                        self.rlos_new[key] = (neTime, cause, nodename)
-                                        
+                                    if self.first_run:
+                                        if key not in self.rlos_dict.keys():
+                                            self.rlos_new[key] = (neTime, cause, nodename)
                                 else:                                    
                                     #import pdb; pdb.set_trace()
                                     if neTime.find(tomonth) >= 0:
@@ -283,6 +288,8 @@ class RLOSMonitor(threading.Thread):
                         
                 self.session.endSession()    
                            
+                self.first_run = False
+                
                 sleep = abs(305 - abs(round(time.time()) - query_mtime))
                 if sleep > 305:
                     sleep = 305
