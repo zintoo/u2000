@@ -220,7 +220,9 @@ class RLOSMonitor(threading.Thread):
                                 key = '%s#%s#%s' % (neTime, cause, nodename)
                                 rlos_query[key] = (neTime, cause, nodename)
                                 
-                                if not self.first_run:
+                                if self.first_run:
+                                    self.rlos_dict[key] = (neTime, cause, nodename)
+                                else:
                                     if key not in self.rlos_dict.keys():
                                         self.rlos_new[key] = (neTime, cause, nodename)
                                         
@@ -232,9 +234,6 @@ class RLOSMonitor(threading.Thread):
                                     else:
                                         print(Style.BRIGHT + Fore.MAGENTA + '%d   \t%s \t%s \t%s' % (event_counter, neOnlyTime, cause.ljust(10), nodename))
                                         
-                                    if self.first_run:
-                                        if key not in self.rlos_dict.keys():
-                                            self.rlos_new[key] = (neTime, cause, nodename)
                                 else:                                    
                                     #import pdb; pdb.set_trace()
                                     if neTime.find(tomonth) >= 0:
