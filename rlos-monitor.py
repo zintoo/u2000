@@ -155,16 +155,47 @@ class RLOSMonitor(threading.Thread):
                         locationInfo = event.filterable_data[15].value.value()[10].value
                         
                         additionalText = event.filterable_data[14].value.value()
-                            
+                        productName = event.filterable_data[15].value.value()[5].value
+                        
                         cause = 'Unknow'
-                        if nativeProbableCause.find('R_LOS') >= 0:
+                        if nativeProbableCause.find('R_LOS') >= 0 or nativeProbableCause.find('RELAY_ALARM_CRITICAL') >= 0:
                             #print('\t(%s/%s)' % (nativateEMSName, nativeProbableCause))
                             causes = nativeProbableCause.split('/')
                             if len(causes) > 0:
                                 cause = causes[len(causes)-1]
                                 #print(cause)
-                            node_selected = True
-                            #node_selected = False
+                            node_selected = False
+                            if productName in ["OptiX OSN 3500", "OptiX OSN 7500"]:
+                                node_selected = True
+                                if nativeProbableCause.find('RELAY_ALARM_CRITICAL') >= 0:
+                                    if locationInfo == "34-AUX-CSK-1:1":
+                                        cause = "AIR#1 Fault"
+                                    elif locationInfo == "34-AUX-CSK-2:2":
+                                        cause = "AIR#2 Fault"
+                                    elif locationInfo == "34-AUX-CSK-3:3":
+                                        cause = "AIR#3 Fault"
+                                    elif locationInfo == "34-AUX-CSK-4:4":
+                                        cause = "AIR#4 Fault"
+                                    elif locationInfo == "34-AUX-CSK-5:5":
+                                        cause = "AIR#5 Fault"
+                                    elif locationInfo == "34-AUX-CSK-6:6":
+                                        cause = "AIR#6 Fault"    
+                                    elif locationInfo == "34-AUX-CSK-7:7":
+                                        cause = "AIR#7 Fault"
+                                    elif locationInfo == "34-AUX-CSK-8:8":
+                                        cause = "AIR#8 Fault"
+                                    elif locationInfo == "34-AUX-CSK-9:9":
+                                        cause = "AIR#9 Fault"
+                                    elif locationInfo == "34-AUX-CSK-10:10":
+                                        cause = "AIR#10 Fault"
+                                    elif locationInfo == "34-AUX-CSK-11:11":
+                                        cause = "AIR#11 Fault"
+                                    elif locationInfo == "34-AUX-CSK-12:12":
+                                        cause = "AIR#12 Fault"
+                                    elif locationInfo == "34-AUX-CSK-13:13":
+                                        cause = "AIR#13 Fault"
+                                    else:
+                                        pass
                             #if nativateEMSName.find('AMR-') >= 0:
                             #    node_selected = True
                             #if nativateEMSName.find('BRM-') >= 0:
